@@ -19,12 +19,33 @@ RECHECK_URL = "https://stall-row-production.up.railway.app/v1/recheck"
 PACK_BALANCE_URL = "https://stall-row-production.up.railway.app/v1/recheck/pack-balance"
 
 
+def _default_http():
+    """Build the default httpx client.
+
+    Works around a real httpx parsing bug: a `no_proxy` env var
+    containing bracketed IPv6 entries (e.g. `[::1]`, common in
+    container/proxy setups) crashes Client construction with
+    `Invalid port: ':1]'`. Drop the bracketed duplicates (the bare
+    `::1` form is normally present too) before constructing.
+    """
+    import os
+
+    import httpx
+
+    for key in ("no_proxy", "NO_PROXY"):
+        raw = os.environ.get(key)
+        if raw and "[" in raw:
+            os.environ[key] = ",".join(
+                p for p in raw.split(",")
+                if not (p.startswith("[") and p.endswith("]"))
+            )
+    return httpx.Client(timeout=30.0)
+
+
 class PackRecheckClient:
     def __init__(self, recheck_url: str = RECHECK_URL, http=None):
         if http is None:
-            import httpx
-
-            http = httpx.Client(timeout=30.0)
+            http = _default_http()
         self.http = http
         self.recheck_url = recheck_url
         self.balance_url = recheck_url.rstrip("/") + "/pack-balance"

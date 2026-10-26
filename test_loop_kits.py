@@ -3,6 +3,8 @@
 Run:  python -m pytest test_loop_kits.py -q   (from this folder)
 """
 
+import json
+
 import pytest
 
 from loopkit_common import DailyCap, SpendCapExceeded, pack_usable, pack_warnings
@@ -150,3 +152,30 @@ def test_inspector_critical_field_classification():
         {"status": "CHANGED", "url": "u", "changes": [
             {"field": "payTo", "before": "0x1", "after": "0x2"}]})
     assert status == "CHANGED" and alerts[0].startswith("CRITICAL")
+
+
+# --- live pack client (mock transport, $0) -------------------------------------
+
+def test_pack_recheck_client_posts_pack_id():
+    httpx = pytest.importorskip("httpx")
+    from live_clients import PackRecheckClient
+
+    seen = {}
+
+    def handler(request):
+        seen["path"] = request.url.path
+        seen["body"] = json.loads(request.content)
+        if request.url.path.endswith("/pack-balance"):
+            return httpx.Response(200, json={
+                "credits_remaining": 249, "credits_total": 250,
+                "expires_at": "2027-01-23T00:00:00Z", "expired": False})
+        return httpx.Response(200, json={"status": "BASELINE"})
+
+    client = PackRecheckClient(http=httpx.Client(transport=httpx.MockTransport(handler)))
+    out = client.recheck("https://example.com/v1/x", "w1", "pack_abc")
+    assert out["status"] == "BASELINE"
+    assert seen["body"]["pack_id"] == "pack_abc"
+    bal = client.pack_balance("pack_abc")
+    assert bal["credits_remaining"] == 249
+    with pytest.raises(ValueError):
+        client.recheck("https://example.com/v1/x", "w1", None)
