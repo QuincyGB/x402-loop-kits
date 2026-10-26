@@ -81,6 +81,18 @@ purchase (see Honesty).
 
 Fleet status: https://quincyGB.github.io/x402-loop-kits/
 
+## Also in this repo (added 2026-10-26)
+
+- **`frameworks/`** — Token Verdict shelves for ElizaOS (TypeScript
+  plugin), LlamaIndex (tool), and the OpenAI Agents SDK (example).
+  Each takes a `pay` seam where x402-guard plugs in. See
+  `frameworks/README.md`.
+- **`managed-loop/`** — Managed Loop, the done-for-you offer: we run
+  the kits, you get webhook alerts + a weekly report. `OFFER.md`
+  carries the pricing with its math; `DEMO-CLIENT0.md` is a real
+  demo run with our own fleet as client #0 (no external client
+  exists yet, and none is claimed).
+
 ## License
 
 MIT

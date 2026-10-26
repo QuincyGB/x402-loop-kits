@@ -3,3 +3,5 @@ __pycache__/
 *-budget.json
 *-state.json
 .pytest_cache/
+node_modules/
+__pycache__/

@@ -17,7 +17,10 @@
 </head>
 <body>
 <h1>Verdict Row — fleet status</h1>
-<p><strong>Generated 2026-10-26, live checks at 19:37–19:38 UTC.</strong></p>
+<p><strong>Generated 2026-10-26, live checks at 19:37–19:38 UTC; updated
+2026-10-26 ~21:05 UTC for the Fleet Pass / Webhook Watch launch (StallRow
+paid routes 13&nbsp;→&nbsp;14, health re-checked 200 for all five services
+in the client-#0 demo pass).</strong></p>
 <p class="note">Generated from the fleet's own watch state and live
 <code>/health</code> + <code>/.well-known/x402</code> reads; if a number here
 disagrees with the chain or the catalogues, they win.</p>
@@ -28,10 +31,13 @@ disagrees with the chain or the catalogues, they win.</p>
 <tr><td>Token Verdict</td><td><a href="https://token-verdict-production.up.railway.app/health">token-verdict-production.up.railway.app</a></td><td class="live">LIVE</td><td>3</td></tr>
 <tr><td>RouteVerdict</td><td><a href="https://route-verdict-production.up.railway.app/health">route-verdict-production.up.railway.app</a></td><td class="live">LIVE</td><td>1</td></tr>
 <tr><td>ListSmith</td><td><a href="https://list-smith-production.up.railway.app/health">list-smith-production.up.railway.app</a></td><td class="live">LIVE</td><td>2</td></tr>
-<tr><td>StallRow</td><td><a href="https://stall-row-production.up.railway.app/health">stall-row-production.up.railway.app</a></td><td class="live">LIVE</td><td>13</td></tr>
+<tr><td>StallRow</td><td><a href="https://stall-row-production.up.railway.app/health">stall-row-production.up.railway.app</a></td><td class="live">LIVE</td><td>14</td></tr>
 <tr><td>LockSmith</td><td><a href="https://lock-smith-production.up.railway.app/health">lock-smith-production.up.railway.app</a></td><td class="live">LIVE</td><td>1</td></tr>
 </table>
-<p><strong>20 paid routes live across 5 services.</strong> Hosting: Railway
+<p><strong>21 paid routes live across 5 services</strong> (the 21st,
+StallRow <code>/v1/fleet-pass</code>, launched 2026-10-26 evening; its
+catalogue seeds are pending a wallet top-up — the route itself is live
+and its 402 is verified). Hosting: Railway
 Hobby plan. Payments: x402 v2 <code>exact</code>, USDC on Base, payTo
 <code>0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F</code> (public in every 402
 challenge). Catalogue record at the 2026-10-26 integration watch: CDP Bazaar
@@ -90,6 +96,35 @@ the reference buyer — runs daily 08:00 America/Toronto under a $0.10/day
 cap with a public log. Labelled self-funded seller demo, not customer
 traffic.</li>
 </ul>
+
+<h2>New since 2026-10-26 evening</h2>
+<ul>
+<li><strong>Fleet Pass</strong> (StallRow <code>POST /v1/fleet-pass</code>):
+one $5.00 prepaid USD balance that spends on any paid route across all
+five services, debited at each route's listed price, 90 days. Send
+<code>X-Fleet-Pass</code>; balance reads free at
+<code>POST /v1/fleet-pass/balance</code>.</li>
+<li><strong>Webhook Watch</strong> (StallRow <code>POST /v1/watch/register</code>):
+register an endpoint + webhook, funded by a recheck pack or a Fleet
+Pass — changes are pushed to your webhook as they are detected.
+First live registration 2026-10-26: BASELINE delivered to the test
+webhook (HTTP 200, payload verified at the receiver).</li>
+<li><strong>Framework shelves</strong>: Token Verdict for ElizaOS,
+LlamaIndex, and the OpenAI Agents SDK — see <code>frameworks/</code>
+in the loop-kits repo.</li>
+</ul>
+
+<h2>Managed Loop — done-for-you monitoring</h2>
+<p>Don't want to run a loop yourself? We run it: change alerts pushed
+to your webhook plus a weekly report, on the same machinery this page
+reports on. Tiers: <strong>Watch $25/mo</strong> (1 endpoint, daily) ·
+<strong>Row $79/mo</strong> (up to 5 endpoints, 6-hourly) ·
+<strong>Fleet $199/mo</strong> (up to 25 endpoints, hourly) — pricing
+math, grounded in the fleet's own listed route prices, is in
+<code>managed-loop/OFFER.md</code> in the loop-kits repo. Client #0 is
+our own fleet; its demo report is published there
+(<code>managed-loop/DEMO-CLIENT0.md</code>). No external client is
+claimed — there isn't one yet.</p>
 
 <h2>Known limitations (stated, not hidden)</h2>
 <ul>
