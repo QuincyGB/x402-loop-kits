@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verdict Row — fleet status</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #1a1a1a; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid #ccc; padding: 0.4rem 0.6rem; text-align: left; font-size: 0.95rem; }
+  th { background: #f4f4f4; }
+  .live { color: #0a7d2c; font-weight: 600; }
+  .note { background: #f8f8f2; border-left: 4px solid #c9a227; padding: 0.6rem 1rem; }
+  code { background: #f0f0f0; padding: 0 0.25rem; }
+  footer { color: #666; font-size: 0.85rem; margin-top: 2rem; }
+</style>
+</head>
+<body>
+<h1>Verdict Row — fleet status</h1>
+<p><strong>Generated 2026-10-26, live checks at 19:37–19:38 UTC.</strong></p>
+<p class="note">Generated from the fleet's own watch state and live
+<code>/health</code> + <code>/.well-known/x402</code> reads; if a number here
+disagrees with the chain or the catalogues, they win.</p>
+
+<h2>Services</h2>
+<table>
+<tr><th>Service</th><th>Base URL</th><th>Health (checked 2026-10-26 19:37 UTC)</th><th>Paid routes</th></tr>
+<tr><td>Token Verdict</td><td><a href="https://token-verdict-production.up.railway.app/health">token-verdict-production.up.railway.app</a></td><td class="live">LIVE</td><td>3</td></tr>
+<tr><td>RouteVerdict</td><td><a href="https://route-verdict-production.up.railway.app/health">route-verdict-production.up.railway.app</a></td><td class="live">LIVE</td><td>1</td></tr>
+<tr><td>ListSmith</td><td><a href="https://list-smith-production.up.railway.app/health">list-smith-production.up.railway.app</a></td><td class="live">LIVE</td><td>2</td></tr>
+<tr><td>StallRow</td><td><a href="https://stall-row-production.up.railway.app/health">stall-row-production.up.railway.app</a></td><td class="live">LIVE</td><td>13</td></tr>
+<tr><td>LockSmith</td><td><a href="https://lock-smith-production.up.railway.app/health">lock-smith-production.up.railway.app</a></td><td class="live">LIVE</td><td>1</td></tr>
+</table>
+<p><strong>20 paid routes live across 5 services.</strong> Hosting: Railway
+Hobby plan. Payments: x402 v2 <code>exact</code>, USDC on Base, payTo
+<code>0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F</code> (public in every 402
+challenge). Catalogue record at the 2026-10-26 integration watch: CDP Bazaar
+merchant total 19 and PayAI listing for the fleet's first 19 routes; the 20th
+route (LockSmith <code>/v1/audit</code>) has settled CDP + PayAI seeds and
+x402scan-verified ownership, with the CDP merchant count moving 19&nbsp;→&nbsp;20
+once indexing catches up. All five services carry x402scan-verified
+ownership.</p>
+
+<h2>Proof</h2>
+<ul>
+<li><strong>Settled scout record (2026-10-26): 35 purchases / 35 delivered /
+19 endpoints</strong>, all stamped <code>as_advertised</code> after the
+$2 whole-fleet re-test plus paid single-endpoint re-tests.</li>
+<li><strong>Security audit 2026-10-25:</strong> no critical findings; one
+HIGH (SSRF in RouteVerdict / ListSmith URL fetching) fixed and deployed the
+same evening; 411 tests across the four audited services at audit time.</li>
+<li><strong>Failure honesty rule:</strong> an upstream failure returns 502
+and the payment does not settle — nobody is charged for undelivered data.</li>
+<li><strong>Recheck store is persistent</strong> across redeploys (StallRow
+<code>/health</code> reports <code>recheck_store: persistent</code>): packs
+and watches survive deploys.</li>
+</ul>
+
+<h2>External record — kept in two buckets, never merged</h2>
+<ul>
+<li>Non-Settled external payers: <strong>19 calls / $0.445</strong> across
+4 wallets (one repeat payer at the $0.10 route).</li>
+<li>Settled scout/inspector traffic: <strong>35 purchases / $2.625</strong>,
+kept separate — it is an inspector's test traffic, not organic demand.</li>
+<li>Seller seeds never count as traction. The recheck pack has had
+<strong>no organic stranger sale yet</strong>.</li>
+<li>No confirmed third-party loop runs on the fleet yet.</li>
+</ul>
+
+<h2>Loop shelf</h2>
+<ul>
+<li><strong>Recheck watch pack</strong> (StallRow <code>POST /v1/recheck/pack</code>):
+$1.00 = 250 change-checks on ONE endpoint, 90 days, $0.004/check. Balance
+reads are free; exhausted packs return 402, expired 410, and never fall back
+to per-call billing.</li>
+<li><strong><a href="https://github.com/QuincyGB/x402-loop-kits">x402-loop-kits</a></strong>:
+monitor / pre-trade / inspector templates (this repo). First live run,
+2026-10-26 19:36 UTC: one inspector recheck of Token Verdict
+<code>/v1/verdict</code> spent one credit from a seeded pack
+(balance 250&nbsp;→&nbsp;249 read back afterward), result BASELINE,
+$0.00 cash.</li>
+<li><strong><a href="https://github.com/QuincyGB/x402-guard">x402-guard</a></strong>:
+buyer-side middleware — PyPI <code>x402-guard</code> 0.1.1 and npm
+<code>@quincygb/x402-guard</code> 0.1.2 (published 2026-10-26 via Trusted
+Publisher workflows, registry-verified) can spend recheck pack credits for
+drift checks (config <code>recheck_pack_id</code> / <code>recheckPackId</code>),
+warning at 25 and 10 credits remaining.</li>
+<li><strong><a href="https://github.com/QuincyGB/verdict-loop">verdict-loop</a></strong>:
+the reference buyer — runs daily 08:00 America/Toronto under a $0.10/day
+cap with a public log. Labelled self-funded seller demo, not customer
+traffic.</li>
+</ul>
+
+<h2>Known limitations (stated, not hidden)</h2>
+<ul>
+<li><strong>No uptime figure is published, because none is measured.</strong>
+Liveness is probed by the daily integration watch; this page shows the check
+time behind every LIVE mark.</li>
+<li><strong>No app-level rate limiting.</strong> A flood of well-formed
+forged payment headers would be forwarded to the facilitator for
+verification (2026-10-25 audit item M3, accepted risk, open decision). A
+facilitator-quota check on 2026-10-26 found that CDP's verify performs
+signature/nonce/balance and KYT screening itself, but no published
+per-seller verify quota was found in CDP's docs; the Railway-edge option
+requires dashboard access and has not been applied.</li>
+<li>Chunked request bodies without Content-Length terminate at the Railway
+edge; a DNS-rebinding TOCTOU residual exists in the SSRF guards
+(2026-10-25 audit).</li>
+<li><strong>EntRoute is parked:</strong> its listing gate needs a DNS TXT
+record that cannot be set on <code>*.up.railway.app</code>, and no custom
+domain has been purchased.</li>
+</ul>
+
+<footer>Verdict Row — Token Verdict · RouteVerdict · ListSmith · StallRow ·
+LockSmith. Page generated 2026-10-26; re-verify numbers before quoting them.</footer>
+</body>
+</html>
