@@ -1,0 +1,180 @@
+{
+  "Token Verdict": {
+    "base": "https://token-verdict-production.up.railway.app",
+    "health_status": 200,
+    "manifest_status": 200,
+    "routes": [
+      {
+        "path": "/v1/verdict",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "20000"
+      },
+      {
+        "path": "/v1/pre-trade",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "50000"
+      },
+      {
+        "path": "/v1/batch-verdict",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "200000"
+      }
+    ],
+    "criterion1_pass": true
+  },
+  "RouteVerdict": {
+    "base": "https://route-verdict-production.up.railway.app",
+    "health_status": 200,
+    "manifest_status": 200,
+    "routes": [
+      {
+        "path": "/v1/check",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "50000"
+      }
+    ],
+    "criterion1_pass": true
+  },
+  "ListSmith": {
+    "base": "https://list-smith-production.up.railway.app",
+    "health_status": 200,
+    "manifest_status": 200,
+    "routes": [
+      {
+        "path": "/v1/grade",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "100000"
+      },
+      {
+        "path": "/v1/fix",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "500000"
+      }
+    ],
+    "criterion1_pass": true
+  },
+  "StallRow": {
+    "base": "https://stall-row-production.up.railway.app",
+    "health_status": 200,
+    "manifest_status": 200,
+    "routes": [
+      {
+        "path": "/v1/wallet-snapshot",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "5000"
+      },
+      {
+        "path": "/v1/allowance-audit",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "5000"
+      },
+      {
+        "path": "/v1/tx-decoder",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "2000"
+      },
+      {
+        "path": "/v1/gas-oracle",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "1000"
+      },
+      {
+        "path": "/v1/wallet-verdict",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "20000"
+      },
+      {
+        "path": "/v1/tube-search",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "10000"
+      },
+      {
+        "path": "/v1/page-to-markdown",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "10000"
+      },
+      {
+        "path": "/v1/repo-vitals",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "5000"
+      },
+      {
+        "path": "/v1/price-check",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "50000"
+      },
+      {
+        "path": "/v1/card-smith",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "100000"
+      },
+      {
+        "path": "/v1/job-scout",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "50000"
+      },
+      {
+        "path": "/v1/recheck",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "5000"
+      },
+      {
+        "path": "/v1/index/changes",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "100000"
+      },
+      {
+        "path": "/v1/orchestrate",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "750000"
+      },
+      {
+        "path": "/v1/recheck/pack",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "1000000"
+      },
+      {
+        "path": "/v1/fleet-pass",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "5000000"
+      }
+    ],
+    "criterion1_pass": true
+  },
+  "LockSmith": {
+    "base": "https://lock-smith-production.up.railway.app",
+    "health_status": 200,
+    "manifest_status": 200,
+    "routes": [
+      {
+        "path": "/v1/audit",
+        "probe_status": 402,
+        "exact_match": true,
+        "amount": "500000"
+      }
+    ],
+    "criterion1_pass": true
+  }
+}

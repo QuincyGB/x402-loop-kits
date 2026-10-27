@@ -70,3 +70,35 @@ in-service snapshot and a changelog diff needs two. Rather than
 carve an exception for our own stall, the badge waits. Re-check
 after the second in-service snapshot lands (expected 2026-10-27);
 the badge page carries this failure and its reason until then.
+
+## Re-check — 2026-10-27
+
+Battery re-run (`badge/battery-2026-10-27.json`): all five services
+PASS criterion 1 — 23 routes probed, StallRow now 16/16 including
+fleet-pass, index and orchestrate; every live 402 exact-matched its
+manifest. The four awarded stalls are unchanged.
+
+StallRow had two delivery blocks at the first run. One cleared:
+
+- **`/v1/orchestrate` — CLEARED.** The fleet-internal secret is set
+  in production on all five services; the internal round-trip
+  passed on all four siblings (correct secret delivers, wrong
+  secret 403s); and a paid dogfood seed call on 2026-10-27 settled
+  ($0.75, Base tx
+  `0x3cded2abdaa34379fe090055124db1b3d4c19709cc2e30090dcc58add2ace30d`)
+  and delivered the full combined report — legs_ok: token_verdict
+  (SOLID), route_verdict (TRUSTED), locksmith (SECURE), listsmith
+  (grade payload delivered); legs_failed: none. Seed labelled as
+  seed: it proves delivery, not demand.
+
+One block stands:
+
+- **`/v1/index/changes` — STILL BLOCKED.** A paid attempt on
+  2026-10-27 again returned the route's charge-free 502: fewer
+  than two catalog snapshots stored in-service, so there is no
+  honest diff to sell yet. No payment settled on the attempt
+  (balances verified unchanged).
+
+**Verdict: StallRow remains NOT AWARDED** — criterion 2 is not
+met while a listed route cannot deliver. Re-check after the
+second in-service snapshot lands.

@@ -35,8 +35,15 @@ re-runnable.</p>
 <tr><td>RouteVerdict</td><td class="pass">PASS — 1/1 routes</td><td>Settled stamp, 2026-10-26</td><td>None (2 snapshots)</td><td class="pass">AWARDED</td></tr>
 <tr><td>ListSmith</td><td class="pass">PASS — 2/2 routes</td><td>Settled stamp, 2026-10-26</td><td>None (2 snapshots)</td><td class="pass">AWARDED</td></tr>
 <tr><td>LockSmith</td><td class="pass">PASS — 1/1 routes</td><td>Full battery 2026-10-25/26 (seed settlements, labelled as seeds; dogfood audits 8/8)</td><td>None — not yet catalog-indexed; drift watch starts at its first catalog appearance</td><td class="pass">AWARDED</td></tr>
-<tr><td>StallRow</td><td class="pass">PASS — 15/15 routes (battery ran before the 16th route shipped)</td><td>Settled stamps on original routes; Fleet Pass / Webhook Watch delivered live 2026-10-26</td><td>None (2 snapshots)</td><td class="fail">NOT AWARDED — two delivery blocks: <code>/v1/index/changes</code> cannot yet deliver a diff (the Index holds one in-service snapshot; a changelog needs two), and <code>/v1/orchestrate</code> (shipped later on 2026-10-26) cannot complete a leg until the fleet-internal secret is set in production config. No exceptions for our own stall. Re-check after both clear (index snapshot #2 expected 2026-10-27).</td></tr>
+<tr><td>StallRow</td><td class="pass">PASS — 16/16 routes (battery re-run 2026-10-27)</td><td>Settled stamps on original routes; Fleet Pass / Webhook Watch delivered live 2026-10-26; Fleet Pass seeded + settled on CDP &amp; PayAI 2026-10-27; <code>/v1/orchestrate</code> delivered live 2026-10-27 (paid dogfood seed — all four legs OK; seed labelled as seed)</td><td>None (2 snapshots)</td><td class="fail">NOT AWARDED — one delivery block remains: <code>/v1/index/changes</code> cannot yet deliver a diff (fewer than two in-service snapshots stored; a paid attempt on 2026-10-27 still returns its charge-free 502). The <code>/v1/orchestrate</code> block cleared 2026-10-27: the fleet-internal secret is set in production, the internal round-trip passed on all four siblings, and a paid dogfood call delivered the full combined report. No exceptions for our own stall. Re-check after the second in-service snapshot lands.</td></tr>
 </table>
+
+<p class="note"><strong>Re-check — 2026-10-27:</strong> battery re-run
+against all five services (23 routes probed; every live 402
+exact-matched its manifest — <code>badge/battery-2026-10-27.json</code>).
+Four stalls unchanged (AWARDED). StallRow's orchestrate block cleared
+(see its row); its index block stands, so StallRow remains NOT
+AWARDED.</p>
 
 <p class="note"><strong>Record-depth honesty:</strong> Verdict Index
 snapshot history starts 2026-10-26. "No drift on record" today means
