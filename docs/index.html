@@ -31,13 +31,14 @@ disagrees with the chain or the catalogues, they win.</p>
 <tr><td>Token Verdict</td><td><a href="https://token-verdict-production.up.railway.app/health">token-verdict-production.up.railway.app</a></td><td class="live">LIVE</td><td>3</td></tr>
 <tr><td>RouteVerdict</td><td><a href="https://route-verdict-production.up.railway.app/health">route-verdict-production.up.railway.app</a></td><td class="live">LIVE</td><td>1</td></tr>
 <tr><td>ListSmith</td><td><a href="https://list-smith-production.up.railway.app/health">list-smith-production.up.railway.app</a></td><td class="live">LIVE</td><td>2</td></tr>
-<tr><td>StallRow</td><td><a href="https://stall-row-production.up.railway.app/health">stall-row-production.up.railway.app</a></td><td class="live">LIVE</td><td>14</td></tr>
+<tr><td>StallRow</td><td><a href="https://stall-row-production.up.railway.app/health">stall-row-production.up.railway.app</a></td><td class="live">LIVE</td><td>16</td></tr>
 <tr><td>LockSmith</td><td><a href="https://lock-smith-production.up.railway.app/health">lock-smith-production.up.railway.app</a></td><td class="live">LIVE</td><td>1</td></tr>
 </table>
-<p><strong>21 paid routes live across 5 services</strong> (the 21st,
+<p><strong>23 paid routes live across 5 services</strong> (the 21st,
 StallRow <code>/v1/fleet-pass</code>, launched 2026-10-26 evening; its
 catalogue seeds are pending a wallet top-up — the route itself is live
-and its 402 is verified). Hosting: Railway
+and its 402 is verified. Routes 22–23 — Verdict Index and Orchestrate —
+shipped later the same night; their seeds are on the same top-up list). Hosting: Railway
 Hobby plan. Payments: x402 v2 <code>exact</code>, USDC on Base, payTo
 <code>0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F</code> (public in every 402
 challenge). Catalogue record at the 2026-10-26 integration watch: CDP Bazaar
@@ -144,6 +145,18 @@ webhook (HTTP 200, payload verified at the receiver).</li>
 <li><strong>Framework shelves</strong>: Token Verdict for ElizaOS,
 LlamaIndex, and the OpenAI Agents SDK — see <code>frameworks/</code>
 in the loop-kits repo.</li>
+<li><strong>Verdict Index</strong> (StallRow <code>POST /v1/index/changes</code>,
+$0.10): the CDP Bazaar catalog changelog — diffs of full-catalog
+snapshots (baseline 2026-10-26: 78,057 unique resources). Issue #0 is
+in the repo (<code>verdict-index/ISSUE-0.md</code>). In-service diffs
+start once two snapshots accrue; until then the route 502s and
+charges nothing.</li>
+<li><strong>Orchestrate</strong> (StallRow <code>POST /v1/orchestrate</code>,
+$0.75): one combined report — Token Verdict + RouteVerdict +
+LockSmith + ListSmith via the fleet's internal paths. Live and
+402-verified; its legs activate when the fleet-internal secret is
+set in production config (a dashboard step), so it is not seeded
+yet — a route that cannot deliver does not get listed.</li>
 </ul>
 
 <h2>Managed Loop — done-for-you monitoring</h2>
