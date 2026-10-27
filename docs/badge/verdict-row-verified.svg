@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="264" height="48" viewBox="0 0 264 48" role="img" aria-label="Verdict Row Verified">
+  <title>Verdict Row Verified</title>
+  <rect x="1" y="1" width="262" height="46" rx="9" fill="#16202a"/>
+  <rect x="1" y="1" width="262" height="46" rx="9" fill="none" stroke="#c9a227" stroke-width="2"/>
+  <path d="M24 8 L36 12 V22 C36 31 30.5 36.5 24 40 C17.5 36.5 12 31 12 22 V12 Z" fill="none" stroke="#c9a227" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M18.5 23.5 L22.5 27.5 L30 19.5" fill="none" stroke="#3ecf6f" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="48" y="22" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="10.5" letter-spacing="1.6" fill="#c9a227">VERDICT ROW</text>
+  <text x="48" y="39" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15.5" font-weight="700" letter-spacing="0.4" fill="#ffffff">VERIFIED</text>
+</svg>

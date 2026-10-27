@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verdict Row Verified — awarded stalls</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #1a1a1a; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid #ccc; padding: 0.4rem 0.6rem; text-align: left; font-size: 0.95rem; }
+  th { background: #f4f4f4; }
+  .pass { color: #0a7d2c; font-weight: 600; }
+  .fail { color: #b3261e; font-weight: 600; }
+  .note { background: #f8f8f2; border-left: 4px solid #c9a227; padding: 0.6rem 1rem; }
+  code { background: #f0f0f0; padding: 0 0.25rem; }
+  footer { color: #666; font-size: 0.85rem; margin-top: 2rem; }
+</style>
+</head>
+<body>
+<h1>Verdict Row Verified — awarded stalls</h1>
+<p>The badge certifies three measured things about a stall's payment
+surface: its live 402 exactly matches its published manifest on every
+route; it has delivery evidence within 7 days; and its payTo/price
+show no unannounced drift across Verdict Index catalog snapshots.
+Full criteria: <code>badge/CRITERIA.md</code> in the
+<a href="https://github.com/QuincyGB/x402-loop-kits">x402-loop-kits</a>
+repo. The battery (<code>badge/run_battery.py</code>) is public and
+re-runnable.</p>
+<p><img src="badge/verdict-row-verified.svg" alt="Verdict Row Verified badge" width="264" height="48"></p>
+
+<h2>Dogfood run — 2026-10-26 (our own five services, judged first)</h2>
+<table>
+<tr><th>Service</th><th>402 exact-match (battery)</th><th>Delivery evidence ≤7d</th><th>Drift on record</th><th>Badge</th></tr>
+<tr><td>Token Verdict</td><td class="pass">PASS — 3/3 routes</td><td>Settled stamp, 2026-10-26</td><td>None (2 snapshots)</td><td class="pass">AWARDED</td></tr>
+<tr><td>RouteVerdict</td><td class="pass">PASS — 1/1 routes</td><td>Settled stamp, 2026-10-26</td><td>None (2 snapshots)</td><td class="pass">AWARDED</td></tr>
+<tr><td>ListSmith</td><td class="pass">PASS — 2/2 routes</td><td>Settled stamp, 2026-10-26</td><td>None (2 snapshots)</td><td class="pass">AWARDED</td></tr>
+<tr><td>LockSmith</td><td class="pass">PASS — 1/1 routes</td><td>Full battery 2026-10-25/26 (seed settlements, labelled as seeds; dogfood audits 8/8)</td><td>None — not yet catalog-indexed; drift watch starts at its first catalog appearance</td><td class="pass">AWARDED</td></tr>
+<tr><td>StallRow</td><td class="pass">PASS — 15/15 routes</td><td>Settled stamps on original routes; Fleet Pass / Webhook Watch delivered live 2026-10-26</td><td>None (2 snapshots)</td><td class="fail">NOT AWARDED — its newest route, <code>/v1/index/changes</code>, cannot yet deliver a diff: the Index holds one in-service snapshot and a changelog needs two. No exceptions for our own stall. Re-check after snapshot #2 (expected 2026-10-27).</td></tr>
+</table>
+
+<p class="note"><strong>Record-depth honesty:</strong> Verdict Index
+snapshot history starts 2026-10-26. "No drift on record" today means
+2 snapshots; the 30-day drift window matures 2026-11-25 and this page
+will print the depth on every future run.</p>
+
+<h2>External stalls</h2>
+<p>None. No external stall is badged, listed, or named here without
+its operator's participation. If you run a stall and want the battery
+run against it, open an issue on the repo — the run is the same one
+published above, and the result is published either way.</p>
+
+<footer>Verdict Row — Token Verdict · RouteVerdict · ListSmith · StallRow ·
+LockSmith. Badge run 2026-10-26; re-verify before quoting.</footer>
+</body>
+</html>
