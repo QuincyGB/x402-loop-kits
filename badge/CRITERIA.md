@@ -154,3 +154,35 @@ record (2 in-service snapshots since 2026-10-26).
 | StallRow | PASS — 16/16 routes | Index + orchestrate delivered live 2026-10-27 (paid dogfood seeds, labelled); Settled stamps; Fleet Pass seeds CDP & PayAI | none (2 in-service snapshots) | **AWARDED** |
 
 **All five fleet services now hold the badge (5/5).**
+
+## Badge v2 — outcome scoring (added 2026-10-27)
+
+V1 certifies the payment surface. V2 adds a fourth criterion, which
+applies **only to services with routes whose claims we score**:
+
+4. **Published outcome record.** The service's scored claims are
+   tracked in a public accuracy ledger whose scoring rules were
+   fixed in writing BEFORE the first scoring run, and the ledger
+   publishes its outcomes — hit rate **with its n**, the
+   inconclusive and excluded counts, and the inconclusive/caution
+   handling — at the horizons the rules name (+7d, +30d). V2 grades
+   the existence and honesty of the record, not the hit rate: a low
+   rate published with its n passes; mature outcomes that exist but
+   are not published fail. While a ledger has records but none are
+   mature yet, the status is **TRACKING** — v2 cannot pass on a
+   record that has not had time to be wrong.
+
+**Scored routes today:** Token Verdict's verdicts only, scored by
+`accuracy-ledger/` (rules: `accuracy-ledger/METHODOLOGY.md`, fixed
+2026-10-26; snapshot: `accuracy-ledger/snapshot.json`). The other
+four fleet services have no outcome-scored route; their v2 status
+is NOT_APPLICABLE — stated, never silently passed, never failed
+for lacking a claim nobody scored.
+
+**Dogfood evaluation — 2026-10-27** (`badge/evaluate_v2.py`,
+output `badge/badge-v2-2026-10-27.json`): Token Verdict —
+TRACKING (6 records, all self-funded and labelled as such, 0
+mature until 2026-11-01, hit rate null and published as null).
+RouteVerdict, ListSmith, StallRow, LockSmith — NOT_APPLICABLE.
+No external stall has been evaluated under v2 (the participation
+rule above is unchanged).

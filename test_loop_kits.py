@@ -179,3 +179,41 @@ def test_pack_recheck_client_posts_pack_id():
     assert bal["credits_remaining"] == 249
     with pytest.raises(ValueError):
         client.recheck("https://example.com/v1/x", "w1", None)
+
+
+# --- fleet pass live client (mock transport, $0) --------------------------------
+
+def test_fleet_pass_client_sends_header_and_reads_balance():
+    httpx = pytest.importorskip("httpx")
+    from live_clients import FleetPassClient
+
+    seen = {}
+
+    def handler(request):
+        seen.setdefault("headers", []).append(request.headers.get("x-fleet-pass"))
+        if request.url.path.endswith("/fleet-pass/balance"):
+            return httpx.Response(200, json={
+                "pass_id": "fpass_x", "balance_units": 19_900_000,
+                "balance_usd": 19.9, "expired": False})
+        return httpx.Response(200, json={"summary": {"resources_after": 84441}})
+
+    client = FleetPassClient(
+        "fpass_x", http=httpx.Client(transport=httpx.MockTransport(handler)))
+    out = client.call("/v1/index/changes", {})
+    assert out["summary"]["resources_after"] == 84441
+    bal = client.balance()
+    assert bal["balance_usd"] == 19.9
+    assert seen["headers"] == ["fpass_x", None]  # call carries it; balance names it in body
+
+
+def test_fleet_pass_client_surfaces_exhaustion_without_fallback():
+    httpx = pytest.importorskip("httpx")
+    from live_clients import FleetPassClient
+
+    def handler(request):
+        return httpx.Response(402, json={"error": "pass balance below price", "code": "pass_insufficient"})
+
+    client = FleetPassClient(
+        "fpass_x", http=httpx.Client(transport=httpx.MockTransport(handler)))
+    with pytest.raises(RuntimeError, match="402"):
+        client.call("/v1/index/changes", {})
