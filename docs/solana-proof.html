@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Verdict — Solana ownership proof signer</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #1a1a1a; }
+  .note { background: #f8f8f2; border-left: 4px solid #c9a227; padding: 0.6rem 1rem; }
+  .warn { background: #fdf3f3; border-left: 4px solid #b03a2e; padding: 0.6rem 1rem; }
+  code { background: #f0f0f0; padding: 0 0.25rem; word-break: break-all; }
+  button { font-size: 1rem; padding: 0.55rem 1.2rem; margin: 0.4rem 0.4rem 0.4rem 0; cursor: pointer; }
+  button:disabled { opacity: 0.45; cursor: default; }
+  textarea { width: 100%; box-sizing: border-box; font-family: ui-monospace, monospace; font-size: 0.85rem; padding: 0.5rem; }
+  footer { color: #666; font-size: 0.85rem; margin-top: 2rem; }
+  #status { min-height: 1.5em; font-weight: 600; }
+</style></head><body>
+<h1>Token Verdict — Solana ownership proof signer</h1>
+
+<p>This page asks Phantom to <strong>sign a message</strong> proving that the
+Phantom account below owns Token Verdict's Solana payments address, so
+x402scan can mark the Solana accept as verified. Signing a message is
+<strong>not a transaction</strong>: it moves no funds, spends nothing, and
+cannot transfer anything. It only produces a signature you copy and send
+to Ren.</p>
+
+<p class="warn"><strong>Check before you sign:</strong> the message below
+must read <em>exactly</em> <code>https://token-verdict-production.up.railway.app</code>
+— bare origin, no trailing slash, nothing else. If any other site ever asks
+you to sign something different, close it. Never sign a transaction you did
+not start.</p>
+
+<h2>1. Connect Phantom</h2>
+<p>Use the Phantom account that receives Token Verdict's Solana payments:
+<code>FeyyAfoCbn1psQ6x8gxN8YQbXZVpTSibZwP6mkXckXUJ</code></p>
+<button id="connect">Connect Phantom</button>
+<p>Connected account: <code id="pubkey">— not connected —</code></p>
+
+<h2>2. Sign this exact message</h2>
+<p>Message: <code id="msg">https://token-verdict-production.up.railway.app</code></p>
+<button id="sign" disabled>Sign message</button>
+<p id="status"></p>
+
+<h2>3. Copy the signature and send it to Ren</h2>
+<textarea id="sig" rows="3" readonly placeholder="The base58 signature will appear here after signing"></textarea>
+<br>
+<button id="copy" disabled>Copy signature</button>
+
+<footer>Verdict Row · x402-loop-kits · This page is a single self-contained
+file with no external scripts — view source to audit it.</footer>
+
+<script>
+"use strict";
+var MESSAGE = "https://token-verdict-production.up.railway.app";
+var EXPECTED = "FeyyAfoCbn1psQ6x8gxN8YQbXZVpTSibZwP6mkXckXUJ";
+var pubkey = null;
+
+var B58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+function base58Encode(bytes) {
+  var zeros = 0;
+  while (zeros < bytes.length && bytes[zeros] === 0) zeros++;
+  if (zeros === bytes.length) return "1".repeat(zeros);
+  var digits = [0];
+  for (var i = zeros; i < bytes.length; i++) {
+    var carry = bytes[i];
+    for (var j = 0; j < digits.length; j++) {
+      carry += digits[j] << 8;
+      digits[j] = carry % 58;
+      carry = (carry / 58) | 0;
+    }
+    while (carry > 0) { digits.push(carry % 58); carry = (carry / 58) | 0; }
+  }
+  var out = "1".repeat(zeros);
+  for (var m = digits.length - 1; m >= 0; m--) out += B58[digits[m]];
+  return out;
+}
+
+function provider() {
+  if (window.phantom && window.phantom.solana && window.phantom.solana.isPhantom) return window.phantom.solana;
+  if (window.solana && window.solana.isPhantom) return window.solana;
+  return null;
+}
+function setStatus(t) { document.getElementById("status").textContent = t; }
+
+document.getElementById("connect").addEventListener("click", async function () {
+  var p = provider();
+  if (!p) { setStatus("Phantom not found — open this page in the browser where the Phantom extension is installed."); return; }
+  try {
+    var res = await p.connect();
+    pubkey = res.publicKey.toString();
+    document.getElementById("pubkey").textContent = pubkey;
+    if (pubkey === EXPECTED) {
+      setStatus("Connected to the right account. You can sign.");
+      document.getElementById("sign").disabled = false;
+    } else {
+      setStatus("Connected, but this is NOT the Token Verdict Solana account (" + EXPECTED + "). Switch accounts in Phantom and reconnect — do not sign with this one.");
+      document.getElementById("sign").disabled = true;
+    }
+  } catch (e) { setStatus("Connect rejected: " + e.message); }
+});
+
+document.getElementById("sign").addEventListener("click", async function () {
+  var p = provider();
+  if (!p || !pubkey) { setStatus("Connect Phantom first."); return; }
+  if (document.getElementById("msg").textContent !== MESSAGE) { setStatus("Message on page does not match the expected origin — do NOT sign."); return; }
+  try {
+    var encoded = new TextEncoder().encode(MESSAGE);
+    var result = await p.signMessage(encoded, "utf8");
+    var sigBytes = result.signature instanceof Uint8Array ? result.signature : new Uint8Array(result.signature);
+    var sig = base58Encode(sigBytes);
+    document.getElementById("sig").value = sig;
+    document.getElementById("copy").disabled = false;
+    setStatus("Signed. Copy the signature below and send it to Ren.");
+  } catch (e) { setStatus("Signing rejected or failed: " + e.message); }
+});
+
+document.getElementById("copy").addEventListener("click", async function () {
+  var box = document.getElementById("sig");
+  box.select();
+  try { await navigator.clipboard.writeText(box.value); setStatus("Signature copied to clipboard."); }
+  catch (e) { document.execCommand("copy"); setStatus("Signature selected — press Ctrl/Cmd+C to copy."); }
+});
+</script>
+</body></html>
