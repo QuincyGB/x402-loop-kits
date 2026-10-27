@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Index Subscriptions — Verdict Row</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #1a1a1a; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid #ccc; padding: 0.4rem 0.6rem; text-align: left; font-size: 0.92rem; }
+  th { background: #f4f4f4; }
+  .note { background: #f8f8f2; border-left: 4px solid #c9a227; padding: 0.6rem 1rem; }
+  pre { background: #0f1b26; color: #dcebf5; padding: 14px 16px; border-radius: 8px; overflow-x: auto; font-size: .82rem; }
+  code { background: #f0f0f0; padding: 0 0.25rem; word-break: break-all; }
+  pre code { background: transparent; }
+  footer { color: #666; font-size: 0.85rem; margin-top: 2rem; }
+</style></head><body>
+<h1>Index Subscriptions — the catalog watch, as a subscription</h1>
+<p>StallRow's Verdict Index snapshots the full x402 Bazaar catalog about
+every 6 hours and diffs it snapshot-to-snapshot. An <strong>index
+subscription</strong> turns that diff into a feed for <em>your</em> stall:
+register a filter once, and every delivered evaluation pushes the full
+diff for your listings — adds, removals, price changes, payTo rotations —
+to your webhook. Empty diffs arrive as heartbeats, so silence never
+masquerades as health.</p>
+
+<h2>How it works</h2>
+<table>
+<tr><th>Step</th><th>Call</th><th>Price</th></tr>
+<tr><td>Register</td><td><code>POST /v1/index/subscribe</code> with a filter
+(<code>pay_to</code>, <code>origin</code>, or <code>service</code>), a webhook URL,
+and a Fleet Pass id for funding</td><td>free</td></tr>
+<tr><td>Baseline</td><td>First evaluation stores your starting snapshot</td><td>free — never debited</td></tr>
+<tr><td>Evaluate</td><td><code>POST /v1/index/subscription/run</code> —
+diffs the newest snapshot against your watermark and pushes it to your webhook</td>
+<td>$0.10 debited from your Fleet Pass per <em>delivered</em> evaluation
+(the <code>/v1/index/changes</code> price)</td></tr>
+<tr><td>Status</td><td><code>POST /v1/index/subscription/status</code></td><td>free</td></tr>
+</table>
+<p class="note">Funding honesty is built in: if your pass can't cover an
+evaluation, the run reports <code>funding_failed</code> and your watermark does
+<strong>not</strong> advance — you never lose a diff to a dry pass, and a failed
+delivery on our side refunds the debit. If our own snapshot pipeline is
+stale, evaluations are <em>skipped, not faked</em> (see the live example
+below).</p>
+
+<h2>Live dogfood: our own stalls, on our own subscription</h2>
+<p>Verdict Row eats its own cooking. On 2026-10-27 we registered our own
+fleet on the subscription — filter <code>pay_to</code> = the fleet payTo,
+funded by our own $5 Fleet Pass:</p>
+<pre><code>POST /v1/index/subscribe
+&rarr; {"subscription_id": "isub_0bae95e3ed874ed4", "status": "active", ...}
+
+POST /v1/index/subscription/run        (first evaluation)
+&rarr; {"status": "baseline", "snapshot_id": 3,
+    "current_at": "2026-10-27T11:39:12Z", "debited_units": 0}</code></pre>
+<p>Two hours later the next evaluation did something more instructive than
+deliver: it <strong>refused</strong>. The snapshot-ingest run behind the Index had
+failed its own settlement-signature reconciliation check, so the newest
+snapshot was stale — and the subscription declined to diff against stale
+data rather than sell us a confident-looking feed built on it:</p>
+<pre><code>POST /v1/index/subscription/run        (second evaluation)
+&rarr; {"status": "skipped",
+    "reason": "latest index snapshot predates the newest ingest run",
+    "debited_units": 0}</code></pre>
+<p>That is the product working as designed: a skipped evaluation costs
+nothing, advances nothing, and says why. When the ingest pipeline is
+healthy again, the next run delivers the full diff since the baseline —
+nothing was lost by waiting.</p>
+
+<h2>What a delivered evaluation looks like</h2>
+<p>A delivered run returns (and webhooks) the complete diff for your
+filter since your last delivered evaluation: listings added and removed,
+and field changes with before/after values — the same diff the fleet's
+public <a href="drift-board.html">drift board</a> renders for the whole
+catalog, narrowed to your stall.</p>
+
+<h2>Get it</h2>
+<p>Hold a <a href="index.html">Fleet Pass</a>, then register with the
+three calls above on StallRow
+(<code>https://stall-row-production.up.railway.app</code>). Prefer a
+managed version — alerts triaged, a weekly one-page report, a human in
+the loop? That's the <a href="https://github.com/QuincyGB/x402-loop-kits/blob/main/managed-loop/SELLER-OFFER.md">Stall Watch managed loop</a>.</p>
+<footer>Built by Verdict Row. The dogfood subscription, its baseline, and
+the skipped evaluation above are real outputs from 2026-10-27, quoted
+verbatim; no diff is shown for the dogfood filter because none has been
+delivered yet — the baseline is two hours old and the pipeline said so.</footer>
+</body></html>

@@ -1,0 +1,11 @@
+{
+  "client": "Verdict Row — client #0 (our own fleet)",
+  "tier": "Row",
+  "endpoints": [
+    {"url": "https://token-verdict-production.up.railway.app/v1/verdict", "watch_id": "managed-loop-client0-tv", "funding": {"kind": "fleet_pass", "pass_id": "fpass_62035848d24afc7826e9444adb5d86fe"}},
+    {"url": "https://route-verdict-production.up.railway.app/v1/check", "watch_id": "managed-loop-client0-rv", "funding": {"kind": "fleet_pass", "pass_id": "fpass_62035848d24afc7826e9444adb5d86fe"}},
+    {"url": "https://list-smith-production.up.railway.app/v1/grade", "watch_id": "managed-loop-client0-ls", "funding": {"kind": "fleet_pass", "pass_id": "fpass_62035848d24afc7826e9444adb5d86fe"}},
+    {"url": "https://stall-row-production.up.railway.app/v1/gas-oracle", "watch_id": "managed-loop-client0-sr", "funding": {"kind": "fleet_pass", "pass_id": "fpass_62035848d24afc7826e9444adb5d86fe"}},
+    {"url": "https://lock-smith-production.up.railway.app/v1/audit", "watch_id": "managed-loop-client0-lk", "funding": {"kind": "fleet_pass", "pass_id": "fpass_62035848d24afc7826e9444adb5d86fe"}}
+  ]
+}
