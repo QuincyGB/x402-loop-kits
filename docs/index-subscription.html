@@ -38,33 +38,47 @@ diffs the newest snapshot against your watermark and pushes it to your webhook</
 <p class="note">Funding honesty is built in: if your pass can't cover an
 evaluation, the run reports <code>funding_failed</code> and your watermark does
 <strong>not</strong> advance — you never lose a diff to a dry pass, and a failed
-delivery on our side refunds the debit. If our own snapshot pipeline is
-stale, evaluations are <em>skipped, not faked</em> (see the live example
-below).</p>
+delivery on our side refunds the debit. Freshness is enforced in code
+(since 2026-10-27): if the newest snapshot has aged past the freshness
+window, evaluations are <em>skipped, not faked</em> — no debit, no
+watermark advance — until a fresh snapshot lands.</p>
 
 <h2>Live dogfood: our own stalls, on our own subscription</h2>
 <p>Verdict Row eats its own cooking. On 2026-10-27 we registered our own
 fleet on the subscription — filter <code>pay_to</code> = the fleet payTo,
 funded by our own $5 Fleet Pass:</p>
 <pre><code>POST /v1/index/subscribe
-&rarr; {"subscription_id": "isub_0bae95e3ed874ed4", "status": "active", ...}
+&rarr; {"reg_id": "isub_0bae95e3ed874ed4", "status": "active",
+    "funding_kind": "fleet_pass", "created_at": "2026-10-27T17:05:44Z"}
 
 POST /v1/index/subscription/run        (first evaluation)
 &rarr; {"status": "baseline", "snapshot_id": 3,
     "current_at": "2026-10-27T11:39:12Z", "debited_units": 0}</code></pre>
-<p>Two hours later the next evaluation did something more instructive than
-deliver: it <strong>refused</strong>. The snapshot-ingest run behind the Index had
-failed its own settlement-signature reconciliation check, so the newest
-snapshot was stale — and the subscription declined to diff against stale
-data rather than sell us a confident-looking feed built on it:</p>
-<pre><code>POST /v1/index/subscription/run        (second evaluation)
+<p>When snapshot #4 landed, the ticker-driven evaluation
+<strong>delivered</strong>: the subscription's watermark advanced to
+snapshot 4, its status reads <code>delivered</code>, and $0.10 was debited
+from the Fleet Pass — exactly the priced amount, visible in the pass's
+own debit ledger. A manual run after that answers honestly that there
+is nothing new to deliver yet:</p>
+<pre><code>POST /v1/index/subscription/run        (after the #4 delivery)
+&rarr; {"status": "no_new_snapshot", "snapshot_id": 4}</code></pre>
+<p><strong>Correction (2026-10-27):</strong> an earlier version of this page
+described a second evaluation that "refused" because a snapshot-ingest
+run had failed a settlement-signature reconciliation check. That event
+never occurred — no such ingest component or check exists in the
+service, and the evaluation in question delivered, as shown above.
+Writing the page exposed a real gap, though: the subscription had no
+freshness guard, so it <em>would</em> have delivered against a stale
+snapshot if the snapshot ticker ever failed. That guard has since been
+shipped (and the paid diff route refuses stale pairs the same way), so
+the skipped evaluation the earlier page imagined is now the service's
+actual, tested behaviour:</p>
+<pre><code>POST /v1/index/subscription/run        (when the newest snapshot is stale)
 &rarr; {"status": "skipped",
-    "reason": "latest index snapshot predates the newest ingest run",
+    "reason": "latest index snapshot is stale (captured &hellip;,
+               beyond the freshness window); refusing to diff against
+               stale data",
     "debited_units": 0}</code></pre>
-<p>That is the product working as designed: a skipped evaluation costs
-nothing, advances nothing, and says why. When the ingest pipeline is
-healthy again, the next run delivers the full diff since the baseline —
-nothing was lost by waiting.</p>
 
 <h2>What a delivered evaluation looks like</h2>
 <p>A delivered run returns (and webhooks) the complete diff for your
@@ -79,8 +93,12 @@ three calls above on StallRow
 (<code>https://stall-row-production.up.railway.app</code>). Prefer a
 managed version — alerts triaged, a weekly one-page report, a human in
 the loop? That's the <a href="https://github.com/QuincyGB/x402-loop-kits/blob/main/managed-loop/SELLER-OFFER.md">Stall Watch managed loop</a>.</p>
-<footer>Built by Verdict Row. The dogfood subscription, its baseline, and
-the skipped evaluation above are real outputs from 2026-10-27, quoted
-verbatim; no diff is shown for the dogfood filter because none has been
-delivered yet — the baseline is two hours old and the pipeline said so.</footer>
+<footer>Built by Verdict Row. The dogfood subscription, its baseline,
+and its snapshot-4 delivery above are real outputs from 2026-10-27,
+verified against the live service and the Fleet Pass debit ledger on
+2026-10-27; the page was corrected the same day after an earlier
+version described a skipped evaluation that never happened (see the
+correction in the dogfood section). The skipped response shown is the
+freshness guard's actual output shape; it has not fired live, because
+no live snapshot has gone stale since the guard shipped.</footer>
 </body></html>
