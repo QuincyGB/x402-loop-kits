@@ -35,15 +35,33 @@ re-runnable.</p>
 <tr><td>RouteVerdict</td><td class="pass">PASS — 1/1 routes</td><td>Settled stamp, 2026-10-26</td><td>None (2 snapshots)</td><td class="pass">AWARDED</td></tr>
 <tr><td>ListSmith</td><td class="pass">PASS — 2/2 routes</td><td>Settled stamp, 2026-10-26</td><td>None (2 snapshots)</td><td class="pass">AWARDED</td></tr>
 <tr><td>LockSmith</td><td class="pass">PASS — 1/1 routes</td><td>Full battery 2026-10-25/26 (seed settlements, labelled as seeds; dogfood audits 8/8)</td><td>None — not yet catalog-indexed; drift watch starts at its first catalog appearance</td><td class="pass">AWARDED</td></tr>
-<tr><td>StallRow</td><td class="pass">PASS — 16/16 routes (battery re-run 2026-10-27)</td><td>Settled stamps on original routes; Fleet Pass / Webhook Watch delivered live 2026-10-26; Fleet Pass seeded + settled on CDP &amp; PayAI 2026-10-27; <code>/v1/orchestrate</code> delivered live 2026-10-27 (paid dogfood seed — all four legs OK; seed labelled as seed)</td><td>None (2 snapshots)</td><td class="fail">NOT AWARDED — one delivery block remains: <code>/v1/index/changes</code> cannot yet deliver a diff (fewer than two in-service snapshots stored; a paid attempt on 2026-10-27 still returns its charge-free 502). The <code>/v1/orchestrate</code> block cleared 2026-10-27: the fleet-internal secret is set in production, the internal round-trip passed on all four siblings, and a paid dogfood call delivered the full combined report. No exceptions for our own stall. Re-check after the second in-service snapshot lands.</td></tr>
+<tr><td>StallRow</td><td class="pass">PASS — 16/16 routes (battery re-run 2026-10-27)</td><td>Settled stamps on original routes; Fleet Pass / Webhook Watch delivered live 2026-10-26; Fleet Pass seeded + settled on CDP &amp; PayAI 2026-10-27; <code>/v1/orchestrate</code> delivered live 2026-10-27 (paid dogfood seed — all four legs OK; seed labelled as seed); <code>/v1/index/changes</code> delivered live 2026-10-27 (paid dogfood seed — a real catalog diff; seed labelled as seed)</td><td>None (2 in-service snapshots)</td><td class="pass">AWARDED — 2026-10-27, on the second re-check (see below). The last block was ours, and it was a bug, not a carve-out: the index ticker refreshed only on its 6h window, so the second catalog snapshot was never taken inside any deployment's lifetime and the route stayed undeliverable. Fixed in stall-row <code>13eeaf8</code> (bootstrap refresh while under two snapshots); a paid seed call then settled and delivered the diff (Base tx <code>0xe45a933c…a58</code>).</td></tr>
 </table>
 
 <p class="note"><strong>Re-check — 2026-10-27:</strong> battery re-run
 against all five services (23 routes probed; every live 402
 exact-matched its manifest — <code>badge/battery-2026-10-27.json</code>).
 Four stalls unchanged (AWARDED). StallRow's orchestrate block cleared
-(see its row); its index block stands, so StallRow remains NOT
-AWARDED.</p>
+(see its row); its index block stood at that run, so StallRow remained
+NOT AWARDED.</p>
+
+<p class="note"><strong>Re-check — 2026-10-27 (index fix):</strong>
+StallRow's index block is <strong>cleared</strong>. Root cause (from
+the service's own Railway logs): the catalog pull ran exactly once,
+at the 2026-10-26 22:50 EDT deploy; the refresh gate (newest snapshot
+younger than the 6h window) never opened inside any later
+deployment's lifetime, so no second snapshot was ever taken — no
+error, no crash, the pull simply never fired again. The fix
+(stall-row <code>13eeaf8</code>) refreshes on a 900s bootstrap
+interval while fewer than two snapshots are held, so any redeploy
+sequence reaches a sellable pair in about one tick. On the fix's
+deploy the ticker stored snapshot #2 (2026-10-27 05:38:08Z), and a
+paid dogfood seed call settled ($0.10, Base tx
+<code>0xe45a933c2d23928e34438bbb904c376c1804e28159cfd03f76a19b402b921a58</code>)
+and delivered a real diff: 77,945 → 80,462 resources, 80 field
+changes, 2,766 added, 249 removed (baseline 2026-10-27T02:54:13Z).
+Seed labelled as seed: it proves delivery, not demand.
+<strong>StallRow is AWARDED — the fleet is 5/5.</strong></p>
 
 <p class="note"><strong>Record-depth honesty:</strong> Verdict Index
 snapshot history starts 2026-10-26. "No drift on record" today means
@@ -57,6 +75,7 @@ run against it, open an issue on the repo — the run is the same one
 published above, and the result is published either way.</p>
 
 <footer>Verdict Row — Token Verdict · RouteVerdict · ListSmith · StallRow ·
-LockSmith. Badge run 2026-10-26; re-verify before quoting.</footer>
+LockSmith. Badge run 2026-10-26; re-checked 2026-10-27 (fleet 5/5);
+re-verify before quoting.</footer>
 </body>
 </html>

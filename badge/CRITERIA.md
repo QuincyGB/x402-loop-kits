@@ -102,3 +102,55 @@ One block stands:
 **Verdict: StallRow remains NOT AWARDED** — criterion 2 is not
 met while a listed route cannot deliver. Re-check after the
 second in-service snapshot lands.
+
+## Re-check — 2026-10-27 (index fix): StallRow AWARDED — fleet 5/5
+
+The index block is cleared, and the root cause is on the record
+(from stall-row's Railway logs, Oct 26 21:00 UTC → Oct 27 01:40
+EDT): the catalog pull ran exactly **once** — at the startup of
+the Oct 26 22:50 EDT Verdict Index deployment (all 80 pages 200,
+snapshot stored 22:54:15 EDT). The four later deployments started
+cleanly (store reopened at `/data/recheck.db`, durability
+persistent) but never pulled again: `refresh_if_stale` skips
+while the newest snapshot is younger than the 6h window, snapshot
+#2 was therefore not due until ~04:54 EDT, and no deployment in
+the window lived that long. Zero errors, zero tracebacks — the
+gate simply never opened inside any deployment's lifetime, and
+every paid attempt landed inside the window. It was a
+cold-start design flaw (refresh cadence keyed to a 6h window
+with no bootstrap path to a first pair), not a storage, write,
+or fetch failure: storage was verified persistent at
+`/data/recheck.db`, the store held exactly one snapshot, and the
+identical pull code succeeds against the live catalog.
+
+**Fix** (stall-row `13eeaf8`, suite 212 passed): while fewer
+than two snapshots are held, the ticker refreshes on a bootstrap
+interval (`STALLROW_INDEX_BOOTSTRAP_MIN_S`, default 900s)
+instead of the 6h window — so any redeploy sequence reaches a
+sellable pair in about one tick once the held snapshot is
+>15 min old, and a store wiped to zero rebuilds its pair the
+same way (immediate first pull + bootstrap second pull). Steady
+state is unchanged (~4 pulls/day). The pull also now identifies
+itself (`verdict-row-index/1.0`) with a 60s per-page timeout,
+matching the proven baseline pull.
+
+**Production proof:** on the fix's deploy (2026-10-27 01:36
+EDT) the ticker stored snapshot #2 at 05:38:08Z ("catalog
+snapshot stored (2 held)"). A paid dogfood seed call then
+**settled and delivered**: $0.10, Base tx
+`0xe45a933c2d23928e34438bbb904c376c1804e28159cfd03f76a19b402b921a58`,
+diff of snapshot #1 (2026-10-27T02:54:13Z, 77,945 resources) →
+snapshot #2 (80,462): 80 field changes, 2,766 added, 249
+removed. That settled call is the route's CDP seed (disclosed
+self-seed; it proves delivery, not demand).
+
+Battery re-run the same night (`badge/battery-2026-10-27.json`,
+refreshed): 23/23 routes across all five services exact-match —
+StallRow 16/16, criterion 1 PASS. Criterion 3: no drift on
+record (2 in-service snapshots since 2026-10-26).
+
+| Service | 402 exact-match | Delivery evidence ≤7d | Drift on record | Verdict |
+|---|---|---|---|---|
+| StallRow | PASS — 16/16 routes | Index + orchestrate delivered live 2026-10-27 (paid dogfood seeds, labelled); Settled stamps; Fleet Pass seeds CDP & PayAI | none (2 in-service snapshots) | **AWARDED** |
+
+**All five fleet services now hold the badge (5/5).**
