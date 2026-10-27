@@ -1,0 +1,188 @@
+{
+  "generated_at": "2026-10-27T02:41:49Z",
+  "rules": "METHODOLOGY.md fixed 2026-10-26",
+  "status": "tracking_started_no_mature_records",
+  "coverage": {
+    "records": 6,
+    "by_verdict": {
+      "SOLID": 6
+    },
+    "tokens": [
+      "AERO",
+      "WETH"
+    ],
+    "first_record": "2026-10-25T00:00:00Z",
+    "last_record": "2026-10-26T00:00:00Z",
+    "self_funded_records": 6
+  },
+  "horizons": {
+    "7": {
+      "records_mature": 0,
+      "correct": 0,
+      "incorrect": 0,
+      "inconclusive": 0,
+      "survived_no_baseline": 0,
+      "excluded_caution": 0,
+      "pending_fetch_error": 0,
+      "hit_rate": null,
+      "hit_rate_n": 0
+    },
+    "30": {
+      "records_mature": 0,
+      "correct": 0,
+      "incorrect": 0,
+      "inconclusive": 0,
+      "survived_no_baseline": 0,
+      "excluded_caution": 0,
+      "pending_fetch_error": 0,
+      "hit_rate": null,
+      "hit_rate_n": 0
+    }
+  },
+  "records": [
+    {
+      "ts": "2026-10-25T00:00:00Z",
+      "ts_precision": "day",
+      "source": "verdict-loop-live-log",
+      "self_funded": true,
+      "address": "0x4200000000000000000000000000000000000006",
+      "chain": "base",
+      "symbol": "WETH",
+      "verdict": "SOLID",
+      "score": 17.3,
+      "price_usd_at_verdict": 2365.19,
+      "liquidity_usd_at_verdict": 8460000.0,
+      "pair_address": null,
+      "dex": "uniswap",
+      "age_days": 2,
+      "evaluations": {
+        "7": {
+          "outcome": "immature"
+        },
+        "30": {
+          "outcome": "immature"
+        }
+      }
+    },
+    {
+      "ts": "2026-10-25T00:00:00Z",
+      "ts_precision": "day",
+      "source": "verdict-loop-live-log",
+      "self_funded": true,
+      "address": "0x940181a94A35A4569E4529A3CDfB74e38FD98631",
+      "chain": "base",
+      "symbol": "AERO",
+      "verdict": "SOLID",
+      "score": 8.2,
+      "price_usd_at_verdict": 0.6888,
+      "liquidity_usd_at_verdict": 7870000.0,
+      "pair_address": null,
+      "dex": "aerodrome",
+      "age_days": 2,
+      "evaluations": {
+        "7": {
+          "outcome": "immature"
+        },
+        "30": {
+          "outcome": "immature"
+        }
+      }
+    },
+    {
+      "ts": "2026-10-25T00:00:00Z",
+      "ts_precision": "day",
+      "source": "verdict-loop-live-log",
+      "self_funded": true,
+      "address": "0x4200000000000000000000000000000000000006",
+      "chain": "base",
+      "symbol": "WETH",
+      "verdict": "SOLID",
+      "score": 16.4,
+      "price_usd_at_verdict": null,
+      "liquidity_usd_at_verdict": null,
+      "pair_address": null,
+      "dex": null,
+      "age_days": 2,
+      "evaluations": {
+        "7": {
+          "outcome": "immature"
+        },
+        "30": {
+          "outcome": "immature"
+        }
+      }
+    },
+    {
+      "ts": "2026-10-25T00:00:00Z",
+      "ts_precision": "day",
+      "source": "verdict-loop-live-log",
+      "self_funded": true,
+      "address": "0x940181a94A35A4569E4529A3CDfB74e38FD98631",
+      "chain": "base",
+      "symbol": "AERO",
+      "verdict": "SOLID",
+      "score": 8.2,
+      "price_usd_at_verdict": null,
+      "liquidity_usd_at_verdict": null,
+      "pair_address": null,
+      "dex": null,
+      "age_days": 2,
+      "evaluations": {
+        "7": {
+          "outcome": "immature"
+        },
+        "30": {
+          "outcome": "immature"
+        }
+      }
+    },
+    {
+      "ts": "2026-10-26T00:00:00Z",
+      "ts_precision": "day",
+      "source": "verdict-loop-live-log",
+      "self_funded": true,
+      "address": "0x4200000000000000000000000000000000000006",
+      "chain": "base",
+      "symbol": "WETH",
+      "verdict": "SOLID",
+      "score": 11.8,
+      "price_usd_at_verdict": 2333.93,
+      "liquidity_usd_at_verdict": 531100.0,
+      "pair_address": null,
+      "dex": "uniswap",
+      "age_days": 1,
+      "evaluations": {
+        "7": {
+          "outcome": "immature"
+        },
+        "30": {
+          "outcome": "immature"
+        }
+      }
+    },
+    {
+      "ts": "2026-10-26T00:00:00Z",
+      "ts_precision": "day",
+      "source": "verdict-loop-live-log",
+      "self_funded": true,
+      "address": "0x940181a94A35A4569E4529A3CDfB74e38FD98631",
+      "chain": "base",
+      "symbol": "AERO",
+      "verdict": "SOLID",
+      "score": 12.7,
+      "price_usd_at_verdict": 0.6647,
+      "liquidity_usd_at_verdict": 7120000.0,
+      "pair_address": null,
+      "dex": "aerodrome",
+      "age_days": 1,
+      "evaluations": {
+        "7": {
+          "outcome": "immature"
+        },
+        "30": {
+          "outcome": "immature"
+        }
+      }
+    }
+  ]
+}

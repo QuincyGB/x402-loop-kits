@@ -62,6 +62,28 @@ and the payment does not settle — nobody is charged for undelivered data.</li>
 and watches survive deploys.</li>
 </ul>
 
+<h2>Accuracy Ledger — Token Verdict's track record, scored in public</h2>
+<p>Every Token Verdict verdict is now recorded and scored against what
+the token actually did afterward, under rules fixed in writing
+<em>before</em> the first scoring run (<code>accuracy-ledger/METHODOLOGY.md</code>
+in the loop-kits repo: mature at +7d and +30d; collapsed = pair gone or
+liquidity under $1,000; SOLID correct iff not collapsed and the move is
+better than −30%; CAUTION never scored for or against).</p>
+<ul>
+<li><strong>Status: tracking started 2026-10-26.</strong> Records tracked:
+<strong>6</strong> — all SOLID, two tokens (WETH, AERO on Base),
+2026-10-25 → 2026-10-26, all sourced from verdict-loop's public live log
+(labelled self-funded demo runs, because they are).</li>
+<li><strong>Records mature for scoring: 0.</strong> The first +7d
+evaluations land 2026-11-01. <strong>No hit rate is published</strong> —
+a percentage over zero mature records would be a fabricated number.</li>
+<li>Verdicts served before the recorder shipped were never logged by
+the service and are unrecoverable; the ledger starts from what exists
+and says so, rather than reconstructing a prettier history. From
+2026-10-26 the service appends every served verdict to its own ledger,
+so coverage grows with real traffic.</li>
+</ul>
+
 <h2>External record — kept in two buckets, never merged</h2>
 <ul>
 <li>Non-Settled external payers: <strong>19 calls / $0.445</strong> across
