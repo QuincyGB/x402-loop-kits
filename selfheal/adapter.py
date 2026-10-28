@@ -1,24 +1,24 @@
 """ADAPTER — severity / impact / action.
 
 ====================================================================
-INTEGRATION NOTE (the one open seam, flagged 2026-10-28): the base
-nudge spec (nudge-inbox.md §2) does not yet document `severity`,
-`impact`, or `action` fields. The reference sender engine
-(fleet-checker/nudge.py) ALREADY emits all three on every knock it
-composes. This adapter is written against the engine's emitted
-shape, and tolerates their absence:
+INTEGRATION NOTE (updated 2026-10-28): the wake-up upgrade has
+since landed in the base spec — nudge-inbox.md §2 now documents
+`severity`, `impact`, and `action`, and its §3 worked vector (a
+message carrying all three) is pinned in test_selfheal.py
+alongside the original vector; this adapter verifies
+byte-identical against both. The adapter remains the tolerance
+layer for knocks that arrive WITHOUT the fields (older senders,
+minimal implementations of the base spec):
 
   present -> taken as the sender's view (logged; the action block
              becomes the escalation's suggested_action)
   absent  -> derived from the base spec fields (severity from the
-             defect-class mapping below — the same sets the engine
-             uses; the action from check_url + route)
+             defect-class mapping below — the same sets the spec's
+             §5 mapping uses; the action from check_url + route)
 
 Playbook decisions NEVER depend on this module: severity and the
 suggested action inform humans; every spend decision rests on the
-receiver's own probe, the §3 evidence bar, and the policy. When
-the spec lands the fields, this adapter becomes a thin reader and
-nothing else in the receiver changes.
+receiver's own probe, the §3 evidence bar, and the policy.
 ====================================================================
 """
 

@@ -238,21 +238,23 @@ listing reading banked toward the §3 bar).
 
 ## 7. Adapter note — `severity`, `impact`, `action`
 
-The base nudge message (nudge-inbox.md §2) does not carry
-`severity`, `impact`, or `action` fields; the reference sender
-engine already emits them (severity stamped from the defect class,
-a consequence-first `impact` line, and an `action` block naming
-the exact Fleet Check call for the affected route). The reference
-receiver consumes them through a small **adapter**: present →
-taken as the sender's view (logged, and used for the escalation's
-`suggested_action`); absent → derived from the base fields
-(severity from the defect-class mapping; the action from
-`check_url` + `route`). Playbook decisions never depend on the
+Knocks carry `severity`, `impact`, and `action` fields
+(nudge-inbox.md §2, the wake-up upgrade): severity stamped from
+the defect class, a consequence-first `impact` line, and an
+`action` block naming the exact Fleet Check call for the affected
+route. The reference receiver consumes them through a small
+**adapter**: present → taken as the sender's view (logged, and
+used for the escalation's `suggested_action`); absent → derived
+from the base fields (severity from the defect-class mapping; the
+action from `check_url` + `route`), so minimal senders and older
+knocks still process. Playbook decisions never depend on the
 adapter: severity and the suggested action inform humans, while
 every spend decision rests on the receiver's own probe, the
-evidence bar, and the policy. When the base spec lands these
-fields, the adapter becomes a thin reader and nothing else
-changes.
+evidence bar, and the policy. The receiver's signature check is
+field-agnostic — its canonical form covers whatever fields a
+knock carries — and its test suite pins both of the spec's worked
+vectors (with and without the wake-up fields), so the two
+contracts cannot drift apart silently.
 
 ## 8. What this contract is not
 

@@ -85,6 +85,39 @@ VECTOR_CANONICAL = (
 )
 
 
+WAKEUP_VECTOR_MESSAGE = {
+    **VECTOR_MESSAGE,
+    "severity": "warning",
+    "impact": "Your route charges 70000 but advertises 50000 (amounts in the asset's smallest units) — routers that verify declared prices will skip or flag it.",
+    "action": {
+        "summary": "Run the full Fleet Check diagnosis on this route now",
+        "method": "POST",
+        "url": CHECK_URL,
+        "body": {"resources": ["https://stall.example.com/v1/check"]},
+        "spec": "https://github.com/QuincyGB/x402-loop-kits/blob/main/nudge-inbox.md",
+    },
+    "signature": "0x172075899b7ec09b546e6a51bad774b5b896cdec8fb5138d2934a127455f04c278fe7f7d4b0b36f6594727bad81dadc88927721bffd599148b5b52d6fbae3bbf1b",
+}
+WAKEUP_CANONICAL = (
+    "fleet-health-nudge/v1\n"
+    '{"action":{"body":{"resources":["https://stall.example.com/v1/check"]},'
+    '"method":"POST","spec":"https://github.com/QuincyGB/x402-loop-kits/blob/'
+    'main/nudge-inbox.md","summary":"Run the full Fleet Check diagnosis on '
+    'this route now","url":"https://stall-row-production.up.railway.app/v1/'
+    'fleet-check"},"check_url":"https://stall-row-production.up.railway.app/'
+    'v1/fleet-check","defect":{"code":"amount_mismatch","expected":"50000",'
+    '"observed":"70000"},"evidence":{"probes":[{"at":"2026-10-27T22:40:00Z",'
+    '"detail":"live challenge amount 70000 != declared 50000","http_status":'
+    '402}],"source":"fleet-check"},"first_seen":"2026-10-27T22:40:00Z",'
+    '"impact":"Your route charges 70000 but advertises 50000 (amounts in the '
+    'asset\'s smallest units) — routers that verify declared prices will '
+    'skip or flag it.","kind":"fleet-health-nudge","protocol":"fleet-health/'
+    'v1","route":"https://stall.example.com/v1/check","sender":"0x19E7E376'
+    'E7C213B7E7e7e46cc70A5dD086DAff2A","severity":"warning","stall":"https://'
+    'stall.example.com"}'
+)
+
+
 def challenge_headers(amount, payto=PAYTO):
     challenge = {
         "x402Version": 2,
@@ -248,6 +281,13 @@ class TestSigning(unittest.TestCase):
     def test_spec_vector_canonical_and_verify(self):
         self.assertEqual(canonical_text(VECTOR_MESSAGE), VECTOR_CANONICAL)
         self.assertTrue(verify_message(VECTOR_MESSAGE))
+
+    def test_wake_up_vector_canonical_and_verify(self):
+        # The updated spec's worked vector: the same message WITH
+        # severity/impact/action. The receiver's canonical form is
+        # field-agnostic and must reproduce it byte-exactly.
+        self.assertEqual(canonical_text(WAKEUP_VECTOR_MESSAGE), WAKEUP_CANONICAL)
+        self.assertTrue(verify_message(WAKEUP_VECTOR_MESSAGE))
 
     def test_tampered_message_fails(self):
         forged = json.loads(json.dumps(VECTOR_MESSAGE))
