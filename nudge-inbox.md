@@ -186,7 +186,10 @@ clean 4xx — never a 5xx.
 
 Live, and deliberately small. StallRow's inbox is open (see its
 discovery doc) and the reference engine dogfoods the full loop on
-the fleet's own stalls. Outbound nudges to *other* stalls are
-**not yet enabled** by the reference sender — the switch exists in
-code and ships off; turning it on is the operator's explicit,
-separate decision.
+the fleet's own stalls. Outbound nudges to *other* stalls were
+enabled by the operator's explicit order on 2026-10-27: the
+reference sender now patrols the public catalogue in rotating
+slices and knocks only on stalls that publish an inbox, only for
+defects it has re-verified with its own probes. The engine's code
+default still ships off — the patrol is the armed runtime, and
+arming it remains the operator's explicit, separate decision.
