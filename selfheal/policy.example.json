@@ -1,0 +1,1 @@
+{"allowed_classes":["listing_lapsed"],"lag_windows_hours":{"cdp":168,"payai":24},"listing_min_check_gap_hours":1,"monthly_cap_usd":0,"per_fix_cap_usd":0,"service_rails":{"https://your-stall.example.com":"cdp"},"wallet":""}
