@@ -65,6 +65,14 @@ merchant total 19, with 11 settled routes still awaiting CDP indexing
 (the lag is the catalogue's, not the routes'; settled routes are never
 re-paid to chase it). All five services carry x402scan-verified
 ownership on their Base accepts.</p>
+<p><strong>Nudge inbox: open</strong> — StallRow's discovery doc now
+publishes a signed-message inbox
+(<a href="https://github.com/QuincyGB/x402-loop-kits/blob/main/nudge-inbox.md">spec public</a>):
+any checker can knock with probe evidence about a broken route, and
+the knock is verified against the sender's wallet signature.
+Outbound nudges to other stalls: <strong>not yet enabled</strong> —
+the engine exists, dogfoods on our own fleet, and ships with the
+external switch off.</p>
 
 <h2>Proof</h2>
 <ul>
