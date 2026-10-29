@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Receipt Verifier — did that Base payment settle? · Verdict Row</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #1a1a1a; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid #ccc; padding: 0.4rem 0.6rem; text-align: left; font-size: 0.92rem; }
+  th { background: #f4f4f4; width: 11rem; }
+  .note { background: #f8f8f2; border-left: 4px solid #c9a227; padding: 0.6rem 1rem; }
+  .ok { background: #eef7ee; border-left: 4px solid #0a7d2c; padding: 0.6rem 1rem; }
+  .bad { background: #fdf0f0; border-left: 4px solid #b3261e; padding: 0.6rem 1rem; }
+  .unknown { background: #f4f4f4; border-left: 4px solid #888; padding: 0.6rem 1rem; }
+  code { background: #f0f0f0; padding: 0 0.25rem; word-break: break-all; }
+  input[type="text"] { width: 100%; box-sizing: border-box; padding: 0.55rem; font-size: 1rem; margin: 0.4rem 0; }
+  button { padding: 0.55rem 1.2rem; font-size: 1rem; cursor: pointer; }
+  footer { color: #666; font-size: 0.85rem; margin-top: 2rem; }
+</style></head><body>
+<h1>Receipt Verifier</h1>
+<p>Paste a <strong>Base transaction hash</strong> and get the verified receipt back:
+who paid, who was paid, how much — read from the transaction's own USDC Transfer
+log — plus whether it settled and how many confirmations it has. If the payment
+went to the Verdict Row fleet, the routes priced at exactly that amount are
+listed as <em>candidates</em> (an amount alone never identifies a route).</p>
+<p class="note">How it works, stated plainly: the check reads Base directly —
+no trust in any seller's claim, including ours. An unknown or unconfirmed hash
+is reported as not found, never dressed up as a receipt. This demo is free
+(10 checks per minute per address); the standing API form is
+<code>POST /v1/receipt-verify</code> on StallRow at <strong>$0.002</strong> per verification.</p>
+
+<form id="verify-form">
+  <label for="tx">Base transaction hash (0x + 64 hex)</label>
+  <input type="text" id="tx" required placeholder="0x…">
+  <button type="submit" id="go">Verify it</button>
+</form>
+
+<div id="result" aria-live="polite"></div>
+
+<footer>Verdict Row — Token Verdict · RouteVerdict · ListSmith · StallRow ·
+LockSmith. Demo check: <code>POST https://stall-row-production.up.railway.app/v1/receipt-verify/demo</code>
+(free, unpriced, not a catalogue route). Base only.</footer>
+
+<script>
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+document.getElementById("verify-form").addEventListener("submit", function (ev) {
+  ev.preventDefault();
+  var tx = document.getElementById("tx").value.trim();
+  var box = document.getElementById("result");
+  var btn = document.getElementById("go");
+  btn.disabled = true;
+  box.innerHTML = "<p>Reading Base — one moment…</p>";
+  fetch("https://stall-row-production.up.railway.app/v1/receipt-verify/demo", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({tx_hash: tx})
+  }).then(function (r) {
+    return r.json().catch(function () { return null; }).then(function (body) { return {status: r.status, body: body}; });
+  }).then(function (res) {
+    btn.disabled = false;
+    if (res.status === 429) {
+      box.innerHTML = '<div class="unknown"><strong>Rate limit.</strong> The free demo allows 10 checks per minute per address. Wait a minute and try again.</div>';
+      return;
+    }
+    if (res.status === 422) {
+      box.innerHTML = '<div class="unknown"><strong>That is not a transaction hash.</strong> ' + esc(res.body && res.body.error ? res.body.error : "Expected 0x followed by 64 hex characters.") + '</div>';
+      return;
+    }
+    if (res.status === 404) {
+      box.innerHTML = '<div class="bad"><strong>Not verified.</strong> ' + esc(res.body && res.body.error ? res.body.error : "That transaction was not found on Base.") + ' Nothing was verified — double-check the hash and the network (Base only).</div>';
+      return;
+    }
+    if (res.status !== 200 || !res.body) {
+      box.innerHTML = '<div class="unknown"><strong>The check failed to run.</strong> The verifier itself could not complete this check. A failed check is <em>not</em> a verdict on the transaction. Try again in a moment.</div>';
+      return;
+    }
+    var b = res.body;
+    var candidates = (b.fleet_route_candidates && b.fleet_route_candidates.length)
+      ? b.fleet_route_candidates.map(function (c) { return esc(c.service) + " " + esc(c.route); }).join("<br>")
+      : "— (payment was not to the fleet payTo, or no fleet route is priced at this amount)";
+    var head = b.settled
+      ? '<div class="ok"><strong>Verified — settled on Base.</strong></div>'
+      : '<div class="bad"><strong>Found, but NOT settled.</strong> The transaction\'s receipt status is not success — do not treat this payment as completed.</div>';
+    box.innerHTML = head + "<table>"
+      + "<tr><th>Transaction</th><td><code>" + esc(b.tx_hash) + "</code></td></tr>"
+      + "<tr><th>Payer</th><td><code>" + esc(b.payer) + "</code></td></tr>"
+      + "<tr><th>Paid to</th><td><code>" + esc(b.pay_to) + "</code></td></tr>"
+      + "<tr><th>Amount</th><td>$" + esc(b.amount_usd) + " (" + esc(b.amount_units) + " units)</td></tr>"
+      + "<tr><th>Asset</th><td>" + esc(b.asset_symbol) + (b.asset ? " <code>" + esc(b.asset) + "</code>" : "") + "</td></tr>"
+      + "<tr><th>Block</th><td>" + esc(b.block_number) + " · " + esc(b.confirmations) + " confirmations</td></tr>"
+      + "<tr><th>Fleet route candidates</th><td>" + candidates + "</td></tr>"
+      + "</table>";
+  }).catch(function () {
+    btn.disabled = false;
+    box.innerHTML = '<div class="unknown"><strong>The check failed to run.</strong> The verifier could not be reached or did not answer. A failed check is <em>not</em> a verdict on the transaction.</div>';
+  });
+});
+</script>
+</body></html>
