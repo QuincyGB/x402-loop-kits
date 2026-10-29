@@ -1,0 +1,393 @@
+{
+ "schema": "fleet-status/v1",
+ "generated_at": "2026-10-29T03:26:22.605425+00:00",
+ "summary": "32/32 routes OK, 5/5 services OK",
+ "services": [
+  {
+   "name": "Token Verdict",
+   "id": "token-verdict",
+   "origin": "https://token-verdict-production.up.railway.app",
+   "status": "OK",
+   "checker": {
+    "service_status": "ok",
+    "class": "OK",
+    "detail": "health/openapi/discovery OK",
+    "since": "2026-10-28T00:42:29.059977+00:00"
+   },
+   "dogfood": {
+    "status": "OK",
+    "detail": "RouteVerdict verdict=TRUSTED score=95.0 alive=True x402_valid=True"
+   },
+   "routes": [
+    {
+     "route": "/v1/batch-verdict",
+     "url": "https://token-verdict-production.up.railway.app/v1/batch-verdict",
+     "price": "$0.20",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060228+00:00",
+     "detail": "402, Base accept OK (200000 units to payTo) + Solana accept OK"
+    },
+    {
+     "route": "/v1/pre-trade",
+     "url": "https://token-verdict-production.up.railway.app/v1/pre-trade",
+     "price": "$0.05",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060235+00:00",
+     "detail": "402, Base accept OK (50000 units to payTo) + Solana accept OK"
+    },
+    {
+     "route": "/v1/verdict",
+     "url": "https://token-verdict-production.up.railway.app/v1/verdict",
+     "price": "$0.02",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060240+00:00",
+     "detail": "402, Base accept OK (20000 units to payTo) + Solana accept OK"
+    }
+   ]
+  },
+  {
+   "name": "RouteVerdict",
+   "id": "route-verdict",
+   "origin": "https://route-verdict-production.up.railway.app",
+   "status": "OK",
+   "checker": {
+    "service_status": "ok",
+    "class": "OK",
+    "detail": "health/openapi/discovery OK",
+    "since": "2026-10-28T00:42:29.060007+00:00"
+   },
+   "dogfood": {
+    "status": "OK",
+    "detail": "RouteVerdict verdict=TRUSTED score=95.0 alive=True x402_valid=True"
+   },
+   "routes": [
+    {
+     "route": "/v1/check",
+     "url": "https://route-verdict-production.up.railway.app/v1/check",
+     "price": "$0.05",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060083+00:00",
+     "detail": "402, Base accept OK (50000 units to payTo)"
+    }
+   ]
+  },
+  {
+   "name": "ListSmith",
+   "id": "list-smith",
+   "origin": "https://list-smith-production.up.railway.app",
+   "status": "OK",
+   "checker": {
+    "service_status": "ok",
+    "class": "OK",
+    "detail": "health/openapi/discovery OK",
+    "since": "2026-10-28T00:42:29.060013+00:00"
+   },
+   "dogfood": {
+    "status": "OK",
+    "detail": "RouteVerdict verdict=TRUSTED score=95.0 alive=True x402_valid=True"
+   },
+   "routes": [
+    {
+     "route": "/v1/fix",
+     "url": "https://list-smith-production.up.railway.app/v1/fix",
+     "price": "$0.50",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060040+00:00",
+     "detail": "402, Base accept OK (500000 units to payTo)"
+    },
+    {
+     "route": "/v1/grade",
+     "url": "https://list-smith-production.up.railway.app/v1/grade",
+     "price": "$0.10",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060067+00:00",
+     "detail": "402, Base accept OK (100000 units to payTo)"
+    }
+   ]
+  },
+  {
+   "name": "StallRow",
+   "id": "stall-row",
+   "origin": "https://stall-row-production.up.railway.app",
+   "status": "OK",
+   "checker": {
+    "service_status": "ok",
+    "class": "OK",
+    "detail": "health/openapi/discovery OK",
+    "since": "2026-10-28T00:42:29.060017+00:00"
+   },
+   "dogfood": {
+    "status": "OK",
+    "detail": "RouteVerdict verdict=TRUSTED score=95.0 alive=True x402_valid=True"
+   },
+   "routes": [
+    {
+     "route": "/v1/agent-card-verify",
+     "url": "https://stall-row-production.up.railway.app/v1/agent-card-verify",
+     "price": "$0.005",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060090+00:00",
+     "detail": "402, Base accept OK (5000 units to payTo)"
+    },
+    {
+     "route": "/v1/allowance-audit",
+     "url": "https://stall-row-production.up.railway.app/v1/allowance-audit",
+     "price": "$0.005",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060095+00:00",
+     "detail": "402, Base accept OK (5000 units to payTo)"
+    },
+    {
+     "route": "/v1/card-smith",
+     "url": "https://stall-row-production.up.railway.app/v1/card-smith",
+     "price": "$0.1",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060101+00:00",
+     "detail": "402, Base accept OK (100000 units to payTo)"
+    },
+    {
+     "route": "/v1/counterparty-report",
+     "url": "https://stall-row-production.up.railway.app/v1/counterparty-report",
+     "price": "$1",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060107+00:00",
+     "detail": "402, Base accept OK (1000000 units to payTo)"
+    },
+    {
+     "route": "/v1/flagged-paytos",
+     "url": "https://stall-row-production.up.railway.app/v1/flagged-paytos",
+     "price": "$0.005",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060113+00:00",
+     "detail": "402, Base accept OK (5000 units to payTo)"
+    },
+    {
+     "route": "/v1/fleet-check",
+     "url": "https://stall-row-production.up.railway.app/v1/fleet-check",
+     "price": "$0.1",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T01:41:42.488190+00:00",
+     "detail": "402, Base accept OK (100000 units to payTo)"
+    },
+    {
+     "route": "/v1/fleet-check/pack",
+     "url": "https://stall-row-production.up.railway.app/v1/fleet-check/pack",
+     "price": "$5",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T01:41:42.488198+00:00",
+     "detail": "402, Base accept OK (5000000 units to payTo)"
+    },
+    {
+     "route": "/v1/fleet-pass",
+     "url": "https://stall-row-production.up.railway.app/v1/fleet-pass",
+     "price": "$5",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060131+00:00",
+     "detail": "402, Base accept OK (5000000 units to payTo)"
+    },
+    {
+     "route": "/v1/fleet-pass-20",
+     "url": "https://stall-row-production.up.railway.app/v1/fleet-pass-20",
+     "price": "$20",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060137+00:00",
+     "detail": "402, Base accept OK (20000000 units to payTo)"
+    },
+    {
+     "route": "/v1/gas-oracle",
+     "url": "https://stall-row-production.up.railway.app/v1/gas-oracle",
+     "price": "$0.001",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060143+00:00",
+     "detail": "402, Base accept OK (1000 units to payTo)"
+    },
+    {
+     "route": "/v1/grade-my-stall",
+     "url": "https://stall-row-production.up.railway.app/v1/grade-my-stall",
+     "price": "$0.005",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060149+00:00",
+     "detail": "402, Base accept OK (5000 units to payTo)"
+    },
+    {
+     "route": "/v1/index/changes",
+     "url": "https://stall-row-production.up.railway.app/v1/index/changes",
+     "price": "$0.1",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060154+00:00",
+     "detail": "402, Base accept OK (100000 units to payTo)"
+    },
+    {
+     "route": "/v1/job-scout",
+     "url": "https://stall-row-production.up.railway.app/v1/job-scout",
+     "price": "$0.05",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060159+00:00",
+     "detail": "402, Base accept OK (50000 units to payTo)"
+    },
+    {
+     "route": "/v1/orchestrate",
+     "url": "https://stall-row-production.up.railway.app/v1/orchestrate",
+     "price": "$0.75",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060164+00:00",
+     "detail": "402, Base accept OK (750000 units to payTo)"
+    },
+    {
+     "route": "/v1/page-to-markdown",
+     "url": "https://stall-row-production.up.railway.app/v1/page-to-markdown",
+     "price": "$0.01",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060169+00:00",
+     "detail": "402, Base accept OK (10000 units to payTo)"
+    },
+    {
+     "route": "/v1/pre-trade-guard",
+     "url": "https://stall-row-production.up.railway.app/v1/pre-trade-guard",
+     "price": "$0.005",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060175+00:00",
+     "detail": "402, Base accept OK (5000 units to payTo)"
+    },
+    {
+     "route": "/v1/price-check",
+     "url": "https://stall-row-production.up.railway.app/v1/price-check",
+     "price": "$0.05",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060180+00:00",
+     "detail": "402, Base accept OK (50000 units to payTo)"
+    },
+    {
+     "route": "/v1/receipt-verify",
+     "url": "https://stall-row-production.up.railway.app/v1/receipt-verify",
+     "price": "$0.002",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060185+00:00",
+     "detail": "402, Base accept OK (2000 units to payTo)"
+    },
+    {
+     "route": "/v1/recheck",
+     "url": "https://stall-row-production.up.railway.app/v1/recheck",
+     "price": "$0.005",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060190+00:00",
+     "detail": "402, Base accept OK (5000 units to payTo)"
+    },
+    {
+     "route": "/v1/recheck/pack",
+     "url": "https://stall-row-production.up.railway.app/v1/recheck/pack",
+     "price": "$1",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060195+00:00",
+     "detail": "402, Base accept OK (1000000 units to payTo)"
+    },
+    {
+     "route": "/v1/repo-vitals",
+     "url": "https://stall-row-production.up.railway.app/v1/repo-vitals",
+     "price": "$0.005",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060202+00:00",
+     "detail": "402, Base accept OK (5000 units to payTo)"
+    },
+    {
+     "route": "/v1/tube-search",
+     "url": "https://stall-row-production.up.railway.app/v1/tube-search",
+     "price": "$0.01",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060207+00:00",
+     "detail": "402, Base accept OK (10000 units to payTo)"
+    },
+    {
+     "route": "/v1/tx-decoder",
+     "url": "https://stall-row-production.up.railway.app/v1/tx-decoder",
+     "price": "$0.002",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060212+00:00",
+     "detail": "402, Base accept OK (2000 units to payTo)"
+    },
+    {
+     "route": "/v1/wallet-snapshot",
+     "url": "https://stall-row-production.up.railway.app/v1/wallet-snapshot",
+     "price": "$0.005",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060217+00:00",
+     "detail": "402, Base accept OK (5000 units to payTo)"
+    },
+    {
+     "route": "/v1/wallet-verdict",
+     "url": "https://stall-row-production.up.railway.app/v1/wallet-verdict",
+     "price": "$0.02",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060223+00:00",
+     "detail": "402, Base accept OK (20000 units to payTo)"
+    }
+   ]
+  },
+  {
+   "name": "LockSmith",
+   "id": "lock-smith",
+   "origin": "https://lock-smith-production.up.railway.app",
+   "status": "OK",
+   "checker": {
+    "service_status": "ok",
+    "class": "OK",
+    "detail": "health/openapi/discovery OK",
+    "since": "2026-10-28T00:42:29.060021+00:00"
+   },
+   "dogfood": {
+    "status": "OK",
+    "detail": "RouteVerdict verdict=TRUSTED score=85.0 alive=True x402_valid=True"
+   },
+   "routes": [
+    {
+     "route": "/v1/audit",
+     "url": "https://lock-smith-production.up.railway.app/v1/audit",
+     "price": "$0.50",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-28T00:42:29.060076+00:00",
+     "detail": "402, Base accept OK (500000 units to payTo)"
+    }
+   ]
+  }
+ ],
+ "incidents_30d": [],
+ "incidents_window": {
+  "since": "2026-10-29T03:26:22.605425+00:00",
+  "label": "Incidents recorded since 2026-10-29",
+  "note": "The fleet checker retains only its latest run \u2014 it keeps no 30-day history \u2014 so this rollup covers only the incident log kept beside the checker since 2026-10-29 (the first status-snapshot publish). Nothing earlier is claimed: there is no earlier record to publish.",
+  "open": 0,
+  "total_recorded": 0
+ }
+}

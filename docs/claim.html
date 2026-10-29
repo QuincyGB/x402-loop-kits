@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claim Your Stall — x402 Fleet Patrol</title>
+<!--
+  Published on the loop-kits GitHub Pages site, beside check.html.
+  StallRow grants CORS to https://quincygb.github.io for /v1/claim/*
+  only, mirroring the /v1/probe allowance.
+
+  Flow (all calls go to the StallRow API, default base below):
+    1. POST /v1/claim/start {origin}
+       → {token, message, file_url, file_content, expires_at, proof_options}
+    2. The operator proves control ONE of two ways:
+       (a) sign-message — EIP-191 personal_sign of `message` with the
+           payTo wallet the origin's /.well-known/x402 publishes;
+       (b) file — serve `file_content` as the entire content of
+           `file_url` (<origin>/.well-known/claim-<token>).
+    3. POST /v1/claim/verify {origin, method, signature?}
+       → {claimed, session_token, session_expires_at}
+       The challenge is single-use and expires within 1 hour.
+    4. GET /v1/claim/status?origin=<origin>
+       with header X-Claim-Session: <session_token>
+       → {history: {loaded, history_not_loaded, defects, summary},
+          enrollment_offer: {client, enrolled_at, origins, routes,
+          knock_channel, contact, cadence, enabled}}
+       A session unlocks ONLY its own origin's history. When the
+       deployment has no patrol snapshot loaded, history comes back
+       empty with an honest "history not loaded" note — this page
+       renders that as-is, never as a clean record.
+-->
+<style>
+  body{font-family:system-ui,sans-serif;max-width:820px;margin:2rem auto;padding:0 1rem;line-height:1.55;color:#111}
+  code,pre{background:#f4f4f4;padding:.15em .35em;border-radius:4px}
+  pre{padding:1rem;overflow:auto;white-space:pre-wrap;word-break:break-word}
+  input[type=text],textarea{width:100%;font-family:monospace;padding:.45em}
+  textarea{min-height:90px}
+  button{padding:.5em 1.1em;cursor:pointer}
+  .ok{color:#0a7a2f;font-weight:600}.bad{color:#b00020;font-weight:600}
+  .step{border:1px solid #ddd;border-radius:8px;padding:1rem 1.2rem;margin:1.2rem 0}
+  table{border-collapse:collapse;width:100%}
+  td,th{border:1px solid #ccc;padding:.35rem .6rem;text-align:left}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<h1>Claim Your Stall</h1>
+<p>The x402 fleet patrol probes paid routes around the clock and records
+defects — routes answering 403, 500, or nothing at all instead of a
+<strong>402 payment challenge</strong>, or charging a different amount or
+payTo than their own discovery doc declares. That record belongs to the
+stall's operator, so before we show it, you prove the stall is yours.</p>
+
+<p>Two proofs work — either one is enough:</p>
+<ul>
+<li><strong>Sign a message</strong> with the wallet your stall's
+<code>/.well-known/x402</code> publishes as <code>payTo</code>.</li>
+<li><strong>Serve a file</strong> at a <code>/.well-known/</code> URL on
+your origin, containing a one-time token.</li>
+</ul>
+<p>Challenges expire within <strong>one hour</strong> and are
+<strong>single-use</strong>. A successful claim returns a session token
+that unlocks <em>only your origin's</em> patrol history — never anyone
+else's.</p>
+
+<div class="step">
+<h2>1 — Start a claim</h2>
+<label>Your stall origin
+<input type="text" id="origin" placeholder="https://stall.example.com">
+</label>
+<p><button id="start">Start claim</button> <span id="start-status"></span></p>
+</div>
+
+<div class="step hidden" id="prove-step">
+<h2>2 — Prove control (either way)</h2>
+<h3>Option A — sign this message</h3>
+<p>Sign the exact text below (EIP-191 <code>personal_sign</code>) with
+your published payTo wallet:</p>
+<textarea id="message" readonly></textarea>
+<label>Signature (0x…, 65 bytes)
+<input type="text" id="signature" placeholder="0x…">
+</label>
+<p><button id="verify-sign">Verify signature</button></p>
+<h3>Option B — serve this file</h3>
+<p>Create a file at <code id="file-url"></code> whose entire content is:</p>
+<pre id="file-content"></pre>
+<p><button id="verify-file">Verify file</button>
+<span id="verify-status"></span></p>
+<p>Challenge expires at <span id="expires"></span>. If it expires, start
+a new one — proofs against an expired or already-used challenge are
+refused.</p>
+</div>
+
+<div class="step hidden" id="history-step">
+<h2>3 — Your patrol history</h2>
+<p id="history-note"></p>
+<table id="history-table">
+<thead><tr><th>Route</th><th>Defect</th><th>First seen</th><th>Last seen</th><th>State</th></tr></thead>
+<tbody></tbody>
+</table>
+<h3>Keep it watched — Managed Loop enrollment offer</h3>
+<p>Hand this payload to the Managed Loop enrollment flow
+(<code>enroll_client.py</code> client schema) and your routes are
+re-probed daily, with new failures and recoveries reported. Nothing is
+enrolled until you hand it over.</p>
+<pre id="enrollment"></pre>
+</div>
+
+<script>
+const API = "https://stall-row-production.up.railway.app";
+let sessionToken = null;
+
+function originValue(){
+  return document.getElementById("origin").value.trim().replace(/\/+$/, "");
+}
+function show(id){ document.getElementById(id).classList.remove("hidden"); }
+function fail(el, msg){ el.textContent = "✗ " + msg; el.className = "bad"; }
+function good(el, msg){ el.textContent = "✓ " + msg; el.className = "ok"; }
+
+document.getElementById("start").addEventListener("click", async () => {
+  const status = document.getElementById("start-status");
+  const origin = originValue();
+  if (!origin){ fail(status, "Enter your stall origin first."); return; }
+  let resp, body;
+  try {
+    resp = await fetch(API + "/v1/claim/start", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({origin})
+    });
+    body = await resp.json();
+  } catch(e){ fail(status, "Could not reach the claim service: " + e.message); return; }
+  if (!resp.ok){ fail(status, body.error || ("HTTP " + resp.status)); return; }
+  document.getElementById("message").value = body.message;
+  document.getElementById("file-url").textContent = body.file_url;
+  document.getElementById("file-content").textContent = body.file_content;
+  document.getElementById("expires").textContent = body.expires_at;
+  good(status, "Challenge issued — expires " + body.expires_at + ".");
+  show("prove-step");
+});
+
+async function verify(payload){
+  const status = document.getElementById("verify-status");
+  let resp, body;
+  try {
+    resp = await fetch(API + "/v1/claim/verify", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(payload)
+    });
+    body = await resp.json();
+  } catch(e){ fail(status, "Could not reach the claim service: " + e.message); return; }
+  if (!resp.ok || !body.claimed){
+    fail(status, body.error || ("HTTP " + resp.status));
+    return;
+  }
+  sessionToken = body.session_token;
+  good(status, "Claimed — session expires " + body.session_expires_at + ".");
+  loadHistory();
+}
+
+document.getElementById("verify-sign").addEventListener("click", () => {
+  verify({
+    origin: originValue(),
+    method: "sign-message",
+    signature: document.getElementById("signature").value.trim()
+  });
+});
+document.getElementById("verify-file").addEventListener("click", () => {
+  verify({origin: originValue(), method: "file"});
+});
+
+async function loadHistory(){
+  const origin = originValue();
+  let resp, body;
+  try {
+    resp = await fetch(API + "/v1/claim/status?origin=" + encodeURIComponent(origin), {
+      headers: {"X-Claim-Session": sessionToken}
+    });
+    body = await resp.json();
+  } catch(e){
+    document.getElementById("history-note").textContent =
+      "History could not be loaded: " + e.message;
+    show("history-step");
+    return;
+  }
+  if (!resp.ok){
+    document.getElementById("history-note").textContent =
+      "History refused: " + (body.error || ("HTTP " + resp.status));
+    show("history-step");
+    return;
+  }
+  const h = body.history;
+  document.getElementById("history-note").textContent = h.history_not_loaded
+    ? "History not loaded on this deployment yet — no patrol record can be shown. This is not a clean record; it means the snapshot has not been connected."
+    : h.note + " (" + h.summary.open + " open, " + h.summary.recovered + " recovered, " + h.summary.total + " total)";
+  const tbody = document.querySelector("#history-table tbody");
+  tbody.innerHTML = "";
+  for (const d of h.defects){
+    const tr = document.createElement("tr");
+    for (const v of [d.route, d.defect_class, d.first_seen || "—", d.last_seen || "—", d.state]){
+      const td = document.createElement("td");
+      td.textContent = v;
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+  document.getElementById("enrollment").textContent =
+    JSON.stringify(body.enrollment_offer, null, 2);
+  show("history-step");
+}
+</script>
+</body>
+</html>

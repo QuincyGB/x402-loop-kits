@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fleet Status — Verdict Row's own routes, checked by its own checker · Verdict Row</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #1a1a1a; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid #ccc; padding: 0.4rem 0.6rem; text-align: left; font-size: 0.92rem; }
+  th { background: #f4f4f4; }
+  .note { background: #f8f8f2; border-left: 4px solid #c9a227; padding: 0.6rem 1rem; }
+  .ok { background: #eef7ee; border-left: 4px solid #0a7d2c; padding: 0.6rem 1rem; }
+  .bad { background: #fdf0f0; border-left: 4px solid #b3261e; padding: 0.6rem 1rem; }
+  .degraded { background: #fdf6e0; border-left: 4px solid #c9a227; padding: 0.6rem 1rem; }
+  .unknown { background: #f4f4f4; border-left: 4px solid #888; padding: 0.6rem 1rem; }
+  code { background: #f0f0f0; padding: 0 0.25rem; word-break: break-all; }
+  .rollup { font-weight: 700; }
+  .rollup-ok { color: #0a7d2c; }
+  .rollup-degraded { color: #8a6d00; }
+  .rollup-down { color: #b3261e; }
+  footer { color: #666; font-size: 0.85rem; margin-top: 2rem; }
+</style></head><body>
+<h1>Fleet Status</h1>
+<p>This is the fleet holding itself to the standard it sells. Fleet Check
+grades other stalls' routes by unpaid probes against their own discovery
+docs — so the fleet's own routes get the same treatment, in public: every
+run of the fleet's standing checker probes all five services
+(<code>/health</code>, <code>/openapi.json</code>,
+<code>/.well-known/x402</code>) and every priced route (an unpaid request
+that must meet a decodable 402 challenge whose Base accept — network,
+asset, payTo, amount — matches the route's declared price, plus the
+Solana accept on Token Verdict), cross-checked by RouteVerdict's own
+internal verdicts. What the checker finds is what this page shows.</p>
+<p class="note">How it works, stated plainly: this page reads <strong>one
+published snapshot</strong> (<code>status-snapshot.json</code>), refreshed
+and pushed by the checker itself at the end of every run — it makes
+<strong>no live probes</strong> for your visit. The snapshot carries the
+checker's own classifications, not a second opinion invented here:
+a service is <strong>OK</strong> when its probe and every route pass,
+<strong>DEGRADED</strong> when the service answers but some routes fail,
+<strong>DOWN</strong> when the service probe fails or every route does.
+Want to grade one route — yours or ours — live, right now? The
+<a href="check.html">One-Link Checker</a> does that, free. Wondering
+whether you're listed where buyers look? <a href="on-the-map.html">Am I
+on the Map?</a></p>
+
+<div id="status" aria-live="polite"><p>Reading the snapshot…</p></div>
+
+<footer>Verdict Row — Token Verdict · RouteVerdict · ListSmith · StallRow ·
+LockSmith. Snapshot: <code>status-snapshot.json</code> (same directory as
+this page), built by <code>status_snapshot.py</code> in the fleet-checker
+tooling from the checker's own state and refreshed on every checker run.
+A stale snapshot is reported as a stale snapshot — the generated-at stamp
+above is the truth about when this data was taken.</footer>
+
+<script>
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+function rollupClass(s) { return s === "OK" ? "ok" : (s === "DEGRADED" ? "degraded" : "bad"); }
+function rollupTextClass(s) { return s === "OK" ? "rollup-ok" : (s === "DEGRADED" ? "rollup-degraded" : "rollup-down"); }
+fetch("status-snapshot.json").then(function (r) {
+  if (!r.ok) throw new Error("HTTP " + r.status);
+  return r.json();
+}).then(function (snap) {
+  var box = document.getElementById("status");
+  var when = snap.generated_at ? new Date(snap.generated_at).toUTCString() : "unknown";
+  var nRoutes = 0, nOk = 0;
+  (snap.services || []).forEach(function (s) { (s.routes || []).forEach(function (r) { nRoutes++; if (r.status === "OK") nOk++; }); });
+  var allOk = (snap.services || []).every(function (s) { return s.status === "OK"; });
+  var anyDown = (snap.services || []).some(function (s) { return s.status === "DOWN"; });
+  var html = '<div class="' + (allOk ? "ok" : (anyDown ? "bad" : "degraded")) + '"><strong>' +
+    (allOk ? "All services OK." : (anyDown ? "At least one service is DOWN." : "Degraded — some routes are failing.")) +
+    '</strong> ' + esc(snap.summary || "") + '<br>Snapshot generated <strong>' + esc(when) + '</strong> — ' +
+    nOk + ' of ' + nRoutes + ' priced routes OK across ' + (snap.services || []).length + ' services.</div>';
+
+  (snap.services || []).forEach(function (s) {
+    html += "<h2>" + esc(s.name) + ' — <span class="rollup ' + rollupTextClass(s.status) + '">' + esc(s.status) + "</span></h2>";
+    html += "<p>Origin: <code>" + esc(s.origin) + "</code>";
+    if (s.checker && s.checker.detail) html += "<br>Service probe: " + esc(s.checker.detail) + (s.checker.class ? " (checker class: " + esc(s.checker.class) + ")" : "");
+    if (s.dogfood) html += "<br>RouteVerdict dogfood: " + esc(s.dogfood.status) + " — " + esc(s.dogfood.detail);
+    html += "</p>";
+    html += "<table><tr><th>Route</th><th>Price</th><th>Status</th><th>Checker detail</th></tr>";
+    (s.routes || []).forEach(function (r) {
+      html += "<tr><td><code>" + esc(r.route) + '</code></td><td>' + esc(r.price) + '</td><td><span class="rollup ' + rollupTextClass(r.status) + '">' + esc(r.status) + "</span>" +
+        (r.checker_class && r.checker_class !== "OK" ? " (" + esc(r.checker_class) + ")" : "") + "</td><td>" + esc(r.detail) + "</td></tr>";
+    });
+    html += "</table>";
+  });
+
+  var w = snap.incidents_window || {};
+  html += "<h2>" + esc(w.label || "Incidents") + "</h2>";
+  if (w.note) html += '<p class="note">' + esc(w.note) + "</p>";
+  var inc = snap.incidents_30d || [];
+  if (!inc.length) {
+    html += "<p>No incidents recorded in this window — every route and service has passed every checker run since the incident log began.</p>";
+  } else {
+    html += "<table><tr><th>Entity</th><th>State</th><th>First seen</th><th>Last seen</th><th>Recovered</th><th>Detail</th></tr>";
+    inc.forEach(function (i) {
+      html += "<tr><td><code>" + esc(i.entity) + '</code></td><td><span class="rollup ' + (i.status === "open" ? "rollup-down" : "rollup-ok") + '">' + esc(i.status) + "</span></td><td>" +
+        esc(i.first_seen) + "</td><td>" + esc(i.last_seen) + "</td><td>" + esc(i.recovered_at || "—") + "</td><td>" + esc(i.detail) + "</td></tr>";
+    });
+    html += "</table>";
+  }
+  box.innerHTML = html;
+}).catch(function (e) {
+  document.getElementById("status").innerHTML = '<div class="unknown"><strong>The snapshot could not be loaded.</strong> ' + esc(e && e.message ? e.message : "") + ' A failed snapshot load is <em>not</em> a verdict on the fleet — it means this page could not read its data file. Try again in a moment.</div>';
+});
+</script>
+</body></html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recovery Receipts — x402 Fleet Patrol</title>
+<!--
+  Published on the loop-kits GitHub Pages site, beside check.html.
+  Explainer + receipt format + verification.
+  JS verification note: browser-side EIP-191 ecrecover needs a crypto
+  library (ethers via CDN). The draft below implements verification
+  with ethers if it loads; if the CDN is unavailable it falls back to
+  showing the equivalent Python verify snippet. Canonicalization in
+  JS must match recovery_receipts.py exactly:
+    canonical = "fleet-recovery-receipt/v1\n" + JSON.stringify with
+    keys sorted recursively, no spaces — implemented by sortKeys()
+    below (JSON.stringify of a key-sorted deep copy, separators
+    "," and ":" — same as Python json.dumps(sort_keys, separators)).
+-->
+<style>
+  body{font-family:system-ui,sans-serif;max-width:820px;margin:2rem auto;padding:0 1rem;line-height:1.55;color:#111}
+  code,pre{background:#f4f4f4;padding:.15em .35em;border-radius:4px}
+  pre{padding:1rem;overflow:auto}
+  textarea{width:100%;min-height:180px;font-family:monospace}
+  .ok{color:#0a7a2f;font-weight:600}.bad{color:#b00020;font-weight:600}
+  table{border-collapse:collapse}td,th{border:1px solid #ccc;padding:.35rem .6rem;text-align:left}
+</style>
+</head>
+<body>
+<h1>Recovery Receipts</h1>
+<p>When the x402 fleet patrol finds a paid route broken — answering
+403, 500, or nothing at all instead of a <strong>402 payment
+challenge</strong> — that defect is recorded with a first-seen time.
+When the operator fixes it, we don't just take their word for it, and
+you shouldn't take ours either.</p>
+
+<p>A <strong>recovery receipt</strong> is a signed record that a
+previously-defective route was re-probed <strong>twice, at least 10
+minutes apart</strong>, and returned a clean, decodable 402 challenge
+both times. Each receipt is signed (EIP-191) by the patrol's agent
+wallet, <code>0xa4f183a6799F0310FcCC545B07F2DcC960223de2</code>, so
+anyone can verify it was really issued by the patrol — and any
+tampering with a single field breaks the signature.</p>
+
+<h2>Receipt format (version <code>fleet-recovery-receipt/v1</code>)</h2>
+<table>
+<tr><th>Field</th><th>Meaning</th></tr>
+<tr><td><code>origin</code> / <code>route</code></td><td>The stall origin and the exact route URL that recovered.</td></tr>
+<tr><td><code>defect_class</code></td><td>The patrol's defect classification when it was broken (e.g. <code>unexpected_status</code>, <code>unreachable</code>).</td></tr>
+<tr><td><code>first_seen</code></td><td>When the patrol first recorded the defect. Sourced from the patrol record — stated honestly in every receipt's <code>source_note</code>.</td></tr>
+<tr><td><code>recovered_at</code></td><td>Time of the second clean confirmation probe.</td></tr>
+<tr><td><code>probes</code></td><td>Both confirmation probes: <code>at</code>, <code>observed_status</code> (402), and a <code>challenge_summary</code>.</td></tr>
+<tr><td><code>receipt_id</code></td><td><code>rr-</code> + first 20 hex of SHA-256 over <code>origin|route|defect_class|first_seen</code> — deterministic, so a recovery is only ever receipted once.</td></tr>
+<tr><td><code>signer</code> / <code>signature</code></td><td>The agent wallet and its EIP-191 signature over the canonical form below.</td></tr>
+</table>
+
+<h2>Canonical form</h2>
+<pre>fleet-recovery-receipt/v1
+{JSON of the receipt without "signature", keys sorted, no spaces}</pre>
+<p>Signed as EIP-191 personal-sign (<code>encode_defunct</code> text) —
+the same scheme the patrol's nudge engine uses.</p>
+
+<h2>Verify a receipt</h2>
+<p>Paste a receipt JSON below. Verification runs in your browser
+(ethers.js via CDN) using exactly the canonicalization above. If the
+library can't load, use the Python snippet instead — it needs no
+trust in this page at all.</p>
+<textarea id="receipt" placeholder='{"version":"fleet-recovery-receipt/v1", ...}'></textarea>
+<p><button id="go">Verify signature</button> <span id="verdict"></span></p>
+
+<h3>Or verify with Python</h3>
+<pre>pip install eth-account   # or use the fleet venv
+python3 recovery_receipts.py verify path/to/receipt.json
+# prints {"valid": true, "signer": "0xa4f183a6799F0310FcCC545B07F2DcC960223de2"}</pre>
+<p>The verifier re-derives the canonical string from the receipt,
+recovers the signer from the signature, and checks it equals the
+agent wallet. Full source: <code>recovery_receipts.py</code>
+(<code>verify_receipt()</code>) in the fleet-checker.</p>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+<script>
+const AGENT = "0xa4f183a6799F0310FcCC545B07F2DcC960223de2";
+function sortKeys(v){
+  if (Array.isArray(v)) return v.map(sortKeys);
+  if (v && typeof v === "object"){
+    const o = {};
+    for (const k of Object.keys(v).sort()) o[k] = sortKeys(v[k]);
+    return o;
+  }
+  return v;
+}
+document.getElementById("go").addEventListener("click", async () => {
+  const out = document.getElementById("verdict");
+  let receipt;
+  try { receipt = JSON.parse(document.getElementById("receipt").value); }
+  catch(e){ out.textContent = "✗ Not valid JSON."; out.className = "bad"; return; }
+  if (typeof ethers === "undefined"){
+    out.textContent = "Verifier library unavailable — use the Python snippet above.";
+    out.className = "bad"; return;
+  }
+  try {
+    const { signature, ...unsigned } = receipt;
+    const canonical = "fleet-recovery-receipt/v1\n" + JSON.stringify(sortKeys(unsigned));
+    const recovered = ethers.verifyMessage(canonical, signature);
+    const signerOk = (receipt.signer || "").toLowerCase() === AGENT.toLowerCase();
+    const ok = signerOk && recovered.toLowerCase() === AGENT.toLowerCase();
+    out.textContent = ok
+      ? "✓ Valid — signed by the patrol agent wallet " + recovered
+      : "✗ Invalid — recovered signer " + recovered;
+    out.className = ok ? "ok" : "bad";
+  } catch(e){
+    out.textContent = "✗ Verification failed: " + e.message; out.className = "bad";
+  }
+});
+</script>
+</body>
+</html>
