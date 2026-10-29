@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Am I on the Map? — are you listed in the x402 directories? · Verdict Row</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #1a1a1a; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid #ccc; padding: 0.4rem 0.6rem; text-align: left; font-size: 0.92rem; }
+  th { background: #f4f4f4; }
+  .note { background: #f8f8f2; border-left: 4px solid #c9a227; padding: 0.6rem 1rem; }
+  .ok { background: #eef7ee; border-left: 4px solid #0a7d2c; padding: 0.6rem 1rem; }
+  .bad { background: #fdf0f0; border-left: 4px solid #b3261e; padding: 0.6rem 1rem; }
+  .unknown { background: #f4f4f4; border-left: 4px solid #888; padding: 0.6rem 1rem; }
+  code { background: #f0f0f0; padding: 0 0.25rem; word-break: break-all; }
+  input[type="text"] { width: 100%; box-sizing: border-box; padding: 0.55rem; font-size: 1rem; margin: 0.4rem 0; }
+  button { padding: 0.55rem 1.2rem; font-size: 1rem; cursor: pointer; }
+  .sample { font-size: 0.9rem; }
+  footer { color: #666; font-size: 0.85rem; margin-top: 2rem; }
+</style></head><body>
+<h1>Am I on the Map?</h1>
+<p>Buyers find x402 stalls through directories — <strong>CDP Bazaar</strong>,
+<strong>PayAI</strong>, <strong>Settled</strong> and <strong>x402scan</strong>. If you are
+not listed, you are not found, and listings lapse silently. Paste your
+<strong>payTo address</strong> or your <strong>stall origin URL</strong> and see where
+this snapshot has you.</p>
+<p class="note">How it works, stated plainly: this page reads <strong>one published
+snapshot</strong> (<code>map-snapshot.json</code>, refreshed when the fleet's catalogue
+watchdog runs) — it makes <strong>no live directory reads</strong> for your query.
+The snapshot is built from the same four directory sources the watchdog reads:
+bounded slices of the CDP / PayAI / Settled discovery feeds, exact scoped checks
+for a bounded set of patrol-census origins, and x402scan recipient pages where
+they were actually fetched (x402scan has no global feed — see the coverage
+notes under your result). <strong>Absence from this snapshot is not absence from
+a directory</strong>: directories change continuously, indexing lags, and a
+bounded slice cannot see everyone. “Not covered by this snapshot” means
+exactly that.</p>
+
+<form id="map-form">
+  <label for="q">payTo address (0x…) or stall origin URL</label>
+  <input type="text" id="q" required placeholder="0x… or https://your-stall.example.com" autocomplete="off" spellcheck="false">
+  <button type="submit" id="go">Look me up</button>
+  <span class="sample">Worked example — our own fleet:
+  <a href="#" id="sample-link">0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F</a></span>
+</form>
+
+<div id="result" aria-live="polite"></div>
+
+<h2>Stop checking by hand</h2>
+<p>This page is a snapshot — true when it was taken, stale a day later. The
+fleet's own answer is a <strong>standing catalogue watchdog</strong>: the same four
+directories re-read on a cadence, with gains and losses flagged the run they
+happen (our fleet's own worked example above is 19 / 5 / 19 / 20 of its 32
+routes across CDP / PayAI / Settled / x402scan — listings lapse even when
+nothing on the stall changed). The <a href="managed-loop.html">Managed Loop</a>
+runs that watch for your stall so you don't have to: delisting, drift and
+breakage watched daily, a knock when something moves. Route broken right
+now, not just unlisted? The <a href="check.html">One-Link Checker</a> probes
+one route live, free.</p>
+
+<footer>Verdict Row — Token Verdict · RouteVerdict · ListSmith · StallRow ·
+LockSmith. Snapshot: <code>map-snapshot.json</code> (same directory as this
+page), built by <code>map_snapshot.py</code> in the fleet-checker tooling and
+refreshed by the catalogue watchdog. A snapshot miss is reported as a
+snapshot miss — never as a verdict on your listings.</footer>
+
+<script>
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+var LABELS = {cdp: "CDP Bazaar", payai: "PayAI", settled: "Settled", x402scan: "x402scan"};
+var BASIS = {
+  fleet_matrix: "Exact — the catalogue watchdog's per-route reads of our own fleet (catalogue-matrix.json).",
+  scoped: "Exact scoped check — this origin/payTo was read directly in each directory source that supports it at snapshot time.",
+  feed_slice: "Feed slice — counted in the bounded slice of the directory's global discovery feed read for this snapshot."
+};
+var SNAP = null, BY_PAYTO = {}, BY_ORIGIN = {};
+function normOrigin(raw) {
+  var s = String(raw || "").trim();
+  if (!s) return null;
+  if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(s)) s = "https://" + s;
+  try {
+    var u = new URL(s);
+    if (u.protocol !== "http:" && u.protocol !== "https:") return null;
+    return u.protocol + "//" + u.host.toLowerCase();
+  } catch (e) { return null; }
+}
+function loadSnap() {
+  if (SNAP) return Promise.resolve(SNAP);
+  return fetch("map-snapshot.json").then(function (r) {
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return r.json();
+  }).then(function (snap) {
+    SNAP = snap;
+    (snap.entries || []).forEach(function (ent) {
+      if (ent.payTo) {
+        var k = ent.payTo.toLowerCase();
+        (BY_PAYTO[k] = BY_PAYTO[k] || []).push(ent);
+      }
+      (ent.origins || []).forEach(function (org) {
+        (BY_ORIGIN[org] = BY_ORIGIN[org] || []).push(ent);
+      });
+    });
+    return snap;
+  });
+}
+function statusCell(ent, src) {
+  var listed = ent.listed ? ent.listed[src] : null;
+  var count = ent.counts ? ent.counts[src] : null;
+  if (listed === true) return "<strong>Listed</strong>" + (count != null ? " — " + esc(count) + " resource" + (count === 1 ? "" : "s") + " in this snapshot" : "");
+  if (listed === false) return "<strong>Not found</strong> — an exact read for this entry found none at snapshot time";
+  return "<strong>Not covered by this snapshot</strong>";
+}
+function renderEntries(entries, heading) {
+  var when = SNAP.generated_at ? new Date(SNAP.generated_at).toUTCString() : "unknown";
+  var html = '<div class="ok"><strong>' + esc(heading) + '</strong> Snapshot taken ' + esc(when) + '.</div>';
+  entries.forEach(function (ent) {
+    html += "<h3>" + (ent.payTo ? "payTo <code>" + esc(ent.payTo) + "</code>" : "Origin-only entry (no payTo in the sources read)") + "</h3>";
+    if (ent.origins && ent.origins.length) {
+      html += "<p>Origin" + (ent.origins.length === 1 ? "" : "s") + ": " + ent.origins.map(function (o) { return "<code>" + esc(o) + "</code>"; }).join(" · ") + "</p>";
+    }
+    html += "<table><tr><th>Directory</th><th>Presence in this snapshot</th></tr>";
+    ["cdp", "payai", "settled", "x402scan"].forEach(function (src) {
+      html += "<tr><td>" + esc(LABELS[src]) + "</td><td>" + statusCell(ent, src) + "</td></tr>";
+    });
+    html += "</table>";
+    html += '<p class="note">How this entry was read: ' + esc(BASIS[ent.basis] || ent.basis || "") + "</p>";
+  });
+  var cov = SNAP.coverage || {};
+  html += '<p class="unknown"><strong>Coverage of this snapshot:</strong> ' +
+    esc(cov.entries_total) + " entries; patrol census origins covered: " +
+    esc(cov.census_origins_in_snapshot) + " of " + esc(cov.census_origins_total) +
+    "; exact scoped checks run: " + esc(cov.scoped_checks_run) + ". " +
+    ((cov.limits || []).map(esc).join(" ")) +
+    " Absence here is not absence in a directory — indexing lags and slices are bounded.</p>";
+  return html;
+}
+function lookup(q) {
+  var box = document.getElementById("result");
+  box.innerHTML = "<p>Reading the snapshot…</p>";
+  loadSnap().then(function () {
+    q = q.trim();
+    if (/^0x[0-9a-fA-F]{40}$/.test(q)) {
+      var hits = BY_PAYTO[q.toLowerCase()] || [];
+      box.innerHTML = hits.length
+        ? renderEntries(hits, "Found — payTo " + q)
+        : '<div class="unknown"><strong>Not covered by this snapshot.</strong> payTo <code>' + esc(q) + "</code> does not appear in the snapshot taken " + esc(SNAP.generated_at || "") + ". That means the bounded feed slices and scoped checks behind this snapshot did not reach it — <em>not</em> that the directories do not list it. The standing watchdog (see below) is the version that keeps watching.</div>";
+      return;
+    }
+    var org = normOrigin(q);
+    if (org) {
+      var hits2 = BY_ORIGIN[org] || [];
+      box.innerHTML = hits2.length
+        ? renderEntries(hits2, "Found — origin " + org)
+        : '<div class="unknown"><strong>Not covered by this snapshot.</strong> Origin <code>' + esc(org) + "</code> does not appear in the snapshot taken " + esc(SNAP.generated_at || "") + ". That means the bounded feed slices and scoped checks behind this snapshot did not reach it — <em>not</em> that the directories do not list it. The standing watchdog (see below) is the version that keeps watching.</div>";
+      return;
+    }
+    box.innerHTML = '<div class="bad"><strong>That is neither a payTo nor an origin.</strong> Paste a 0x… payTo address (42 characters) or an origin like <code>https://your-stall.example.com</code> (a full route URL works too — its origin is what the snapshot keys on).</div>';
+  }).catch(function (e) {
+    box.innerHTML = '<div class="unknown"><strong>The snapshot could not be loaded.</strong> ' + esc(e && e.message ? e.message : "") + ' A failed snapshot load is <em>not</em> a verdict on your listings. Try again in a moment.</div>';
+  });
+}
+document.getElementById("map-form").addEventListener("submit", function (ev) {
+  ev.preventDefault();
+  lookup(document.getElementById("q").value);
+});
+document.getElementById("sample-link").addEventListener("click", function (ev) {
+  ev.preventDefault();
+  document.getElementById("q").value = "0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F";
+  lookup(document.getElementById("q").value);
+});
+loadSnap().catch(function () {});
+</script>
+</body></html>
