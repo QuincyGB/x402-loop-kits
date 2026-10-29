@@ -36,6 +36,19 @@ address. Private and loopback targets are refused.</p>
 
 <div id="result" aria-live="polite"></div>
 
+<h2>Batch check — up to 10 links at once</h2>
+<p>Paste up to <strong>10 route URLs or stall origins, one per line</strong>, and get
+one combined report — the same probe, the same defect classes, every row graded
+separately. Batch limit: 3 batches per minute per address.</p>
+
+<form id="batch-form">
+  <label for="urls">Route URLs or stall origins (one per line, max 10)</label>
+  <textarea id="urls" rows="6" style="width:100%;box-sizing:border-box;padding:0.55rem;font-size:0.95rem;margin:0.4rem 0" placeholder="https://your-stall.example.com/v1/route-one&#10;https://your-stall.example.com/v1/route-two"></textarea>
+  <button type="submit" id="go-batch">Check them all</button>
+</form>
+
+<div id="batch-result" aria-live="polite"></div>
+
 <h2>Want every route, not just one?</h2>
 <p>This page checks <strong>one route for free</strong>. The full sweep of every
 route — with declared-vs-live diffs on each one and alerts when a route
@@ -111,6 +124,44 @@ document.getElementById("check-form").addEventListener("submit", function (ev) {
   }).catch(function () {
     btn.disabled = false;
     box.innerHTML = '<div class="unknown"><strong>The probe failed to run.</strong> The checker could not be reached or did not answer. A failed probe is <em>not</em> a verdict — it does not mean your stall is down. Try again in a moment.</div>';
+  });
+});
+document.getElementById("batch-form").addEventListener("submit", function (ev) {
+  ev.preventDefault();
+  var urls = document.getElementById("urls").value.split("\n").map(function (s) { return s.trim(); }).filter(function (s) { return s; });
+  var box = document.getElementById("batch-result");
+  var btn = document.getElementById("go-batch");
+  if (!urls.length) { box.innerHTML = '<div class="unknown"><strong>Nothing to check.</strong> Paste at least one URL, one per line.</div>'; return; }
+  if (urls.length > 10) { box.innerHTML = '<div class="unknown"><strong>Too many.</strong> A batch holds at most 10 URLs — this one has ' + urls.length + '. Trim it and try again.</div>'; return; }
+  btn.disabled = true;
+  box.innerHTML = "<p>Probing " + urls.length + " unpaid — one moment…</p>";
+  fetch("https://stall-row-production.up.railway.app/v1/probe/batch", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({urls: urls})
+  }).then(function (r) {
+    return r.json().catch(function () { return null; }).then(function (body) { return {status: r.status, body: body}; });
+  }).then(function (res) {
+    btn.disabled = false;
+    if (res.status === 429) {
+      box.innerHTML = '<div class="unknown"><strong>Rate limit.</strong> The free checker allows 3 batches per minute per address. Wait a minute and try again — this says nothing about your stalls.</div>';
+      return;
+    }
+    if (res.status !== 200 || !res.body || !res.body.results) {
+      box.innerHTML = '<div class="unknown"><strong>The batch probe failed to run.</strong> The checker itself could not complete this check. A failed probe is <em>not</em> a verdict — it does not mean your stalls are down. Try again in a moment.</div>';
+      return;
+    }
+    var b = res.body;
+    var s = b.summary || {};
+    var head = '<p><strong>Batch report</strong> — ' + esc(s.total) + ' checked: ' + esc(s.ok) + ' healthy, ' + esc(s.defect) + ' with defects' + (s.refused ? ', ' + esc(s.refused) + ' refused' : '') + (s.error ? ', ' + esc(s.error) + ' probe failures (ours, not verdicts)' : '') + '. Checked at ' + esc(b.checked_at) + '.</p>';
+    var table = "<table><tr><th>URL</th><th>Observed</th><th>Verdict</th><th>Defect</th><th>What the fix usually is</th></tr>" + b.results.map(function (row) {
+      var code = row.defect_class || (row.status === "ok" ? "ok" : null);
+      return "<tr><td><code>" + esc(row.url) + "</code></td><td>" + esc(row.observed_status == null ? "no response" : "HTTP " + row.observed_status) + "</td><td>" + esc(row.verdict || row.status) + "</td><td>" + esc(code || "—") + "</td><td>" + esc(code ? (FIXES[code] || row.detail || "") : (row.detail || "")) + "</td></tr>";
+    }).join("") + "</table>";
+    box.innerHTML = head + table;
+  }).catch(function () {
+    btn.disabled = false;
+    box.innerHTML = '<div class="unknown"><strong>The batch probe failed to run.</strong> The checker could not be reached or did not answer. A failed probe is <em>not</em> a verdict — it does not mean your stalls are down. Try again in a moment.</div>';
   });
 });
 </script>
