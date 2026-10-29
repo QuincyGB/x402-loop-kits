@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One-Link Checker — is your x402 route healthy? · Verdict Row</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #1a1a1a; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid #ccc; padding: 0.4rem 0.6rem; text-align: left; font-size: 0.92rem; }
+  th { background: #f4f4f4; }
+  .note { background: #f8f8f2; border-left: 4px solid #c9a227; padding: 0.6rem 1rem; }
+  .ok { background: #eef7ee; border-left: 4px solid #0a7d2c; padding: 0.6rem 1rem; }
+  .bad { background: #fdf0f0; border-left: 4px solid #b3261e; padding: 0.6rem 1rem; }
+  .unknown { background: #f4f4f4; border-left: 4px solid #888; padding: 0.6rem 1rem; }
+  code { background: #f0f0f0; padding: 0 0.25rem; word-break: break-all; }
+  input[type="url"] { width: 100%; box-sizing: border-box; padding: 0.55rem; font-size: 1rem; margin: 0.4rem 0; }
+  button { padding: 0.55rem 1.2rem; font-size: 1rem; cursor: pointer; }
+  footer { color: #666; font-size: 0.85rem; margin-top: 2rem; }
+</style></head><body>
+<h1>One-Link Checker</h1>
+<p>Paste <strong>one x402 route URL</strong> — or a stall origin — and see what a buyer
+meets right now: an unpaid probe asks the route for its <strong>402 payment
+challenge</strong> and grades what actually comes back. The same probe and the same
+defect classes as a paid Fleet Check sweep, for one link, free.</p>
+<p class="note">How it works, stated plainly: the probe never pays, signs, or
+settles anything. It sends one unpaid request, reads the HTTP status and —
+on a 402 — whether the challenge parses as x402 v2 with accepts, and whether
+the live amount and payTo match what the origin's own
+<code>/.well-known/x402</code> declares. Rate limit: 10 probes per minute per
+address. Private and loopback targets are refused.</p>
+
+<form id="check-form">
+  <label for="url">Route URL or stall origin</label>
+  <input type="url" id="url" required placeholder="https://your-stall.example.com/v1/your-route">
+  <button type="submit" id="go">Check it</button>
+</form>
+
+<div id="result" aria-live="polite"></div>
+
+<h2>Want every route, not just one?</h2>
+<p>This page checks <strong>one route for free</strong>. The full sweep of every
+route — with declared-vs-live diffs on each one and alerts when a route
+breaks or recovers — is <strong>Fleet Check</strong> on StallRow:
+<code>POST /v1/fleet-check</code>, <strong>$0.10</strong> per sweep. The standing form is
+the <strong>$5 pack: 100 sweeps</strong> of one fixed fleet definition
+(<code>POST /v1/fleet-check/pack</code>), with diffs pushed to your webhook.
+Agents pay via x402; for humans it is reply-based — see the
+<a href="index.html">fleet status page</a> and reply there rather than paying
+anything up front. No hype version: if you run one route and it passes
+above, you may not need either.</p>
+
+<footer>Verdict Row — Token Verdict · RouteVerdict · ListSmith · StallRow ·
+LockSmith. Probe: <code>POST https://stall-row-production.up.railway.app/v1/probe</code>
+(free, unpriced, not a catalogue route). A failed probe run is reported as
+a failed probe run — never as a verdict on your stall.</footer>
+
+<script>
+var FIXES = {
+  ok: "Nothing to fix on this route — it answers an unpaid probe with a parseable 402 challenge.",
+  unexpected_status: "The route answered something other than a 402 payment challenge. Usual fix: check for a firewall / WAF / auth layer answering first (403s are often a bot filter), a moved or renamed route (404), or a redirect to a login page — an unpaid buyer should meet the 402 challenge directly.",
+  challenge_undecodable: "The route answers 402, but the challenge does not parse as x402 v2 or carries no accepts. Usual fix: return the challenge as a base64 JSON PAYMENT-REQUIRED header (or a JSON body in the same shape) with an accepts array — scheme, network, asset, amount, payTo.",
+  amount_mismatch: "The live challenge amount disagrees with the amount the origin's own /.well-known/x402 declares. Usual fix: bring the two back into agreement — routers that verify declared prices skip or flag routes whose live price is not the advertised one.",
+  payto_mismatch: "The live challenge pays a different payTo than the origin's own /.well-known/x402 declares. Usual fix: align the payTo in the challenge and the discovery document — buyers screen payTos before paying them.",
+  unreachable: "No HTTP response could be had at all. Usual fix: check the deployment is up, DNS resolves publicly, and the host accepts connections from outside your own network.",
+  server_error: "The route answers 5xx to an unpaid probe. Usual fix: read the server-side error for this route — a buyer cannot obtain a payment challenge from a route that errors before it can issue one.",
+  no_402: "The route answers 200 to an unpaid probe — there is no payment gate. Usual fix: if this route is meant to be paid, put the x402 paywall middleware in front of it; if it is meant to be free, it does not belong in a priced discovery document.",
+  target_refused: "The checker refused this target before probing (non-public address or a redirect to one). Paste the route's public URL.",
+  no_priced_routes: "That origin publishes no priced resources in its /.well-known/x402, so there was no route to probe. Paste a full route URL instead."
+};
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+document.getElementById("check-form").addEventListener("submit", function (ev) {
+  ev.preventDefault();
+  var url = document.getElementById("url").value.trim();
+  var box = document.getElementById("result");
+  var btn = document.getElementById("go");
+  btn.disabled = true;
+  box.innerHTML = "<p>Probing unpaid — one moment…</p>";
+  fetch("https://stall-row-production.up.railway.app/v1/probe", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({url: url})
+  }).then(function (r) {
+    return r.json().catch(function () { return null; }).then(function (body) { return {status: r.status, body: body}; });
+  }).then(function (res) {
+    btn.disabled = false;
+    if (res.status === 429) {
+      box.innerHTML = '<div class="unknown"><strong>Rate limit.</strong> The free checker allows 10 probes per minute per address. Wait a minute and try again — this says nothing about your stall.</div>';
+      return;
+    }
+    if (res.status === 422) {
+      box.innerHTML = '<div class="unknown"><strong>That target was refused.</strong> ' + esc(res.body && res.body.error ? res.body.error : "The URL must be a public http(s) address.") + ' Nothing was probed.</div>';
+      return;
+    }
+    if (res.status !== 200 || !res.body) {
+      box.innerHTML = '<div class="unknown"><strong>The probe failed to run.</strong> The checker itself could not complete this check' + (res.body && res.body.error ? ": " + esc(res.body.error) : "") + '. A failed probe is <em>not</em> a verdict — it does not mean your stall is down. Try again in a moment.</div>';
+      return;
+    }
+    var b = res.body;
+    var rows = "";
+    if (b.resources && b.resources.length > 1) {
+      rows = "<table><tr><th>Route</th><th>Observed</th><th>Verdict</th><th>Defect</th></tr>" + b.resources.map(function (row) {
+        var d = row.defects && row.defects.length ? row.defects[0].code : "—";
+        return "<tr><td><code>" + esc(row.url) + "</code></td><td>" + esc(row.http_status == null ? "no response" : "HTTP " + row.http_status) + "</td><td>" + esc(row.verdict) + "</td><td>" + esc(d) + "</td></tr>";
+      }).join("") + "</table>";
+    }
+    if (b.status === "ok") {
+      box.innerHTML = '<div class="ok"><strong>Healthy.</strong> <code>' + esc(b.url) + '</code> observed <strong>HTTP ' + esc(b.observed_status) + '</strong> (expected 402) with a parseable x402 challenge. Checked at ' + esc(b.checked_at) + '.</div>' + rows;
+    } else {
+      var code = b.defect_class || "unknown";
+      box.innerHTML = '<div class="bad"><strong>Defect: ' + esc(code) + '.</strong> <code>' + esc(b.url) + '</code> observed <strong>' + esc(b.observed_status == null ? "no HTTP response" : "HTTP " + b.observed_status) + '</strong> (expected 402).<br>' + esc(b.detail) + '<br><strong>What the fix usually is:</strong> ' + esc(FIXES[code] || "Compare the observed response above with what your discovery document promises, and bring the two into agreement.") + '<br>Checked at ' + esc(b.checked_at) + '.</div>' + rows;
+    }
+  }).catch(function () {
+    btn.disabled = false;
+    box.innerHTML = '<div class="unknown"><strong>The probe failed to run.</strong> The checker could not be reached or did not answer. A failed probe is <em>not</em> a verdict — it does not mean your stall is down. Try again in a moment.</div>';
+  });
+});
+</script>
+</body></html>

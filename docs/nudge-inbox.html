@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Fleet-Health Nudge Inbox — an open convention · Verdict Row</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #1a1a1a; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid #ccc; padding: 0.4rem 0.6rem; text-align: left; font-size: 0.92rem; vertical-align: top; }
+  th { background: #f4f4f4; }
+  .note { background: #f8f8f2; border-left: 4px solid #c9a227; padding: 0.6rem 1rem; }
+  code { background: #f0f0f0; padding: 0 0.25rem; word-break: break-all; }
+  pre { background: #f6f6f6; padding: 0.8rem 1rem; overflow-x: auto; font-size: 0.85rem; line-height: 1.4; }
+  pre code { background: none; padding: 0; word-break: normal; }
+  blockquote { border-left: 4px solid #c9a227; margin: 1rem 0; padding: 0.2rem 1rem; background: #f8f8f2; }
+  footer { color: #666; font-size: 0.85rem; margin-top: 2rem; }
+</style></head><body>
+<h1>The Fleet-Health Nudge Inbox — an open convention</h1>
+<p><strong>Protocol:</strong> <code>fleet-health/v1</code> · <strong>Status:</strong> live on StallRow since 2026-10-27 ·
+<strong>Reference implementation:</strong> <code>app/services/nudge.py</code> in
+<a href="https://github.com/QuincyGB/stall-row">QuincyGB/stall-row</a></p>
+<p>Everything else in x402 is pull: a stall waits to be called, and a
+broken stall that never asks for a check never gets one. A <strong>nudge</strong>
+is the other direction — a signed knock on a stall's own door:</p>
+<blockquote><em>This route of yours is broken in this specific way. Here is the
+probe evidence. Here is the check that found it.</em></blockquote>
+<p>Any stall can publish an inbox, any checker can knock, and the
+stall's owner decides what a knock is worth. No accounts, no
+payment: inbound mail is not a product.</p>
+
+<h2>1. Publishing an inbox</h2>
+<p>Add one top-level extension to your <code>/.well-known/x402</code> document
+(it is an extension, <strong>not</strong> a resource — it must not change your
+priced route count):</p>
+<pre><code>{
+  "extensions": {
+    "nudge": {
+      "endpoint": "https://your-stall.example.com/v1/nudge",
+      "accepts": ["fleet-health/v1"],
+      "spec": "https://github.com/QuincyGB/x402-loop-kits/blob/main/nudge-inbox.md"
+    }
+  }
+}</code></pre>
+<p>The endpoint accepts <code>POST</code> with a JSON body (§2). Publishing the
+extension is the entire integration — and the entire consent: an
+origin that publishes no inbox is never nudged by a conforming
+sender.</p>
+
+<h2>2. The nudge message</h2>
+<pre><code>{
+  "kind": "fleet-health-nudge",
+  "protocol": "fleet-health/v1",
+  "stall": "https://stall.example.com",
+  "route": "https://stall.example.com/v1/check",
+  "defect": {
+    "code": "amount_mismatch",
+    "expected": "50000",
+    "observed": "70000"
+  },
+  "severity": "warning",
+  "impact": "Your route charges 70000 but advertises 50000 (amounts in the asset's smallest units) — routers that verify declared prices will skip or flag it.",
+  "action": {
+    "summary": "Run the full Fleet Check diagnosis on this route now",
+    "method": "POST",
+    "url": "https://stall-row-production.up.railway.app/v1/fleet-check",
+    "body": {"resources": ["https://stall.example.com/v1/check"]},
+    "spec": "https://github.com/QuincyGB/x402-loop-kits/blob/main/nudge-inbox.md"
+  },
+  "evidence": {
+    "probes": [
+      {
+        "at": "2026-10-27T22:40:00Z",
+        "http_status": 402,
+        "detail": "live challenge amount 70000 != declared 50000"
+      }
+    ],
+    "source": "fleet-check"
+  },
+  "first_seen": "2026-10-27T22:40:00Z",
+  "check_url": "https://stall-row-production.up.railway.app/v1/fleet-check",
+  "sender": "0x19E7E376E7C213B7E7e7e46cc70A5dD086DAff2A",
+  "signature": "0x172075…"
+}</code></pre>
+<p>A knock is built to wake the stall up, not just to inform a human:
+it is <strong>severity-stamped</strong> (§5), it <strong>leads with the consequence</strong>
+(<code>impact</code>), and it is <strong>machine-actionable</strong> — the <code>action</code> block
+is a complete call a stall's own agent can execute in one step to
+order its own diagnosis, no human reading required.</p>
+<table>
+<tr><th>Field</th><th>Meaning</th></tr>
+<tr><td><code>kind</code></td><td><code>fleet-health-nudge</code> (or <code>fleet-health-opt-out</code>, §4)</td></tr>
+<tr><td><code>protocol</code></td><td><code>fleet-health/v1</code></td></tr>
+<tr><td><code>stall</code></td><td>The origin the nudge is about (scheme + host, no path)</td></tr>
+<tr><td><code>route</code></td><td>The full resource URL, under <code>stall</code></td></tr>
+<tr><td><code>defect.code</code></td><td>Machine-readable defect class (§5)</td></tr>
+<tr><td><code>defect.expected</code> / <code>defect.observed</code></td><td>What the stall's own sources promise vs what the probe met. Strings or integers; amounts in the asset's smallest units, as strings</td></tr>
+<tr><td><code>severity</code></td><td><code>critical</code> or <code>warning</code>, from the mapping in §5</td></tr>
+<tr><td><code>impact</code></td><td>One plain-language line naming the consequence of the defect, generated from the defect class and the observed numbers — factual and specific, no hype, no invented losses</td></tr>
+<tr><td><code>action</code></td><td>A complete, executable call that diagnoses the affected route: <code>{summary, method, url, body, spec}</code>. <code>body.resources</code> names exactly the affected route</td></tr>
+<tr><td><code>evidence</code></td><td>Probe records: timestamps, HTTP statuses, details. The receiver should be able to re-run the probe and land on the same facts</td></tr>
+<tr><td><code>first_seen</code></td><td>ISO-8601 time the sender first observed the defect</td></tr>
+<tr><td><code>first_knock_at</code></td><td>Escalation knocks only (§6): ISO-8601 time of knock 1 for this incident</td></tr>
+<tr><td><code>escalation</code></td><td>Escalation knocks only (§6): the string <code>"final"</code></td></tr>
+<tr><td><code>check_url</code></td><td>Where the receiver can buy or run the full check</td></tr>
+<tr><td><code>sender</code></td><td>The sender's wallet address</td></tr>
+<tr><td><code>signature</code></td><td>EIP-191 <code>personal_sign</code> over the canonical form (§3)</td></tr>
+</table>
+<p>Receivers answer <code>200 {"ok": true, "stored": true|false,
+"duplicate": bool}</code>. A re-send of an identical
+<code>(sender, route, defect.code, first_seen)</code> is a duplicate, not a
+second entry — <strong>except</strong> that an escalation knock (§6), which
+carries <code>escalation: "final"</code>, is a distinct message from knock 1
+even though it shares those four fields, and receivers must store
+it as its own entry.</p>
+
+<h2>3. The signature — canonical form</h2>
+<p>The signature proves who knocked and that the evidence was not
+altered in transit. To sign:</p>
+<ol>
+<li>Take the message object <strong>without</strong> the <code>signature</code> field.</li>
+<li>Serialize it as canonical JSON: keys sorted (recursively), no
+insignificant whitespace (<code>","</code> / <code>":"</code> separators), UTF-8,
+non-ASCII characters unescaped.</li>
+<li>Prefix the protocol line: <code>fleet-health-nudge/v1\n</code> + the JSON.</li>
+<li>Sign that text with EIP-191 <code>personal_sign</code> from the <code>sender</code>
+wallet.</li>
+</ol>
+<p>To verify: rebuild the same text from the received message,
+recover the signer, and compare with <code>sender</code> (case-insensitive).</p>
+<h3>Worked example (test vector)</h3>
+<p>Throwaway key <code>0x1111…1111</code> (never a real wallet) signs the message
+in §2. The canonical text is exactly:</p>
+<pre><code>fleet-health-nudge/v1
+{"action":{"body":{"resources":["https://stall.example.com/v1/check"]},"method":"POST","spec":"https://github.com/QuincyGB/x402-loop-kits/blob/main/nudge-inbox.md","summary":"Run the full Fleet Check diagnosis on this route now","url":"https://stall-row-production.up.railway.app/v1/fleet-check"},"check_url":"https://stall-row-production.up.railway.app/v1/fleet-check","defect":{"code":"amount_mismatch","expected":"50000","observed":"70000"},"evidence":{"probes":[{"at":"2026-10-27T22:40:00Z","detail":"live challenge amount 70000 != declared 50000","http_status":402}],"source":"fleet-check"},"first_seen":"2026-10-27T22:40:00Z","impact":"Your route charges 70000 but advertises 50000 (amounts in the asset's smallest units) — routers that verify declared prices will skip or flag it.","kind":"fleet-health-nudge","protocol":"fleet-health/v1","route":"https://stall.example.com/v1/check","sender":"0x19E7E376E7C213B7E7e7e46cc70A5dD086DAff2A","severity":"warning","stall":"https://stall.example.com"}</code></pre>
+<p>Signature (recovers to <code>0x19E7E376E7C213B7E7e7e46cc70A5dD086DAff2A</code>):</p>
+<pre><code>0x172075899b7ec09b546e6a51bad774b5b896cdec8fb5138d2934a127455f04c278fe7f7d4b0b36f6594727bad81dadc88927721bffd599148b5b52d6fbae3bbf1b</code></pre>
+<p>Both reference test suites (StallRow's and the sender engine's) pin
+this vector, so independent implementations cannot drift apart.</p>
+
+<h2>4. Opting out</h2>
+<p>A stall stops nudges by POSTing, to the <strong>sender's</strong> inbox (the
+inbox of whoever has been nudging it), a message of the same shape
+with <code>kind: "fleet-health-opt-out"</code>, the <code>stall</code> it speaks for, and
+<code>sender</code> + <code>signature</code> from <strong>the wallet that stall's own discovery
+doc publishes as <code>payTo</code></strong>:</p>
+<pre><code>{
+  "kind": "fleet-health-opt-out",
+  "protocol": "fleet-health/v1",
+  "stall": "https://stall.example.com",
+  "sender": "0x…the stall's payTo…",
+  "signature": "0x…"
+}</code></pre>
+<p>Control of the payTo is control of the stall's mail: an opt-out
+signed by anyone else is refused. A conforming sender checks the
+opt-out registry <strong>before every send</strong> and never nudges an opted-out
+stall again. Opt-outs are not rate-limited — leaving is a
+right, not mail.</p>
+
+<h2>5. Defect classes and severity</h2>
+<p>The classes the reference checker (Fleet Check) emits; senders may
+add their own, receivers should treat unknown codes as opaque:</p>
+<table>
+<tr><th>Code</th><th>Meaning</th></tr>
+<tr><td><code>amount_mismatch</code></td><td>Live challenge amount ≠ the amount the stall's own discovery doc declares</td></tr>
+<tr><td><code>payto_mismatch</code></td><td>Live challenge payTo ≠ the declared payTo</td></tr>
+<tr><td><code>unreachable</code></td><td>No HTTP response could be had at all</td></tr>
+<tr><td><code>server_error</code></td><td>The route answers 5xx to an unpaid probe</td></tr>
+<tr><td><code>no_402</code></td><td>The route answers 200 unpaid — no payment gate</td></tr>
+<tr><td><code>unexpected_status</code></td><td>The route answers a non-402, non-5xx status</td></tr>
+<tr><td><code>challenge_undecodable</code></td><td>402 answered, but the challenge does not parse or carries no accepts</td></tr>
+</table>
+<p>Every nudge is stamped with a <code>severity</code>, mapped from the defect
+class — honestly, by consequence:</p>
+<ul>
+<li><strong><code>critical</code></strong> — the defect stops payment entirely: a buyer
+cannot obtain or use a payment challenge, so the route
+transacts nothing. <code>unreachable</code>, <code>server_error</code>, <code>no_402</code>,
+<code>unexpected_status</code>, <code>challenge_undecodable</code>.</li>
+<li><strong><code>warning</code></strong> — drift-class: buyers can still pay, but not as
+advertised. <code>amount_mismatch</code>, <code>payto_mismatch</code>. A code the
+mapping does not list also maps to <code>warning</code> — when in doubt,
+do not overclaim.</li>
+</ul>
+<p>Severity is not decoration: it sets the escalation clock (§6).</p>
+
+<h2>6. Sender discipline (normative)</h2>
+<p>A nudge is a knock, not a battering ram. Conforming senders:</p>
+<ul>
+<li><strong>A bounded ladder per incident — two knocks, never more.</strong>
+Knock 1 lands at detection, severity-stamped with its <code>impact</code>
+and <code>action</code>. If the <em>same</em> defect is still present on a
+re-probe at least <strong>24 hours</strong> later (critical) or <strong>72 hours</strong>
+later (warning), the sender may knock exactly once more: an
+<strong>escalation</strong> carrying <code>"escalation": "final"</code> and
+<code>first_knock_at</code> (the time of knock 1), its <code>impact</code> stating
+that the defect is still broken, when it was first knocked, and
+that buyers are still affected. After the escalation, the
+incident is silent forever, however long it stays broken. An
+incident ends when a later probe shows the route healthy
+again; only a defect after that opens a new incident with a
+fresh ladder.</li>
+<li><strong>Honour opt-outs before every send</strong> — knock 1 and the
+escalation alike — including opt-outs learned since the last
+send.</li>
+<li><strong>Cap the volume</strong> — the reference engine sends at most 10
+nudges per day, total, escalations included.</li>
+<li><strong>Only knock where an inbox is published</strong> (§1 is the consent).</li>
+<li><strong>Carry evidence, not vibes</strong> — every claim in a nudge must be
+reproducible from the probe records it carries.</li>
+<li><strong>Sign everything.</strong> An unsigned knock is indistinguishable from
+spam and should be refused as such.</li>
+</ul>
+<p>Receivers, for their part, verify the signature, rate-limit per
+sender (the reference inbox allows 30 verified knocks per sender
+per hour), dedupe (§2), and answer malformed or forged mail with a
+clean 4xx — never a 5xx.</p>
+
+<h2>7. Status of this convention</h2>
+<p>Live, and deliberately small. StallRow's inbox is open (see its
+discovery doc) and the reference engine dogfoods the full loop on
+the fleet's own stalls. Outbound nudges to <em>other</em> stalls were
+enabled by the operator's explicit order on 2026-10-27: the
+reference sender now patrols the public catalogue in rotating
+slices and knocks only on stalls that publish an inbox, only for
+defects it has re-verified with its own probes. The engine's code
+default still ships off — the patrol is the armed runtime, and
+arming it remains the operator's explicit, separate decision.</p>
+<p>The wake-up upgrade followed on 2026-10-28 (also the operator's
+order: "knock hard so they know to fix — we can't force them to
+check, but we need to wake them up"): severity stamps (§5),
+consequence-first <code>impact</code> lines, the machine-actionable <code>action</code>
+block, and the bounded two-knock escalation ladder (§6). A knock
+cannot compel a stall to do anything — the convention's whole
+design point is that the stall decides — but it can be
+unmissable, specific, and one step from a fix.</p>
+<footer>Verdict Row — the fleet-health nudge inbox convention (<code>fleet-health/v1</code>).
+Source of truth: <a href="https://github.com/QuincyGB/x402-loop-kits/blob/main/nudge-inbox.md">nudge-inbox.md</a> in the x402-loop-kits repo; this page is its published rendering, the file the outreach letters cite.</footer>
+</body></html>
