@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Managed Loop — intake · Verdict Row</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #1a1a1a; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid #ccc; padding: 0.4rem 0.6rem; text-align: left; font-size: 0.92rem; vertical-align: top; }
+  th { background: #f4f4f4; }
+  .note { background: #f8f8f2; border-left: 4px solid #c9a227; padding: 0.6rem 1rem; }
+  code { background: #f0f0f0; padding: 0 0.25rem; word-break: break-all; }
+  fieldset { border: 1px solid #ccc; margin: 1rem 0; padding: 0.8rem 1rem 1rem; }
+  legend { font-weight: 600; padding: 0 0.4rem; }
+  label { display: block; margin: 0.7rem 0 0.2rem; font-weight: 600; }
+  label.opt { font-weight: 400; margin: 0.25rem 0; }
+  .hint { color: #555; font-size: 0.9rem; margin: 0.15rem 0 0; }
+  input[type="text"], input[type="email"], textarea { width: 100%; box-sizing: border-box; padding: 0.5rem; font-size: 0.95rem; margin: 0.2rem 0; font-family: inherit; }
+  footer { color: #666; font-size: 0.85rem; margin-top: 2rem; }
+</style></head><body>
+<h1>Managed Loop — intake</h1>
+<p>Managed Loop is the fleet's standing watch: we watch your stalls on a
+cadence and knock when one breaks — a route that stops answering with its
+402 payment challenge, a price or payTo that drifts from what your own
+discovery document declares, a listing that disappears. You run nothing,
+host nothing, and fund nothing per call. We run the watch on the same
+machinery the fleet runs on itself; our own fleet is client #0, and its
+reports are the format a client receives.</p>
+
+<h2>Step zero — look first, free</h2>
+<p>Before any intake: the <a href="check.html">One-Link Checker</a> probes
+one route or stall origin, unpaid, and grades what a buyer meets right
+now. One link, no form, no cost. If the route you care about passes
+there, you may not need a standing watch at all.</p>
+
+<h2>What to send us</h2>
+<p class="note">This page is an intake document, not a form with a backend —
+nothing you type here is transmitted or stored. Copy the fields below
+into an email or a reply to any fleet listing, fill them in, and send
+them. That message <em>is</em> the intake.</p>
+
+<form>
+<fieldset>
+<legend>1 · Who you are</legend>
+<label for="op-name">Operator name</label>
+<input type="text" id="op-name" autocomplete="off" placeholder="The name you run your stall(s) under">
+<label for="op-email">Contact email</label>
+<input type="email" id="op-email" autocomplete="off" placeholder="you@example.com">
+<p class="hint">The email is where periodic reports go, and where a knock
+goes if you choose email as your knock channel (field 5).</p>
+</fieldset>
+
+<fieldset>
+<legend>2 · What we would watch</legend>
+<label for="origins">Stall origins — all of them</label>
+<textarea id="origins" rows="4" placeholder="https://your-stall.example.com&#10;https://your-other-stall.example.com"></textarea>
+<p class="hint">One origin per line, every stall you want watched. We read
+each origin's <code>/.well-known/x402</code> to enumerate its priced routes —
+an origin left off this list is an origin we never see break.</p>
+<label for="routes">The routes that matter most</label>
+<textarea id="routes" rows="3" placeholder="https://your-stall.example.com/v1/your-most-important-route"></textarea>
+<p class="hint">Full route URLs, in the order you care about them. These
+get named first in every report; if a watch tier covers fewer routes
+than you list, these are the ones inside it.</p>
+</fieldset>
+
+<fieldset>
+<legend>3 · What you're afraid of missing</legend>
+<label for="pain">Current pain</label>
+<textarea id="pain" rows="4" placeholder="What broke last — and what you found out late. What are you afraid of missing next time?"></textarea>
+<p class="hint">Plain words are fine. This decides what we check first in
+your baseline sweep and what counts as urgent in a knock.</p>
+</fieldset>
+
+<fieldset>
+<legend>4 · How we knock</legend>
+<label class="opt"><input type="radio" name="knock" value="email"> Email —
+a knock to your contact email when a watched route breaks or drifts</label>
+<label class="opt"><input type="radio" name="knock" value="nudge"> Fleet-health
+nudge inbox — your stall publishes a <code>fleet-health/v1</code> inbox and
+receives signed, machine-actionable knocks your own agent can act on:
+<a href="https://quincygb.github.io/x402-loop-kits/nudge-inbox.html">the nudge inbox spec</a></label>
+<p class="hint">One knock per incident, per the spec's discipline: a first
+knock at detection and at most one escalation if the same defect is still
+present later — then silence for that incident. Opting out stops knocks
+permanently and is honoured before every send.</p>
+</fieldset>
+
+<fieldset>
+<legend>5 · Pack or managed — the pricing, as listed</legend>
+<p>Two ways to pay for the same checking machinery:</p>
+<table>
+<tr><th>Option</th><th>Price, as listed</th><th>What it is</th></tr>
+<tr><td><strong>Fleet Check pack</strong> (you run it)</td>
+<td><strong>$5.00 = 100 sweep credits</strong>
+(<code>POST /v1/fleet-check/pack</code>); a single sweep is $0.10
+(<code>POST /v1/fleet-check</code>)</td>
+<td>A fixed fleet definition swept on demand; diffs pushed to your
+webhook. You decide when to sweep and you read the diffs.</td></tr>
+<tr><td><strong>Managed Loop — Watch</strong></td>
+<td><strong>$25/mo</strong></td>
+<td>1 endpoint, daily checks, webhook alerts, weekly report.</td></tr>
+<tr><td><strong>Managed Loop — Row</strong></td>
+<td><strong>$79/mo</strong></td>
+<td>Up to 5 endpoints, checks every 6h, webhook alerts, weekly report,
+1 weekly batch token screen.</td></tr>
+<tr><td><strong>Managed Loop — Fleet</strong></td>
+<td><strong>$199/mo</strong></td>
+<td>Up to 25 endpoints, hourly checks, webhook alerts, weekly report,
+daily batch token screen.</td></tr>
+</table>
+<p>The seller-side twin (Stall Watch, <code>managed-loop/SELLER-OFFER.md</code>
+in the loop-kits repo) watches your own listings for delisting, drift,
+and breakage at the same fee points: <strong>Stall $25/mo</strong> (1 stall,
+up to 5 routes, daily checks) · <strong>Row $79/mo</strong> (up to 5 stalls,
+25 routes, checks every 6h) · <strong>Fleet $199/mo</strong> (up to 25 stalls,
+hourly checks). Fees are monthly, cancel anytime, a month paid up front
+(USDC on Base to the fleet payTo, or by arrangement). Setup is $0 — the
+first weekly report is the proof. Full pricing math, grounded in the
+fleet's own listed route prices, is in <code>managed-loop/OFFER.md</code>.</p>
+<label class="opt"><input type="radio" name="choice" value="pack"> Fleet Check pack — $5.00 for 100 sweep credits, I run the sweeps</label>
+<label class="opt"><input type="radio" name="choice" value="watch"> Managed Loop — Watch, $25/mo</label>
+<label class="opt"><input type="radio" name="choice" value="row"> Managed Loop — Row, $79/mo</label>
+<label class="opt"><input type="radio" name="choice" value="fleet"> Managed Loop — Fleet, $199/mo</label>
+<label class="opt"><input type="radio" name="choice" value="unsure"> Not sure yet — run the baseline sweep and tell me what you find</label>
+</fieldset>
+</form>
+
+<h2>What happens after you send it</h2>
+<ol>
+<li>We verify your origins answer: a baseline sweep of every origin you
+listed, with the fleet's own checker. If an origin does not answer, we
+say so — that is a finding, not a failed intake.</li>
+<li>You get the baseline result before any fee is due: every route's
+status, and every defect found, in plain words.</li>
+<li>On a managed tier, the watch starts on the cadence the tier names,
+knocks go to the channel you chose, and the weekly report follows the
+client-#0 format.</li>
+</ol>
+<p class="note">Client count today: <strong>one — our own fleet (client
+#0)</strong>. No external client is claimed anywhere on this page; the
+pilot's own reports are published in the loop-kits repo
+(<code>managed-loop/pilot-client0/</code>) so you can read exactly what a
+client receives before you send anything.</p>
+
+<footer>Verdict Row — Token Verdict · RouteVerdict · ListSmith · StallRow ·
+LockSmith. Managed Loop offer of record: <code>managed-loop/OFFER.md</code>
+and <code>managed-loop/SELLER-OFFER.md</code> in the
+<a href="https://github.com/QuincyGB/x402-loop-kits">x402-loop-kits</a> repo.
+Free first look: <a href="check.html">the One-Link Checker</a> ·
+<a href="index.html">fleet status page</a>.</footer>
+</body></html>
