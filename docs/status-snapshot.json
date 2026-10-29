@@ -1,6 +1,6 @@
 {
  "schema": "fleet-status/v1",
- "generated_at": "2026-10-29T20:39:03.459744+00:00",
+ "generated_at": "2026-10-29T22:41:36.532280+00:00",
  "summary": "32/32 routes OK, 5/5 services OK",
  "services": [
   {
