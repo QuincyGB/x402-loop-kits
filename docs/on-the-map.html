@@ -34,6 +34,11 @@ notes under your result). <strong>Absence from this snapshot is not absence from
 a directory</strong>: directories change continuously, indexing lags, and a
 bounded slice cannot see everyone. “Not covered by this snapshot” means
 exactly that.</p>
+<p>Each entry also carries a <strong>health inbox</strong> signal: whether the
+stall publishes a fleet-health inbox the patrol can knock when a route
+breaks — self-hosted, or hosted by Verdict Row for claimed stalls
+(<a href="nudge-inbox.html">the mailbox spec</a>). “Unknown” means the
+patrol has not read that stall's discovery doc — never a guess.</p>
 
 <form id="map-form">
   <label for="q">payTo address (0x…) or stall origin URL</label>
@@ -101,6 +106,13 @@ function loadSnap() {
     return snap;
   });
 }
+function inboxCell(ent) {
+  var inbox = ent.inbox || {status: "unknown"};
+  if (inbox.status === "hosted") return "<strong>Present — hosted</strong> by Verdict Row (this stall claimed its origin; its mailbox lives on StallRow)";
+  if (inbox.status === "self_hosted") return "<strong>Present — self-hosted</strong> (published in the stall's own discovery doc, read by the patrol)";
+  if (inbox.status === "absent") return "<strong>None published</strong> — the patrol read this stall's discovery doc and it carries no health inbox, so a breakage cannot be knocked; <a href=\"claim.html\">claim the origin</a> for a hosted one";
+  return "<strong>Unknown</strong> — the patrol has not read this stall's discovery doc";
+}
 function statusCell(ent, src) {
   var listed = ent.listed ? ent.listed[src] : null;
   var count = ent.counts ? ent.counts[src] : null;
@@ -120,16 +132,27 @@ function renderEntries(entries, heading) {
     ["cdp", "payai", "settled", "x402scan"].forEach(function (src) {
       html += "<tr><td>" + esc(LABELS[src]) + "</td><td>" + statusCell(ent, src) + "</td></tr>";
     });
+    html += "<tr><td>Health inbox</td><td>" + inboxCell(ent) + "</td></tr>";
     html += "</table>";
     html += '<p class="note">How this entry was read: ' + esc(BASIS[ent.basis] || ent.basis || "") + "</p>";
   });
   var cov = SNAP.coverage || {};
+  var sig = cov.inbox_signal || {};
   html += '<p class="unknown"><strong>Coverage of this snapshot:</strong> ' +
     esc(cov.entries_total) + " entries; patrol census origins covered: " +
     esc(cov.census_origins_in_snapshot) + " of " + esc(cov.census_origins_total) +
     "; exact scoped checks run: " + esc(cov.scoped_checks_run) + ". " +
     ((cov.limits || []).map(esc).join(" ")) +
     " Absence here is not absence in a directory — indexing lags and slices are bounded.</p>";
+  if (sig.entries_with_signal != null || sig.hosted != null) {
+    html += '<p class="unknown"><strong>Health-inbox signal:</strong> ' +
+      esc(sig.self_hosted || 0) + " entries present (self-hosted), " +
+      esc(sig.hosted || 0) + " present (hosted), " +
+      esc(sig.absent || 0) + " none published, " +
+      esc(sig.unknown || 0) + " unknown — from " +
+      esc(sig.origins_evidenced || 0) + " origins with patrol evidence. " +
+      esc(sig.note || "") + "</p>";
+  }
   return html;
 }
 function lookup(q) {

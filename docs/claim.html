@@ -24,11 +24,21 @@
        with header X-Claim-Session: <session_token>
        → {history: {loaded, history_not_loaded, defects, summary},
           enrollment_offer: {client, enrolled_at, origins, routes,
-          knock_channel, contact, cadence, enabled}}
+          knock_channel, contact, cadence, enabled},
+          hosted_inbox: {endpoint, publish_line, discovery_snippet,
+          self_host_snippets, webhook, email, knocks_received}}
        A session unlocks ONLY its own origin's history. When the
        deployment has no patrol snapshot loaded, history comes back
        empty with an honest "history not loaded" note — this page
        renders that as-is, never as a clean record.
+    5. The claim also mints the origin's HOSTED INBOX (mailbox spec
+       §8): knocks to POST /v1/hosted-inbox/<origin-key> are verified
+       and stored per-origin. GET /v1/claim/inbox (session header)
+       reads the mail + relay delivery log; POST
+       /v1/claim/inbox/config {origin, webhook_url, webhook_enabled,
+       email, email_enabled} configures the relays. The email relay
+       is built but disabled on the deployment — the page shows that
+       state as the API reports it.
 -->
 <style>
   body{font-family:system-ui,sans-serif;max-width:820px;margin:2rem auto;padding:0 1rem;line-height:1.55;color:#111}
@@ -63,6 +73,14 @@ your origin, containing a one-time token.</li>
 <strong>single-use</strong>. A successful claim returns a session token
 that unlocks <em>only your origin's</em> patrol history — never anyone
 else's.</p>
+
+<p>Claiming also mints your stall a <strong>hosted health inbox</strong>:
+a mailbox on StallRow that receives the patrol's signed breakage
+knocks for your origin, so you can be told the moment a route breaks
+without running a receiver yourself. Publish one line in your
+discovery doc and the patrol knocks there — the kit is in step 4
+below, and the model is specified in the
+<a href="nudge-inbox.html">mailbox spec, §8 (hosted inboxes)</a>.</p>
 
 <div class="step">
 <h2>1 — Start a claim</h2>
@@ -105,6 +123,47 @@ refused.</p>
 re-probed daily, with new failures and recoveries reported. Nothing is
 enrolled until you hand it over.</p>
 <pre id="enrollment"></pre>
+</div>
+
+<div class="step hidden" id="inbox-step">
+<h2>4 — Your hosted mailbox</h2>
+<p>Your hosted inbox address is
+<code id="inbox-endpoint"></code>. Add this exact line to your
+<code>/.well-known/x402</code> discovery doc (inside the top-level
+object) and the patrol will knock there when a route breaks:</p>
+<pre id="inbox-snippet"></pre>
+<p><button id="copy-snippet">Copy the line</button>
+<span id="copy-status"></span></p>
+<p>Knocks are verified (EIP-191 signature, ladder and opt-out rules —
+identical to a self-hosted inbox) and stored here. Nothing is stored
+for unclaimed origins, and only your claim session can read this
+mailbox.</p>
+<h3>Mail received</h3>
+<p id="inbox-note"></p>
+<table id="knock-table">
+<thead><tr><th>Route</th><th>Defect</th><th>Severity</th><th>First seen</th><th>Received</th></tr></thead>
+<tbody></tbody>
+</table>
+<p><button id="refresh-inbox">Refresh mailbox</button>
+<span id="inbox-status"></span></p>
+<h3>Relay my knocks</h3>
+<p>Optionally, each stored knock is also relayed:</p>
+<label>Webhook URL (public https)
+<input type="text" id="webhook-url" placeholder="https://example.com/fleet-health-hook">
+</label>
+<p><label><input type="checkbox" id="webhook-enabled"> Send each knock to this webhook</label></p>
+<label>Email address
+<input type="text" id="relay-email" placeholder="ops@example.com">
+</label>
+<p><label><input type="checkbox" id="email-enabled"> Email each knock to this address</label></p>
+<p id="email-note"></p>
+<p><button id="save-config">Save relay settings</button>
+<span id="config-status"></span></p>
+<h3>Prefer to host the mailbox yourself?</h3>
+<p id="snippets-note"></p>
+<details><summary>Express (Node, ethers v6)</summary><pre id="snippet-express"></pre></details>
+<details><summary>FastAPI (Python)</summary><pre id="snippet-fastapi"></pre></details>
+<details><summary>Cloudflare Workers (viem)</summary><pre id="snippet-workers"></pre></details>
 </div>
 
 <script>
@@ -209,7 +268,93 @@ async function loadHistory(){
   document.getElementById("enrollment").textContent =
     JSON.stringify(body.enrollment_offer, null, 2);
   show("history-step");
+  if (body.hosted_inbox){ renderInboxKit(body.hosted_inbox); loadInbox(); }
 }
+
+function renderInboxKit(kit){
+  document.getElementById("inbox-endpoint").textContent = kit.endpoint;
+  document.getElementById("inbox-snippet").textContent = kit.publish_line;
+  const wh = kit.webhook || {};
+  document.getElementById("webhook-url").value = wh.url || "";
+  document.getElementById("webhook-enabled").checked = !!wh.enabled;
+  const em = kit.email || {};
+  document.getElementById("relay-email").value = em.address || "";
+  document.getElementById("email-enabled").checked = !!em.enabled;
+  document.getElementById("email-note").textContent = em.relay_enabled
+    ? "Email relay is enabled on this deployment."
+    : "Email relay is built but currently DISABLED on this deployment — it sends under the fleet's identity and awaits the operator's word. A saved address is recorded as a disabled delivery, never sent.";
+  const sn = kit.self_host_snippets || {};
+  document.getElementById("snippets-note").textContent = sn.note || "";
+  document.getElementById("snippet-express").textContent = sn.express || "";
+  document.getElementById("snippet-fastapi").textContent = sn.fastapi || "";
+  document.getElementById("snippet-workers").textContent = sn.cloudflare_workers || "";
+  show("inbox-step");
+}
+
+async function loadInbox(){
+  const origin = originValue();
+  const status = document.getElementById("inbox-status");
+  let resp, body;
+  try {
+    resp = await fetch(API + "/v1/claim/inbox?origin=" + encodeURIComponent(origin), {
+      headers: {"X-Claim-Session": sessionToken}
+    });
+    body = await resp.json();
+  } catch(e){ fail(status, "Mailbox could not be loaded: " + e.message); return; }
+  if (!resp.ok){ fail(status, body.error || ("HTTP " + resp.status)); return; }
+  const tbody = document.querySelector("#knock-table tbody");
+  tbody.innerHTML = "";
+  for (const k of body.knocks){
+    const m = k.message || {};
+    const tr = document.createElement("tr");
+    const cells = [m.route || "—", (m.defect || {}).code || "—", m.severity || "—",
+                   m.first_seen || "—", k.received_at || "—"];
+    for (const v of cells){
+      const td = document.createElement("td");
+      td.textContent = v;
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+  document.getElementById("inbox-note").textContent = body.knocks.length
+    ? body.knocks.length + " knock(s) stored for this origin."
+    : "No knocks yet — when the patrol finds a defect on this origin, its signed knock lands here.";
+  good(status, "Mailbox read at " + new Date().toLocaleTimeString() + ".");
+}
+
+document.getElementById("refresh-inbox").addEventListener("click", loadInbox);
+
+document.getElementById("copy-snippet").addEventListener("click", async () => {
+  const status = document.getElementById("copy-status");
+  try {
+    await navigator.clipboard.writeText(
+      document.getElementById("inbox-snippet").textContent);
+    good(status, "Copied.");
+  } catch(e){ fail(status, "Copy failed — select the line and copy it manually."); }
+});
+
+document.getElementById("save-config").addEventListener("click", async () => {
+  const status = document.getElementById("config-status");
+  const payload = {
+    origin: originValue(),
+    webhook_url: document.getElementById("webhook-url").value.trim() || null,
+    webhook_enabled: document.getElementById("webhook-enabled").checked,
+    email: document.getElementById("relay-email").value.trim() || null,
+    email_enabled: document.getElementById("email-enabled").checked
+  };
+  let resp, body;
+  try {
+    resp = await fetch(API + "/v1/claim/inbox/config", {
+      method: "POST",
+      headers: {"Content-Type": "application/json", "X-Claim-Session": sessionToken},
+      body: JSON.stringify(payload)
+    });
+    body = await resp.json();
+  } catch(e){ fail(status, "Could not reach the claim service: " + e.message); return; }
+  if (!resp.ok){ fail(status, body.error || body.detail || ("HTTP " + resp.status)); return; }
+  if (body.hosted_inbox){ renderInboxKit(body.hosted_inbox); }
+  good(status, "Relay settings saved.");
+});
 </script>
 </body>
 </html>

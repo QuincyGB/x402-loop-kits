@@ -232,6 +232,72 @@ block, and the bounded two-knock escalation ladder (§6). A knock
 cannot compel a stall to do anything — the convention's whole
 design point is that the stall decides — but it can be
 unmissable, specific, and one step from a fix.</p>
+
+<h2>8. Hosted inboxes</h2>
+<p>Publishing an inbox (§1) asks the stall to run a receiver. Many
+operators cannot or will not — and an operator who never hears
+about a breakage cannot fix one. A <strong>hosted inbox</strong> removes the
+receiver: a relay operator hosts the mailbox, and the stall
+publishes the relay's address in its discovery doc exactly as it
+would its own.</p>
+<p><strong>The relay model.</strong> The reference relay is StallRow (Verdict
+Row). A hosted mailbox exists only for an origin its operator has
+<em>claimed</em> — control proven the claim flow's way: an EIP-191
+signature by the payTo the origin's own discovery doc publishes,
+or a one-time token file served under the origin's <code>/.well-known/</code>.
+On a successful claim the relay mints the hosted address:</p>
+<pre>POST &lt;relay&gt;/v1/hosted-inbox/&lt;origin-key&gt;</pre>
+<p>where <code>&lt;origin-key&gt;</code> is a stable key derived from the normalized
+origin (host slug + a short digest). The address never moves once
+minted — an operator may publish it permanently.</p>
+<p><strong>Publishing is unchanged.</strong> The operator adds the same
+<code>extensions.nudge</code> entry as any self-hosted stall (§1), with the
+hosted address as the endpoint:</p>
+<pre>{"extensions": {"nudge": {"endpoint": "https://stall-row-production.up.railway.app/v1/hosted-inbox/&lt;origin-key&gt;", "accepts": ["fleet-health/v1"], "spec": "https://quincygb.github.io/x402-loop-kits/nudge-inbox.html"}}}</pre>
+<p>Senders need no changes and cannot tell a hosted endpoint from a
+self-hosted one — discovery, detection, and the knock itself are
+identical. (Proven 2026-10-29: the reference patrol's unmodified
+code path detected a hosted endpoint in a discovery doc, knocked,
+and the knock landed in the hosted mailbox.)</p>
+<p><strong>Receive discipline is identical</strong> to the reference receiver
+(§2–§4), plus one binding: the knock's <code>stall</code> must be the claimed
+origin the address was minted for — a mailbox never accepts mail
+addressed to someone else. Refusals stay clean 4xx: malformed
+<code>400</code>, forged signature <code>403</code>, a knock for a different stall
+<code>400</code>, an opted-out origin <code>403</code> — and an address whose origin was
+never claimed answers <code>404</code> and stores nothing.</p>
+<p><strong>What's stored, and who can read it.</strong> The verified knock JSON,
+per origin, plus a relay delivery log (below). Nothing is stored
+for unclaimed origins. The mail belongs to the origin's operator:
+only that origin's claim session can read it (the claim page's
+mailbox view) — the relay operator's other tooling does not read
+hosted mail, and one origin's session never sees another's.</p>
+<p><strong>Relays onward.</strong> The owner may configure, per origin:</p>
+<ul>
+<li>a <strong>webhook URL</strong> — each stored knock is POSTed server-side to
+it with the knock payload; retries are bounded and every
+delivery attempt is recorded on the delivery log;</li>
+<li>an <strong>email address</strong> — built, but <strong>NOT enabled</strong> on the
+reference deployment. Relay mail would leave under the relay
+operator's identity, so the channel stays off until that
+operator explicitly enables it; a configured address records an
+honest <code>disabled</code> delivery and nothing is sent.</li>
+</ul>
+<p><strong>Opt-out and ladder are identical to self-hosted.</strong> An opt-out
+(§4) signed by the origin's published payTo binds at the hosted
+address exactly as at the stall's own inbox, and senders check it
+the same way. The sender-side ladder (§6) does not change: one
+knock, at most one final escalation, then silence — hosted or
+not.</p>
+<p><strong>Consent.</strong> Publishing the hosted endpoint in a discovery doc is
+the same consent as publishing any inbox (§1). Removing it stops
+new knocks at the patrol's next read; mail already stored stays
+readable through the claim session.</p>
+<p><strong>Self-hosting stays first-class.</strong> The claim kit hands the
+operator both options in one view: the hosted address + publish
+line, and minimal self-host receivers (Express, FastAPI,
+Cloudflare Workers) ported from the reference receiver, for
+operators who would rather run the endpoint themselves.</p>
 <footer>Verdict Row — the fleet-health nudge inbox convention (<code>fleet-health/v1</code>).
 Source of truth: <a href="https://github.com/QuincyGB/x402-loop-kits/blob/main/nudge-inbox.md">nudge-inbox.md</a> in the x402-loop-kits repo; this page is its published rendering, the file the outreach letters cite.</footer>
 </body></html>

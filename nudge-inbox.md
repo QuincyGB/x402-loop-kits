@@ -251,3 +251,85 @@ block, and the bounded two-knock escalation ladder (§6). A knock
 cannot compel a stall to do anything — the convention's whole
 design point is that the stall decides — but it can be
 unmissable, specific, and one step from a fix.
+
+## 8. Hosted inboxes
+
+Publishing an inbox (§1) asks the stall to run a receiver. Many
+operators cannot or will not — and an operator who never hears
+about a breakage cannot fix one. A **hosted inbox** removes the
+receiver: a relay operator hosts the mailbox, and the stall
+publishes the relay's address in its discovery doc exactly as it
+would its own.
+
+**The relay model.** The reference relay is StallRow (Verdict
+Row). A hosted mailbox exists only for an origin its operator has
+*claimed* — control proven the claim flow's way: an EIP-191
+signature by the payTo the origin's own discovery doc publishes,
+or a one-time token file served under the origin's `/.well-known/`.
+On a successful claim the relay mints the hosted address:
+
+```
+POST <relay>/v1/hosted-inbox/<origin-key>
+```
+
+where `<origin-key>` is a stable key derived from the normalized
+origin (host slug + a short digest). The address never moves once
+minted — an operator may publish it permanently.
+
+**Publishing is unchanged.** The operator adds the same
+`extensions.nudge` entry as any self-hosted stall (§1), with the
+hosted address as the endpoint:
+
+```json
+{"extensions": {"nudge": {"endpoint": "https://stall-row-production.up.railway.app/v1/hosted-inbox/<origin-key>", "accepts": ["fleet-health/v1"], "spec": "https://quincygb.github.io/x402-loop-kits/nudge-inbox.html"}}}
+```
+
+Senders need no changes and cannot tell a hosted endpoint from a
+self-hosted one — discovery, detection, and the knock itself are
+identical. (Proven 2026-10-29: the reference patrol's unmodified
+code path detected a hosted endpoint in a discovery doc, knocked,
+and the knock landed in the hosted mailbox.)
+
+**Receive discipline is identical** to the reference receiver
+(§2–§4), plus one binding: the knock's `stall` must be the claimed
+origin the address was minted for — a mailbox never accepts mail
+addressed to someone else. Refusals stay clean 4xx: malformed
+`400`, forged signature `403`, a knock for a different stall
+`400`, an opted-out origin `403` — and an address whose origin was
+never claimed answers `404` and stores nothing.
+
+**What's stored, and who can read it.** The verified knock JSON,
+per origin, plus a relay delivery log (below). Nothing is stored
+for unclaimed origins. The mail belongs to the origin's operator:
+only that origin's claim session can read it (the claim page's
+mailbox view) — the relay operator's other tooling does not read
+hosted mail, and one origin's session never sees another's.
+
+**Relays onward.** The owner may configure, per origin:
+
+- a **webhook URL** — each stored knock is POSTed server-side to
+  it with the knock payload; retries are bounded and every
+  delivery attempt is recorded on the delivery log;
+- an **email address** — built, but **NOT enabled** on the
+  reference deployment. Relay mail would leave under the relay
+  operator's identity, so the channel stays off until that
+  operator explicitly enables it; a configured address records an
+  honest `disabled` delivery and nothing is sent.
+
+**Opt-out and ladder are identical to self-hosted.** An opt-out
+(§4) signed by the origin's published payTo binds at the hosted
+address exactly as at the stall's own inbox, and senders check it
+the same way. The sender-side ladder (§6) does not change: one
+knock, at most one final escalation, then silence — hosted or
+not.
+
+**Consent.** Publishing the hosted endpoint in a discovery doc is
+the same consent as publishing any inbox (§1). Removing it stops
+new knocks at the patrol's next read; mail already stored stays
+readable through the claim session.
+
+**Self-hosting stays first-class.** The claim kit hands the
+operator both options in one view: the hosted address + publish
+line, and minimal self-host receivers (Express, FastAPI,
+Cloudflare Workers) ported from the reference receiver, for
+operators who would rather run the endpoint themselves.
