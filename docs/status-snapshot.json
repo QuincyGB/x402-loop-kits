@@ -1,6 +1,6 @@
 {
  "schema": "fleet-status/v1",
- "generated_at": "2026-10-30T18:27:40.218026+00:00",
+ "generated_at": "2026-10-30T18:37:33.570496+00:00",
  "summary": "37/37 routes OK, 5/5 services OK",
  "services": [
   {
@@ -88,7 +88,7 @@
    },
    "dogfood": {
     "status": "OK",
-    "detail": "RouteVerdict verdict=TRUSTED score=100.0 alive=True x402_valid=True"
+    "detail": "RouteVerdict verdict=TRUSTED score=90.0 alive=True x402_valid=True"
    },
    "routes": [
     {
