@@ -1,7 +1,7 @@
 {
  "schema": "fleet-status/v1",
- "generated_at": "2026-10-30T18:03:51.348869+00:00",
- "summary": "35/35 routes OK, 5/5 services OK",
+ "generated_at": "2026-10-30T18:27:40.218026+00:00",
+ "summary": "37/37 routes OK, 5/5 services OK",
  "services": [
   {
    "name": "Token Verdict",
@@ -252,6 +252,24 @@
      "checker_class": "OK",
      "since": "2026-10-28T00:42:29.060159+00:00",
      "detail": "402, Base accept OK (50000 units to payTo)"
+    },
+    {
+     "route": "/v1/ledger-dataset",
+     "url": "https://stall-row-production.up.railway.app/v1/ledger-dataset",
+     "price": "$0.1",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-30T18:29:08.659309+00:00",
+     "detail": "402, Base accept OK (100000 units to payTo)"
+    },
+    {
+     "route": "/v1/ledger-dataset/full",
+     "url": "https://stall-row-production.up.railway.app/v1/ledger-dataset/full",
+     "price": "$1",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-30T18:29:08.659315+00:00",
+     "detail": "402, Base accept OK (1000000 units to payTo)"
     },
     {
      "route": "/v1/orchestrate",
