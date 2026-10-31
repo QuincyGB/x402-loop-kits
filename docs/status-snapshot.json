@@ -1,7 +1,7 @@
 {
  "schema": "fleet-status/v1",
- "generated_at": "2026-10-31T13:34:03.727689+00:00",
- "summary": "39/39 routes OK, 5/5 services OK",
+ "generated_at": "2026-10-31T15:00:48.546347+00:00",
+ "summary": "40/40 routes OK, 5/5 services OK",
  "services": [
   {
    "name": "Token Verdict",
@@ -12,7 +12,7 @@
     "service_status": "ok",
     "class": "OK",
     "detail": "health/openapi/discovery OK",
-    "since": "2026-10-28T00:42:29.059977+00:00"
+    "since": "2026-10-31T15:02:56.057373+00:00"
    },
    "dogfood": {
     "status": "OK",
@@ -25,7 +25,7 @@
      "price": "$0.20",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060228+00:00",
+     "since": "2026-10-31T15:02:56.057684+00:00",
      "detail": "402, Base accept OK (200000 units to payTo) + Solana accept OK"
     },
     {
@@ -34,7 +34,7 @@
      "price": "$0.05",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060235+00:00",
+     "since": "2026-10-31T15:02:56.057691+00:00",
      "detail": "402, Base accept OK (50000 units to payTo) + Solana accept OK"
     },
     {
@@ -43,7 +43,7 @@
      "price": "$0.02",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060240+00:00",
+     "since": "2026-10-31T15:02:56.057696+00:00",
      "detail": "402, Base accept OK (20000 units to payTo) + Solana accept OK"
     }
    ]
@@ -57,7 +57,7 @@
     "service_status": "ok",
     "class": "OK",
     "detail": "health/openapi/discovery OK",
-    "since": "2026-10-28T00:42:29.060007+00:00"
+    "since": "2026-10-31T15:02:56.057405+00:00"
    },
    "dogfood": {
     "status": "OK",
@@ -70,7 +70,7 @@
      "price": "$0.05",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060083+00:00",
+     "since": "2026-10-31T15:02:56.057489+00:00",
      "detail": "402, Base accept OK (50000 units to payTo)"
     }
    ]
@@ -84,7 +84,7 @@
     "service_status": "ok",
     "class": "OK",
     "detail": "health/openapi/discovery OK",
-    "since": "2026-10-28T00:42:29.060013+00:00"
+    "since": "2026-10-31T15:02:56.057411+00:00"
    },
    "dogfood": {
     "status": "OK",
@@ -97,7 +97,7 @@
      "price": "$0.50",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060040+00:00",
+     "since": "2026-10-31T15:02:56.057442+00:00",
      "detail": "402, Base accept OK (500000 units to payTo)"
     },
     {
@@ -106,7 +106,7 @@
      "price": "$0.10",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060067+00:00",
+     "since": "2026-10-31T15:02:56.057471+00:00",
      "detail": "402, Base accept OK (100000 units to payTo)"
     }
    ]
@@ -120,7 +120,7 @@
     "service_status": "ok",
     "class": "OK",
     "detail": "health/openapi/discovery OK",
-    "since": "2026-10-28T00:42:29.060017+00:00"
+    "since": "2026-10-31T15:02:56.057416+00:00"
    },
    "dogfood": {
     "status": "OK",
@@ -133,7 +133,7 @@
      "price": "$0.005",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060090+00:00",
+     "since": "2026-10-31T15:02:56.057495+00:00",
      "detail": "402, Base accept OK (5000 units to payTo)"
     },
     {
@@ -142,7 +142,7 @@
      "price": "$0.005",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060095+00:00",
+     "since": "2026-10-31T15:02:56.057502+00:00",
      "detail": "402, Base accept OK (5000 units to payTo)"
     },
     {
@@ -151,7 +151,7 @@
      "price": "$0.1",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060101+00:00",
+     "since": "2026-10-31T15:02:56.057508+00:00",
      "detail": "402, Base accept OK (100000 units to payTo)"
     },
     {
@@ -160,7 +160,7 @@
      "price": "$1",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060107+00:00",
+     "since": "2026-10-31T15:02:56.057514+00:00",
      "detail": "402, Base accept OK (1000000 units to payTo)"
     },
     {
@@ -169,7 +169,7 @@
      "price": "$0.005",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060113+00:00",
+     "since": "2026-10-31T15:02:56.057522+00:00",
      "detail": "402, Base accept OK (5000 units to payTo)"
     },
     {
@@ -178,7 +178,7 @@
      "price": "$0.1",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T01:41:42.488190+00:00",
+     "since": "2026-10-31T15:02:56.057529+00:00",
      "detail": "402, Base accept OK (100000 units to payTo)"
     },
     {
@@ -187,7 +187,7 @@
      "price": "$5",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T01:41:42.488198+00:00",
+     "since": "2026-10-31T15:02:56.057535+00:00",
      "detail": "402, Base accept OK (5000000 units to payTo)"
     },
     {
@@ -196,7 +196,7 @@
      "price": "$5",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060131+00:00",
+     "since": "2026-10-31T15:02:56.057541+00:00",
      "detail": "402, Base accept OK (5000000 units to payTo)"
     },
     {
@@ -205,7 +205,7 @@
      "price": "$20",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060137+00:00",
+     "since": "2026-10-31T15:02:56.057546+00:00",
      "detail": "402, Base accept OK (20000000 units to payTo)"
     },
     {
@@ -214,7 +214,7 @@
      "price": "$0.001",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060143+00:00",
+     "since": "2026-10-31T15:02:56.057552+00:00",
      "detail": "402, Base accept OK (1000 units to payTo)"
     },
     {
@@ -223,7 +223,7 @@
      "price": "$0.005",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060149+00:00",
+     "since": "2026-10-31T15:02:56.057558+00:00",
      "detail": "402, Base accept OK (5000 units to payTo)"
     },
     {
@@ -232,7 +232,7 @@
      "price": "$0.01",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-30T17:43:52.740183+00:00",
+     "since": "2026-10-31T15:02:56.057564+00:00",
      "detail": "402, Base accept OK (10000 units to payTo)"
     },
     {
@@ -241,7 +241,7 @@
      "price": "$0.1",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060154+00:00",
+     "since": "2026-10-31T15:02:56.057570+00:00",
      "detail": "402, Base accept OK (100000 units to payTo)"
     },
     {
@@ -250,7 +250,7 @@
      "price": "$0.05",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060159+00:00",
+     "since": "2026-10-31T15:02:56.057576+00:00",
      "detail": "402, Base accept OK (50000 units to payTo)"
     },
     {
@@ -259,7 +259,7 @@
      "price": "$0.1",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-30T18:29:08.659309+00:00",
+     "since": "2026-10-31T15:02:56.057583+00:00",
      "detail": "402, Base accept OK (100000 units to payTo)"
     },
     {
@@ -268,7 +268,7 @@
      "price": "$1",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-30T18:29:08.659315+00:00",
+     "since": "2026-10-31T15:02:56.057589+00:00",
      "detail": "402, Base accept OK (1000000 units to payTo)"
     },
     {
@@ -277,7 +277,7 @@
      "price": "$0.75",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060164+00:00",
+     "since": "2026-10-31T15:02:56.057594+00:00",
      "detail": "402, Base accept OK (750000 units to payTo)"
     },
     {
@@ -286,7 +286,16 @@
      "price": "$0.01",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060169+00:00",
+     "since": "2026-10-31T15:02:56.057599+00:00",
+     "detail": "402, Base accept OK (10000 units to payTo)"
+    },
+    {
+     "route": "/v1/payto-pin/verify",
+     "url": "https://stall-row-production.up.railway.app/v1/payto-pin/verify",
+     "price": "$0.01",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-31T15:02:56.057605+00:00",
      "detail": "402, Base accept OK (10000 units to payTo)"
     },
     {
@@ -295,7 +304,7 @@
      "price": "$0.05",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-31T13:35:51.711829+00:00",
+     "since": "2026-10-31T15:02:56.057610+00:00",
      "detail": "402, Base accept OK (50000 units to payTo)"
     },
     {
@@ -304,7 +313,7 @@
      "price": "$0.005",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060175+00:00",
+     "since": "2026-10-31T15:02:56.057616+00:00",
      "detail": "402, Base accept OK (5000 units to payTo)"
     },
     {
@@ -313,7 +322,7 @@
      "price": "$0.05",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060180+00:00",
+     "since": "2026-10-31T15:02:56.057621+00:00",
      "detail": "402, Base accept OK (50000 units to payTo)"
     },
     {
@@ -322,7 +331,7 @@
      "price": "$0.002",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060185+00:00",
+     "since": "2026-10-31T15:02:56.057626+00:00",
      "detail": "402, Base accept OK (2000 units to payTo)"
     },
     {
@@ -331,7 +340,7 @@
      "price": "$0.005",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060190+00:00",
+     "since": "2026-10-31T15:02:56.057631+00:00",
      "detail": "402, Base accept OK (5000 units to payTo)"
     },
     {
@@ -340,7 +349,7 @@
      "price": "$1",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060195+00:00",
+     "since": "2026-10-31T15:02:56.057637+00:00",
      "detail": "402, Base accept OK (1000000 units to payTo)"
     },
     {
@@ -349,7 +358,7 @@
      "price": "$0.005",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060202+00:00",
+     "since": "2026-10-31T15:02:56.057642+00:00",
      "detail": "402, Base accept OK (5000 units to payTo)"
     },
     {
@@ -358,7 +367,7 @@
      "price": "$0.01",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-30T17:43:52.740268+00:00",
+     "since": "2026-10-31T15:02:56.057648+00:00",
      "detail": "402, Base accept OK (10000 units to payTo)"
     },
     {
@@ -367,7 +376,7 @@
      "price": "$0.01",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-30T17:43:52.740273+00:00",
+     "since": "2026-10-31T15:02:56.057653+00:00",
      "detail": "402, Base accept OK (10000 units to payTo)"
     },
     {
@@ -376,7 +385,7 @@
      "price": "$1",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-31T13:35:51.711878+00:00",
+     "since": "2026-10-31T15:02:56.057658+00:00",
      "detail": "402, Base accept OK (1000000 units to payTo)"
     },
     {
@@ -385,7 +394,7 @@
      "price": "$0.01",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060207+00:00",
+     "since": "2026-10-31T15:02:56.057663+00:00",
      "detail": "402, Base accept OK (10000 units to payTo)"
     },
     {
@@ -394,7 +403,7 @@
      "price": "$0.002",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060212+00:00",
+     "since": "2026-10-31T15:02:56.057668+00:00",
      "detail": "402, Base accept OK (2000 units to payTo)"
     },
     {
@@ -403,7 +412,7 @@
      "price": "$0.005",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060217+00:00",
+     "since": "2026-10-31T15:02:56.057674+00:00",
      "detail": "402, Base accept OK (5000 units to payTo)"
     },
     {
@@ -412,7 +421,7 @@
      "price": "$0.02",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060223+00:00",
+     "since": "2026-10-31T15:02:56.057679+00:00",
      "detail": "402, Base accept OK (20000 units to payTo)"
     }
    ]
@@ -426,7 +435,7 @@
     "service_status": "ok",
     "class": "OK",
     "detail": "health/openapi/discovery OK",
-    "since": "2026-10-28T00:42:29.060021+00:00"
+    "since": "2026-10-31T15:02:56.057419+00:00"
    },
    "dogfood": {
     "status": "OK",
@@ -439,7 +448,7 @@
      "price": "$0.50",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-10-28T00:42:29.060076+00:00",
+     "since": "2026-10-31T15:02:56.057481+00:00",
      "detail": "402, Base accept OK (500000 units to payTo)"
     }
    ]
