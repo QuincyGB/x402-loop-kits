@@ -1,7 +1,7 @@
 {
  "schema": "fleet-status/v1",
- "generated_at": "2026-10-31T12:48:47.876632+00:00",
- "summary": "37/37 routes OK, 5/5 services OK",
+ "generated_at": "2026-10-31T13:34:03.727689+00:00",
+ "summary": "39/39 routes OK, 5/5 services OK",
  "services": [
   {
    "name": "Token Verdict",
@@ -290,6 +290,15 @@
      "detail": "402, Base accept OK (10000 units to payTo)"
     },
     {
+     "route": "/v1/physical",
+     "url": "https://stall-row-production.up.railway.app/v1/physical",
+     "price": "$0.05",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-31T13:35:51.711829+00:00",
+     "detail": "402, Base accept OK (50000 units to payTo)"
+    },
+    {
      "route": "/v1/pre-trade-guard",
      "url": "https://stall-row-production.up.railway.app/v1/pre-trade-guard",
      "price": "$0.005",
@@ -360,6 +369,15 @@
      "checker_class": "OK",
      "since": "2026-10-30T17:43:52.740273+00:00",
      "detail": "402, Base accept OK (10000 units to payTo)"
+    },
+    {
+     "route": "/v1/toolkit/pack",
+     "url": "https://stall-row-production.up.railway.app/v1/toolkit/pack",
+     "price": "$1",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-10-31T13:35:51.711878+00:00",
+     "detail": "402, Base accept OK (1000000 units to payTo)"
     },
     {
      "route": "/v1/tube-search",
