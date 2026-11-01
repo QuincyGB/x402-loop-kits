@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-27T02:41:49Z",
+  "generated_at": "2026-11-01T15:18:35Z",
   "rules": "METHODOLOGY.md fixed 2026-10-26",
-  "status": "tracking_started_no_mature_records",
+  "status": "tracking",
   "coverage": {
     "records": 6,
     "by_verdict": {
@@ -17,15 +17,15 @@
   },
   "horizons": {
     "7": {
-      "records_mature": 0,
-      "correct": 0,
+      "records_mature": 4,
+      "correct": 2,
       "incorrect": 0,
       "inconclusive": 0,
-      "survived_no_baseline": 0,
+      "survived_no_baseline": 2,
       "excluded_caution": 0,
       "pending_fetch_error": 0,
-      "hit_rate": null,
-      "hit_rate_n": 0
+      "hit_rate": 1.0,
+      "hit_rate_n": 2
     },
     "30": {
       "records_mature": 0,
@@ -54,10 +54,14 @@
       "liquidity_usd_at_verdict": 8460000.0,
       "pair_address": null,
       "dex": "uniswap",
-      "age_days": 2,
+      "age_days": 7,
       "evaluations": {
         "7": {
-          "outcome": "immature"
+          "collapsed": false,
+          "liquidity_usd_now": 511793.17,
+          "price_usd_now": 2268.22,
+          "price_move_pct": -4.1,
+          "outcome": "correct"
         },
         "30": {
           "outcome": "immature"
@@ -78,10 +82,14 @@
       "liquidity_usd_at_verdict": 7870000.0,
       "pair_address": null,
       "dex": "aerodrome",
-      "age_days": 2,
+      "age_days": 7,
       "evaluations": {
         "7": {
-          "outcome": "immature"
+          "collapsed": false,
+          "liquidity_usd_now": 5693973.63,
+          "price_usd_now": 0.6415,
+          "price_move_pct": -6.87,
+          "outcome": "correct"
         },
         "30": {
           "outcome": "immature"
@@ -102,10 +110,14 @@
       "liquidity_usd_at_verdict": null,
       "pair_address": null,
       "dex": null,
-      "age_days": 2,
+      "age_days": 7,
       "evaluations": {
         "7": {
-          "outcome": "immature"
+          "outcome": "survived_no_baseline",
+          "collapsed": false,
+          "liquidity_usd_now": 511793.17,
+          "price_usd_now": 2268.22,
+          "price_move_pct": null
         },
         "30": {
           "outcome": "immature"
@@ -126,10 +138,14 @@
       "liquidity_usd_at_verdict": null,
       "pair_address": null,
       "dex": null,
-      "age_days": 2,
+      "age_days": 7,
       "evaluations": {
         "7": {
-          "outcome": "immature"
+          "outcome": "survived_no_baseline",
+          "collapsed": false,
+          "liquidity_usd_now": 5693973.63,
+          "price_usd_now": 0.6415,
+          "price_move_pct": null
         },
         "30": {
           "outcome": "immature"
@@ -150,7 +166,7 @@
       "liquidity_usd_at_verdict": 531100.0,
       "pair_address": null,
       "dex": "uniswap",
-      "age_days": 1,
+      "age_days": 6,
       "evaluations": {
         "7": {
           "outcome": "immature"
@@ -174,7 +190,7 @@
       "liquidity_usd_at_verdict": 7120000.0,
       "pair_address": null,
       "dex": "aerodrome",
-      "age_days": 1,
+      "age_days": 6,
       "evaluations": {
         "7": {
           "outcome": "immature"
