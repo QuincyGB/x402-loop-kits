@@ -1,7 +1,7 @@
 {
  "schema": "fleet-status/v1",
- "generated_at": "2026-11-04T05:38:23.674659+00:00",
- "summary": "40/40 routes OK, 5/5 services OK",
+ "generated_at": "2026-11-04T08:16:11.743721+00:00",
+ "summary": "41/41 routes OK, 5/5 services OK",
  "services": [
   {
    "name": "Token Verdict",
@@ -243,6 +243,15 @@
      "checker_class": "OK",
      "since": "2026-10-31T15:02:56.057570+00:00",
      "detail": "402, Base accept OK (100000 units to payTo)"
+    },
+    {
+     "route": "/v1/index/history",
+     "url": "https://stall-row-production.up.railway.app/v1/index/history",
+     "price": "$0.01",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-11-04T08:17:56.950493+00:00",
+     "detail": "402, Base accept OK (10000 units to payTo)"
     },
     {
      "route": "/v1/job-scout",
