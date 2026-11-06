@@ -1,13 +1,13 @@
 {
  "schema": "fleet-status/v1",
- "generated_at": "2026-11-06T10:06:14.147778+00:00",
- "summary": "44/44 routes OK, 5/5 services OK",
+ "generated_at": "2026-11-06T14:06:10.405190+00:00",
+ "summary": "40/40 routes OK, 5/5 services OK",
  "services": [
   {
    "name": "Token Verdict",
    "id": "token-verdict",
    "origin": "https://token-verdict-production.up.railway.app",
-   "status": "OK",
+   "status": "DOWN",
    "checker": {
     "service_status": "ok",
     "class": "OK",
@@ -23,28 +23,28 @@
      "route": "/v1/batch-verdict",
      "url": "https://token-verdict-production.up.railway.app/v1/batch-verdict",
      "price": "$0.20",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-10-31T15:02:56.057684+00:00",
-     "detail": "402, Base accept OK (200000 units to payTo) + Solana accept OK"
+     "status": "DOWN",
+     "checker_class": null,
+     "since": null,
+     "detail": ""
     },
     {
      "route": "/v1/pre-trade",
      "url": "https://token-verdict-production.up.railway.app/v1/pre-trade",
      "price": "$0.05",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-10-31T15:02:56.057691+00:00",
-     "detail": "402, Base accept OK (50000 units to payTo) + Solana accept OK"
+     "status": "DOWN",
+     "checker_class": null,
+     "since": null,
+     "detail": ""
     },
     {
      "route": "/v1/verdict",
      "url": "https://token-verdict-production.up.railway.app/v1/verdict",
      "price": "$0.02",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-10-31T15:02:56.057696+00:00",
-     "detail": "402, Base accept OK (20000 units to payTo) + Solana accept OK"
+     "status": "DOWN",
+     "checker_class": null,
+     "since": null,
+     "detail": ""
     }
    ]
   },
@@ -52,7 +52,7 @@
    "name": "RouteVerdict",
    "id": "route-verdict",
    "origin": "https://route-verdict-production.up.railway.app",
-   "status": "OK",
+   "status": "DOWN",
    "checker": {
     "service_status": "ok",
     "class": "OK",
@@ -68,10 +68,10 @@
      "route": "/v1/check",
      "url": "https://route-verdict-production.up.railway.app/v1/check",
      "price": "$0.05",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-10-31T15:02:56.057489+00:00",
-     "detail": "402, Base accept OK (50000 units to payTo)"
+     "status": "DOWN",
+     "checker_class": null,
+     "since": null,
+     "detail": ""
     }
    ]
   },
