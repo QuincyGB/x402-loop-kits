@@ -1,7 +1,7 @@
 {
  "schema": "fleet-status/v1",
- "generated_at": "2026-11-07T14:24:03.284118+00:00",
- "summary": "44/44 routes OK, 5/5 services OK",
+ "generated_at": "2026-11-07T14:41:29.991114+00:00",
+ "summary": "49/49 routes OK, 5/5 services OK",
  "services": [
   {
    "name": "Token Verdict",
@@ -61,7 +61,7 @@
    },
    "dogfood": {
     "status": "OK",
-    "detail": "RouteVerdict verdict=TRUSTED score=100.0 alive=True x402_valid=True"
+    "detail": "RouteVerdict verdict=TRUSTED score=90.0 alive=True x402_valid=True"
    },
    "routes": [
     {
@@ -88,7 +88,7 @@
    },
    "dogfood": {
     "status": "OK",
-    "detail": "RouteVerdict verdict=TRUSTED score=100.0 alive=True x402_valid=True"
+    "detail": "RouteVerdict verdict=TRUSTED score=90.0 alive=True x402_valid=True"
    },
    "routes": [
     {
@@ -162,6 +162,15 @@
      "checker_class": "OK",
      "since": "2026-10-31T15:02:56.057514+00:00",
      "detail": "402, Base accept OK (1000000 units to payTo)"
+    },
+    {
+     "route": "/v1/feed-digest",
+     "url": "https://stall-row-production.up.railway.app/v1/feed-digest",
+     "price": "$0.01",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-11-07T14:43:31.747406+00:00",
+     "detail": "402, Base accept OK (10000 units to payTo)"
     },
     {
      "route": "/v1/flagged-paytos",
@@ -290,6 +299,15 @@
      "detail": "402, Base accept OK (750000 units to payTo)"
     },
     {
+     "route": "/v1/page-metadata",
+     "url": "https://stall-row-production.up.railway.app/v1/page-metadata",
+     "price": "$0.005",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-11-07T14:43:31.747493+00:00",
+     "detail": "402, Base accept OK (5000 units to payTo)"
+    },
+    {
      "route": "/v1/page-to-markdown",
      "url": "https://stall-row-production.up.railway.app/v1/page-to-markdown",
      "price": "$0.01",
@@ -371,6 +389,15 @@
      "detail": "402, Base accept OK (1000000 units to payTo)"
     },
     {
+     "route": "/v1/repo-readme",
+     "url": "https://stall-row-production.up.railway.app/v1/repo-readme",
+     "price": "$0.005",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-11-07T14:43:31.747561+00:00",
+     "detail": "402, Base accept OK (5000 units to payTo)"
+    },
+    {
      "route": "/v1/repo-vitals",
      "url": "https://stall-row-production.up.railway.app/v1/repo-vitals",
      "price": "$0.005",
@@ -434,12 +461,30 @@
      "detail": "402, Base accept OK (2000 units to payTo)"
     },
     {
+     "route": "/v1/url-unshorten",
+     "url": "https://stall-row-production.up.railway.app/v1/url-unshorten",
+     "price": "$0.005",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-11-07T14:43:31.747607+00:00",
+     "detail": "402, Base accept OK (5000 units to payTo)"
+    },
+    {
      "route": "/v1/video-details",
      "url": "https://stall-row-production.up.railway.app/v1/video-details",
      "price": "$0.01",
      "status": "OK",
      "checker_class": "OK",
      "since": "2026-11-06T01:41:07.077212+00:00",
+     "detail": "402, Base accept OK (10000 units to payTo)"
+    },
+    {
+     "route": "/v1/video-transcript",
+     "url": "https://stall-row-production.up.railway.app/v1/video-transcript",
+     "price": "$0.01",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-11-07T14:43:31.747617+00:00",
      "detail": "402, Base accept OK (10000 units to payTo)"
     },
     {
