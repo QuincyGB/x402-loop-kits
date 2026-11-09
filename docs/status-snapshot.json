@@ -1,16 +1,16 @@
 {
  "schema": "fleet-status/v1",
- "generated_at": "2026-11-09T15:06:12.914300+00:00",
- "summary": "46/46 routes OK, 5/5 services OK, 10 recovered",
+ "generated_at": "2026-11-09T17:29:10.811173+00:00",
+ "summary": "49/49 routes OK, 5/5 services OK",
  "services": [
   {
    "name": "Token Verdict",
    "id": "token-verdict",
    "origin": "https://token-verdict-production.up.railway.app",
-   "status": "DOWN",
+   "status": "OK",
    "checker": {
     "service_status": "ok",
-    "class": "RECOVERED",
+    "class": "OK",
     "detail": "health/openapi/discovery OK",
     "since": "2026-11-09T15:27:00.930297+00:00"
    },
@@ -23,28 +23,28 @@
      "route": "/v1/batch-verdict",
      "url": "https://token-verdict-production.up.railway.app/v1/batch-verdict",
      "price": "$0.20",
-     "status": "DOWN",
-     "checker_class": null,
-     "since": null,
-     "detail": ""
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-11-09T17:31:01.232547+00:00",
+     "detail": "402, Base accept OK (200000 units to payTo) + Solana accept OK"
     },
     {
      "route": "/v1/pre-trade",
      "url": "https://token-verdict-production.up.railway.app/v1/pre-trade",
      "price": "$0.05",
-     "status": "DOWN",
-     "checker_class": null,
-     "since": null,
-     "detail": ""
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-11-09T17:31:01.232557+00:00",
+     "detail": "402, Base accept OK (50000 units to payTo) + Solana accept OK"
     },
     {
      "route": "/v1/verdict",
      "url": "https://token-verdict-production.up.railway.app/v1/verdict",
      "price": "$0.02",
-     "status": "DOWN",
-     "checker_class": null,
-     "since": null,
-     "detail": ""
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-11-09T17:31:01.232567+00:00",
+     "detail": "402, Base accept OK (20000 units to payTo) + Solana accept OK"
     }
    ]
   },
@@ -55,7 +55,7 @@
    "status": "OK",
    "checker": {
     "service_status": "ok",
-    "class": "RECOVERED",
+    "class": "OK",
     "detail": "health/openapi/discovery OK",
     "since": "2026-11-09T15:27:00.930361+00:00"
    },
@@ -82,7 +82,7 @@
    "status": "OK",
    "checker": {
     "service_status": "ok",
-    "class": "RECOVERED",
+    "class": "OK",
     "detail": "health/openapi/discovery OK",
     "since": "2026-11-09T15:27:00.930368+00:00"
    },
@@ -118,7 +118,7 @@
    "status": "OK",
    "checker": {
     "service_status": "ok",
-    "class": "RECOVERED",
+    "class": "OK",
     "detail": "health/openapi/discovery OK",
     "since": "2026-11-09T15:27:00.930372+00:00"
    },
@@ -514,7 +514,7 @@
    "status": "OK",
    "checker": {
     "service_status": "ok",
-    "class": "RECOVERED",
+    "class": "OK",
     "detail": "health/openapi/discovery OK",
     "since": "2026-11-09T15:27:00.930375+00:00"
    },
