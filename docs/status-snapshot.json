@@ -1,6 +1,6 @@
 {
  "schema": "fleet-status/v1",
- "generated_at": "2026-11-20T13:56:18.216043+00:00",
+ "generated_at": "2026-11-20T15:56:12.737652+00:00",
  "summary": "49/49 routes OK, 5/5 services OK",
  "services": [
   {
@@ -16,7 +16,7 @@
    },
    "dogfood": {
     "status": "OK",
-    "detail": "RouteVerdict verdict=TRUSTED score=90.0 alive=True x402_valid=True"
+    "detail": "RouteVerdict verdict=TRUSTED score=100.0 alive=True x402_valid=True"
    },
    "routes": [
     {
@@ -61,7 +61,7 @@
    },
    "dogfood": {
     "status": "OK",
-    "detail": "RouteVerdict verdict=TRUSTED score=100.0 alive=True x402_valid=True"
+    "detail": "RouteVerdict verdict=TRUSTED score=90.0 alive=True x402_valid=True"
    },
    "routes": [
     {
@@ -88,7 +88,7 @@
    },
    "dogfood": {
     "status": "OK",
-    "detail": "RouteVerdict verdict=TRUSTED score=100.0 alive=True x402_valid=True"
+    "detail": "RouteVerdict verdict=TRUSTED score=90.0 alive=True x402_valid=True"
    },
    "routes": [
     {
@@ -520,7 +520,7 @@
    },
    "dogfood": {
     "status": "OK",
-    "detail": "RouteVerdict verdict=TRUSTED score=100.0 alive=True x402_valid=True"
+    "detail": "RouteVerdict verdict=TRUSTED score=90.0 alive=True x402_valid=True"
    },
    "routes": [
     {
