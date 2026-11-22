@@ -1,7 +1,7 @@
 {
  "schema": "fleet-status/v1",
- "generated_at": "2026-11-22T15:56:18.436188+00:00",
- "summary": "58/58 routes OK, 5/5 services OK",
+ "generated_at": "2026-11-22T17:56:15.825941+00:00",
+ "summary": "61/61 routes OK, 5/5 services OK",
  "services": [
   {
    "name": "Token Verdict",
@@ -170,7 +170,7 @@
      "status": "OK",
      "checker_class": "OK",
      "since": "2026-11-09T15:27:00.930488+00:00",
-     "detail": "402, Base accept OK (100000 units to payTo) (PAYMENT-REQUIRED header 5124 chars)"
+     "detail": "402, Base accept OK (100000 units to payTo) (PAYMENT-REQUIRED header 5512 chars)"
     },
     {
      "route": "/v1/counterparty-report/deep",
@@ -179,7 +179,7 @@
      "status": "OK",
      "checker_class": "OK",
      "since": "2026-11-22T15:58:26.483804+00:00",
-     "detail": "402, Base accept OK (250000 units to payTo) (PAYMENT-REQUIRED header 5616 chars)"
+     "detail": "402, Base accept OK (250000 units to payTo) (PAYMENT-REQUIRED header 6004 chars)"
     },
     {
      "route": "/v1/counterparty-watch",
@@ -189,6 +189,15 @@
      "checker_class": "OK",
      "since": "2026-11-22T15:58:26.483810+00:00",
      "detail": "402, Base accept OK (30000 units to payTo) (PAYMENT-REQUIRED header 3376 chars)"
+    },
+    {
+     "route": "/v1/due-diligence-pack",
+     "url": "https://stall-row-production.up.railway.app/v1/due-diligence-pack",
+     "price": "$0.1",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-11-22T16:08:43.045116+00:00",
+     "detail": "402, Base accept OK (100000 units to payTo) (PAYMENT-REQUIRED header 4628 chars)"
     },
     {
      "route": "/v1/entitlement-pack",
@@ -335,6 +344,15 @@
      "detail": "402, Base accept OK (100000 units to payTo) (PAYMENT-REQUIRED header 8304 chars)"
     },
     {
+     "route": "/v1/liquidity-check",
+     "url": "https://stall-row-production.up.railway.app/v1/liquidity-check",
+     "price": "$0.03",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-11-22T16:08:43.045230+00:00",
+     "detail": "402, Base accept OK (30000 units to payTo) (PAYMENT-REQUIRED header 4748 chars)"
+    },
+    {
      "route": "/v1/orchestrate",
      "url": "https://stall-row-production.up.railway.app/v1/orchestrate",
      "price": "$0.1",
@@ -396,6 +414,15 @@
      "checker_class": "OK",
      "since": "2026-11-09T15:27:00.930602+00:00",
      "detail": "402, Base accept OK (5000 units to payTo) (PAYMENT-REQUIRED header 5672 chars)"
+    },
+    {
+     "route": "/v1/pre-trade-pack",
+     "url": "https://stall-row-production.up.railway.app/v1/pre-trade-pack",
+     "price": "$0.1",
+     "status": "OK",
+     "checker_class": "OK",
+     "since": "2026-11-22T16:08:43.045279+00:00",
+     "detail": "402, Base accept OK (100000 units to payTo) (PAYMENT-REQUIRED header 4360 chars)"
     },
     {
      "route": "/v1/price-check",
