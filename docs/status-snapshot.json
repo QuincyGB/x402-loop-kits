@@ -1,7 +1,7 @@
 {
  "schema": "fleet-status/v1",
- "generated_at": "2026-11-22T14:11:48.364190+00:00",
- "summary": "54/54 routes OK, 5/5 services OK, 1 recovered",
+ "generated_at": "2026-11-22T14:26:14.312532+00:00",
+ "summary": "54/54 routes OK, 5/5 services OK",
  "services": [
   {
    "name": "Token Verdict",
@@ -33,7 +33,7 @@
      "url": "https://token-verdict-production.up.railway.app/v1/pre-trade",
      "price": "$0.03",
      "status": "OK",
-     "checker_class": "RECOVERED",
+     "checker_class": "OK",
      "since": "2026-11-22T14:13:52.816054+00:00",
      "detail": "402, Base accept OK (30000 units to payTo) + Solana accept OK"
     },
