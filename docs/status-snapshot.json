@@ -1,13 +1,13 @@
 {
  "schema": "fleet-status/v1",
- "generated_at": "2026-11-22T11:56:19.768151+00:00",
- "summary": "51/51 routes OK, 5/5 services OK",
+ "generated_at": "2026-11-22T13:56:19.187124+00:00",
+ "summary": "51/52 routes OK, 5/5 services OK, 1 failing",
  "services": [
   {
    "name": "Token Verdict",
    "id": "token-verdict",
    "origin": "https://token-verdict-production.up.railway.app",
-   "status": "OK",
+   "status": "DEGRADED",
    "checker": {
     "service_status": "ok",
     "class": "OK",
@@ -32,9 +32,18 @@
      "route": "/v1/pre-trade",
      "url": "https://token-verdict-production.up.railway.app/v1/pre-trade",
      "price": "$0.03",
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-22T14:00:05.833131+00:00",
+     "detail": "transport failure: curl exit 52: curl: (52) Empty reply from server"
+    },
+    {
+     "route": "/v1/second-opinion",
+     "url": "https://token-verdict-production.up.railway.app/v1/second-opinion",
+     "price": "$0.03",
      "status": "OK",
      "checker_class": "OK",
-     "since": "2026-11-09T17:31:01.232557+00:00",
+     "since": "2026-11-22T14:00:05.833135+00:00",
      "detail": "402, Base accept OK (30000 units to payTo) + Solana accept OK"
     },
     {
@@ -555,6 +564,18 @@
  ],
  "incidents_30d": [
   {
+   "entity": "route:token-verdict /v1/pre-trade",
+   "kind": "route",
+   "service": "token-verdict",
+   "route": "/v1/pre-trade",
+   "status": "open",
+   "first_seen": "2026-11-22T14:00:05.833131+00:00",
+   "last_seen": "2026-11-22T13:56:19.187124+00:00",
+   "recovered_at": null,
+   "detail": "transport failure: curl exit 52: curl: (52) Empty reply from server",
+   "consecutive_failures": 1
+  },
+  {
    "entity": "dogfood:lock-smith",
    "kind": "dogfood",
    "service": "lock-smith",
@@ -679,7 +700,7 @@
   "since": "2026-10-29T03:26:22.605425+00:00",
   "label": "Incidents recorded since 2026-10-29",
   "note": "The fleet checker retains only its latest run \u2014 it keeps no 30-day history \u2014 so this rollup covers only the incident log kept beside the checker since 2026-10-29 (the first status-snapshot publish). Nothing earlier is claimed: there is no earlier record to publish.",
-  "open": 0,
-  "total_recorded": 10
+  "open": 1,
+  "total_recorded": 11
  }
 }
