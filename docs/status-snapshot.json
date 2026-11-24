@@ -1,13 +1,13 @@
 {
  "schema": "fleet-status/v1",
- "generated_at": "2026-11-24T01:56:25.896751+00:00",
- "summary": "61/61 routes OK, 5/5 services OK",
+ "generated_at": "2026-11-24T04:01:21.782571+00:00",
+ "summary": "0/61 routes OK, 5/5 services OK, 61 failing",
  "services": [
   {
    "name": "Token Verdict",
    "id": "token-verdict",
    "origin": "https://token-verdict-production.up.railway.app",
-   "status": "OK",
+   "status": "DOWN",
    "checker": {
     "service_status": "ok",
     "class": "OK",
@@ -16,44 +16,44 @@
    },
    "dogfood": {
     "status": "OK",
-    "detail": "RouteVerdict verdict=TRUSTED score=90.0 alive=True x402_valid=True"
+    "detail": "RouteVerdict verdict=TRUSTED score=100.0 alive=True x402_valid=True"
    },
    "routes": [
     {
      "route": "/v1/batch-verdict",
      "url": "https://token-verdict-production.up.railway.app/v1/batch-verdict",
      "price": "$0.10",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T17:31:01.232547+00:00",
-     "detail": "402, Base accept OK (100000 units to payTo) + Solana accept OK (PAYMENT-REQUIRED header 11080 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939220+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/pre-trade",
      "url": "https://token-verdict-production.up.railway.app/v1/pre-trade",
      "price": "$0.03",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-22T14:13:52.816054+00:00",
-     "detail": "402, Base accept OK (30000 units to payTo) + Solana accept OK (PAYMENT-REQUIRED header 15176 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939223+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/second-opinion",
      "url": "https://token-verdict-production.up.railway.app/v1/second-opinion",
      "price": "$0.03",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-22T14:00:05.833135+00:00",
-     "detail": "402, Base accept OK (30000 units to payTo) + Solana accept OK (PAYMENT-REQUIRED header 13564 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939227+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/verdict",
      "url": "https://token-verdict-production.up.railway.app/v1/verdict",
      "price": "$0.02",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T17:31:01.232567+00:00",
-     "detail": "402, Base accept OK (20000 units to payTo) + Solana accept OK (PAYMENT-REQUIRED header 10220 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939230+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     }
    ]
   },
@@ -61,7 +61,7 @@
    "name": "RouteVerdict",
    "id": "route-verdict",
    "origin": "https://route-verdict-production.up.railway.app",
-   "status": "OK",
+   "status": "DOWN",
    "checker": {
     "service_status": "ok",
     "class": "OK",
@@ -70,17 +70,17 @@
    },
    "dogfood": {
     "status": "OK",
-    "detail": "RouteVerdict verdict=TRUSTED score=100.0 alive=True x402_valid=True"
+    "detail": "RouteVerdict verdict=TRUSTED score=85.0 alive=True x402_valid=True"
    },
    "routes": [
     {
      "route": "/v1/check",
      "url": "https://route-verdict-production.up.railway.app/v1/check",
      "price": "$0.03",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930464+00:00",
-     "detail": "402, Base accept OK (30000 units to payTo) (PAYMENT-REQUIRED header 13980 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939010+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     }
    ]
   },
@@ -88,7 +88,7 @@
    "name": "ListSmith",
    "id": "list-smith",
    "origin": "https://list-smith-production.up.railway.app",
-   "status": "OK",
+   "status": "DOWN",
    "checker": {
     "service_status": "ok",
     "class": "OK",
@@ -97,26 +97,26 @@
    },
    "dogfood": {
     "status": "OK",
-    "detail": "RouteVerdict verdict=TRUSTED score=100.0 alive=True x402_valid=True"
+    "detail": "RouteVerdict verdict=TRUSTED score=85.0 alive=True x402_valid=True"
    },
    "routes": [
     {
      "route": "/v1/fix",
      "url": "https://list-smith-production.up.railway.app/v1/fix",
      "price": "$0.10",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930408+00:00",
-     "detail": "402, Base accept OK (100000 units to payTo) (PAYMENT-REQUIRED header 12384 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.938982+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/grade",
      "url": "https://list-smith-production.up.railway.app/v1/grade",
      "price": "$0.03",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930447+00:00",
-     "detail": "402, Base accept OK (30000 units to payTo) (PAYMENT-REQUIRED header 9820 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.938991+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     }
    ]
   },
@@ -124,7 +124,7 @@
    "name": "StallRow",
    "id": "stall-row",
    "origin": "https://stall-row-production.up.railway.app",
-   "status": "OK",
+   "status": "DOWN",
    "checker": {
     "service_status": "ok",
     "class": "OK",
@@ -133,467 +133,467 @@
    },
    "dogfood": {
     "status": "OK",
-    "detail": "RouteVerdict verdict=TRUSTED score=100.0 alive=True x402_valid=True"
+    "detail": "RouteVerdict verdict=TRUSTED score=75.0 alive=True x402_valid=True"
    },
    "routes": [
     {
      "route": "/v1/agent-card-verify",
      "url": "https://stall-row-production.up.railway.app/v1/agent-card-verify",
      "price": "$0.005",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930470+00:00",
-     "detail": "402, Base accept OK (5000 units to payTo) (PAYMENT-REQUIRED header 3944 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939015+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/allowance-audit",
      "url": "https://stall-row-production.up.railway.app/v1/allowance-audit",
      "price": "$0.005",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930476+00:00",
-     "detail": "402, Base accept OK (5000 units to payTo) (PAYMENT-REQUIRED header 5464 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939019+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/card-smith",
      "url": "https://stall-row-production.up.railway.app/v1/card-smith",
      "price": "$0.03",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930482+00:00",
-     "detail": "402, Base accept OK (30000 units to payTo) (PAYMENT-REQUIRED header 4020 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939022+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/counterparty-report",
      "url": "https://stall-row-production.up.railway.app/v1/counterparty-report",
      "price": "$0.1",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930488+00:00",
-     "detail": "402, Base accept OK (100000 units to payTo) (PAYMENT-REQUIRED header 5512 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939026+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/counterparty-report/deep",
      "url": "https://stall-row-production.up.railway.app/v1/counterparty-report/deep",
      "price": "$0.25",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-22T15:58:26.483804+00:00",
-     "detail": "402, Base accept OK (250000 units to payTo) (PAYMENT-REQUIRED header 6004 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939029+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/counterparty-watch",
      "url": "https://stall-row-production.up.railway.app/v1/counterparty-watch",
      "price": "$0.03",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-22T15:58:26.483810+00:00",
-     "detail": "402, Base accept OK (30000 units to payTo) (PAYMENT-REQUIRED header 3376 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939033+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/due-diligence-pack",
      "url": "https://stall-row-production.up.railway.app/v1/due-diligence-pack",
      "price": "$0.1",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-22T16:08:43.045116+00:00",
-     "detail": "402, Base accept OK (100000 units to payTo) (PAYMENT-REQUIRED header 4628 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939037+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/entitlement-pack",
      "url": "https://stall-row-production.up.railway.app/v1/entitlement-pack",
      "price": "$5",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-20T21:58:49.955792+00:00",
-     "detail": "402, Base accept OK (5000000 units to payTo) (PAYMENT-REQUIRED header 4000 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939040+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/entitlement-pass",
      "url": "https://stall-row-production.up.railway.app/v1/entitlement-pass",
      "price": "$9",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-20T21:58:49.955799+00:00",
-     "detail": "402, Base accept OK (9000000 units to payTo) (PAYMENT-REQUIRED header 4032 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939044+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/feed-digest",
      "url": "https://stall-row-production.up.railway.app/v1/feed-digest",
      "price": "$0.01",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930493+00:00",
-     "detail": "402, Base accept OK (10000 units to payTo) (PAYMENT-REQUIRED header 4720 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939048+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/flagged-paytos",
      "url": "https://stall-row-production.up.railway.app/v1/flagged-paytos",
      "price": "$0.005",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930498+00:00",
-     "detail": "402, Base accept OK (5000 units to payTo) (PAYMENT-REQUIRED header 4240 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939063+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/fleet-check",
      "url": "https://stall-row-production.up.railway.app/v1/fleet-check",
      "price": "$0.03",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930503+00:00",
-     "detail": "402, Base accept OK (30000 units to payTo) (PAYMENT-REQUIRED header 8028 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939067+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/fleet-check/pack",
      "url": "https://stall-row-production.up.railway.app/v1/fleet-check/pack",
      "price": "$0.1",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930517+00:00",
-     "detail": "402, Base accept OK (100000 units to payTo) (PAYMENT-REQUIRED header 6084 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939071+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/fleet-pass",
      "url": "https://stall-row-production.up.railway.app/v1/fleet-pass",
      "price": "$5",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930522+00:00",
-     "detail": "402, Base accept OK (5000000 units to payTo) (PAYMENT-REQUIRED header 3912 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939090+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/fleet-pass-20",
      "url": "https://stall-row-production.up.railway.app/v1/fleet-pass-20",
      "price": "$20",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930527+00:00",
-     "detail": "402, Base accept OK (20000000 units to payTo) (PAYMENT-REQUIRED header 4048 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939093+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/gas-oracle",
      "url": "https://stall-row-production.up.railway.app/v1/gas-oracle",
      "price": "$0.001",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930532+00:00",
-     "detail": "402, Base accept OK (1000 units to payTo) (PAYMENT-REQUIRED header 4024 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939097+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/grade-my-stall",
      "url": "https://stall-row-production.up.railway.app/v1/grade-my-stall",
      "price": "$0.005",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930538+00:00",
-     "detail": "402, Base accept OK (5000 units to payTo) (PAYMENT-REQUIRED header 3964 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939101+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/guard",
      "url": "https://stall-row-production.up.railway.app/v1/guard",
      "price": "$0.01",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930543+00:00",
-     "detail": "402, Base accept OK (10000 units to payTo) (PAYMENT-REQUIRED header 3912 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939104+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/index/changes",
      "url": "https://stall-row-production.up.railway.app/v1/index/changes",
      "price": "$0.03",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930548+00:00",
-     "detail": "402, Base accept OK (30000 units to payTo) (PAYMENT-REQUIRED header 5356 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939108+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/index/history",
      "url": "https://stall-row-production.up.railway.app/v1/index/history",
      "price": "$0.01",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930553+00:00",
-     "detail": "402, Base accept OK (10000 units to payTo) (PAYMENT-REQUIRED header 6188 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939111+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/job-scout",
      "url": "https://stall-row-production.up.railway.app/v1/job-scout",
      "price": "$0.03",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930557+00:00",
-     "detail": "402, Base accept OK (30000 units to payTo) (PAYMENT-REQUIRED header 4436 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939114+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/ledger-dataset",
      "url": "https://stall-row-production.up.railway.app/v1/ledger-dataset",
      "price": "$0.03",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930563+00:00",
-     "detail": "402, Base accept OK (30000 units to payTo) (PAYMENT-REQUIRED header 8628 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939118+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/ledger-dataset/full",
      "url": "https://stall-row-production.up.railway.app/v1/ledger-dataset/full",
      "price": "$0.1",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930567+00:00",
-     "detail": "402, Base accept OK (100000 units to payTo) (PAYMENT-REQUIRED header 8304 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939121+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/liquidity-check",
      "url": "https://stall-row-production.up.railway.app/v1/liquidity-check",
      "price": "$0.03",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-22T16:08:43.045230+00:00",
-     "detail": "402, Base accept OK (30000 units to payTo) (PAYMENT-REQUIRED header 4748 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939124+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/orchestrate",
      "url": "https://stall-row-production.up.railway.app/v1/orchestrate",
      "price": "$0.1",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930572+00:00",
-     "detail": "402, Base accept OK (100000 units to payTo) (PAYMENT-REQUIRED header 4948 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939128+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/page-metadata",
      "url": "https://stall-row-production.up.railway.app/v1/page-metadata",
      "price": "$0.005",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930577+00:00",
-     "detail": "402, Base accept OK (5000 units to payTo) (PAYMENT-REQUIRED header 4348 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939131+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/page-to-markdown",
      "url": "https://stall-row-production.up.railway.app/v1/page-to-markdown",
      "price": "$0.005",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930582+00:00",
-     "detail": "402, Base accept OK (5000 units to payTo) (PAYMENT-REQUIRED header 3364 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939135+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/page-to-markdown/batch",
      "url": "https://stall-row-production.up.railway.app/v1/page-to-markdown/batch",
      "price": "$0.03",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930587+00:00",
-     "detail": "402, Base accept OK (30000 units to payTo) (PAYMENT-REQUIRED header 4196 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939139+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/payto-pin/verify",
      "url": "https://stall-row-production.up.railway.app/v1/payto-pin/verify",
      "price": "$0.01",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930591+00:00",
-     "detail": "402, Base accept OK (10000 units to payTo) (PAYMENT-REQUIRED header 4872 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939142+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/physical",
      "url": "https://stall-row-production.up.railway.app/v1/physical",
      "price": "$0.03",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930597+00:00",
-     "detail": "402, Base accept OK (30000 units to payTo) (PAYMENT-REQUIRED header 3852 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939146+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/pre-trade-guard",
      "url": "https://stall-row-production.up.railway.app/v1/pre-trade-guard",
      "price": "$0.005",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930602+00:00",
-     "detail": "402, Base accept OK (5000 units to payTo) (PAYMENT-REQUIRED header 5672 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939149+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/pre-trade-pack",
      "url": "https://stall-row-production.up.railway.app/v1/pre-trade-pack",
      "price": "$0.1",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-22T16:08:43.045279+00:00",
-     "detail": "402, Base accept OK (100000 units to payTo) (PAYMENT-REQUIRED header 4360 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939152+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/price-check",
      "url": "https://stall-row-production.up.railway.app/v1/price-check",
      "price": "$0.03",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930606+00:00",
-     "detail": "402, Base accept OK (30000 units to payTo) (PAYMENT-REQUIRED header 4660 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939157+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/receipt-verify",
      "url": "https://stall-row-production.up.railway.app/v1/receipt-verify",
      "price": "$0.002",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930611+00:00",
-     "detail": "402, Base accept OK (2000 units to payTo) (PAYMENT-REQUIRED header 5500 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939160+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/recheck",
      "url": "https://stall-row-production.up.railway.app/v1/recheck",
      "price": "$0.005",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930615+00:00",
-     "detail": "402, Base accept OK (5000 units to payTo) (PAYMENT-REQUIRED header 5052 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939163+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/recheck/pack",
      "url": "https://stall-row-production.up.railway.app/v1/recheck/pack",
      "price": "$0.1",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930620+00:00",
-     "detail": "402, Base accept OK (100000 units to payTo) (PAYMENT-REQUIRED header 4152 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939166+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/repo-readme",
      "url": "https://stall-row-production.up.railway.app/v1/repo-readme",
      "price": "$0.005",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930624+00:00",
-     "detail": "402, Base accept OK (5000 units to payTo) (PAYMENT-REQUIRED header 3368 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939171+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/repo-vitals",
      "url": "https://stall-row-production.up.railway.app/v1/repo-vitals",
      "price": "$0.005",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930629+00:00",
-     "detail": "402, Base accept OK (5000 units to payTo) (PAYMENT-REQUIRED header 4192 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939174+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/sanctions-check",
      "url": "https://stall-row-production.up.railway.app/v1/sanctions-check",
      "price": "$0.03",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-22T15:58:26.484016+00:00",
-     "detail": "402, Base accept OK (30000 units to payTo) (PAYMENT-REQUIRED header 3836 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939178+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/score-book",
      "url": "https://stall-row-production.up.railway.app/v1/score-book",
      "price": "$0.01",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930634+00:00",
-     "detail": "402, Base accept OK (10000 units to payTo) (PAYMENT-REQUIRED header 3248 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939181+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/sign-read",
      "url": "https://stall-row-production.up.railway.app/v1/sign-read",
      "price": "$0.01",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930639+00:00",
-     "detail": "402, Base accept OK (10000 units to payTo) (PAYMENT-REQUIRED header 4904 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939184+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/toolkit/pack",
      "url": "https://stall-row-production.up.railway.app/v1/toolkit/pack",
      "price": "$0.1",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930645+00:00",
-     "detail": "402, Base accept OK (100000 units to payTo) (PAYMENT-REQUIRED header 4348 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939188+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/tube-search",
      "url": "https://stall-row-production.up.railway.app/v1/tube-search",
      "price": "$0.005",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930664+00:00",
-     "detail": "402, Base accept OK (5000 units to payTo) (PAYMENT-REQUIRED header 4644 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939191+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/tube-search/batch",
      "url": "https://stall-row-production.up.railway.app/v1/tube-search/batch",
      "price": "$0.03",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930668+00:00",
-     "detail": "402, Base accept OK (30000 units to payTo) (PAYMENT-REQUIRED header 4780 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939194+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/tx-decoder",
      "url": "https://stall-row-production.up.railway.app/v1/tx-decoder",
      "price": "$0.002",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930673+00:00",
-     "detail": "402, Base accept OK (2000 units to payTo) (PAYMENT-REQUIRED header 5104 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939198+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/url-unshorten",
      "url": "https://stall-row-production.up.railway.app/v1/url-unshorten",
      "price": "$0.005",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930679+00:00",
-     "detail": "402, Base accept OK (5000 units to payTo) (PAYMENT-REQUIRED header 3644 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939201+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/video-details",
      "url": "https://stall-row-production.up.railway.app/v1/video-details",
      "price": "$0.005",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930683+00:00",
-     "detail": "402, Base accept OK (5000 units to payTo) (PAYMENT-REQUIRED header 5304 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939204+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/video-transcript",
      "url": "https://stall-row-production.up.railway.app/v1/video-transcript",
      "price": "$0.005",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930688+00:00",
-     "detail": "402, Base accept OK (5000 units to payTo) (PAYMENT-REQUIRED header 4792 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939207+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/wallet-ping",
      "url": "https://stall-row-production.up.railway.app/v1/wallet-ping",
      "price": "$0.001",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-22T15:58:26.484073+00:00",
-     "detail": "402, Base accept OK (1000 units to payTo) (PAYMENT-REQUIRED header 4108 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939210+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/wallet-snapshot",
      "url": "https://stall-row-production.up.railway.app/v1/wallet-snapshot",
      "price": "$0.005",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930693+00:00",
-     "detail": "402, Base accept OK (5000 units to payTo) (PAYMENT-REQUIRED header 5288 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939213+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/wallet-verdict",
      "url": "https://stall-row-production.up.railway.app/v1/wallet-verdict",
      "price": "$0.02",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930697+00:00",
-     "detail": "402, Base accept OK (20000 units to payTo) (PAYMENT-REQUIRED header 4488 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939216+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     }
    ]
   },
@@ -601,7 +601,7 @@
    "name": "LockSmith",
    "id": "lock-smith",
    "origin": "https://lock-smith-production.up.railway.app",
-   "status": "OK",
+   "status": "DOWN",
    "checker": {
     "service_status": "ok",
     "class": "OK",
@@ -610,40 +610,772 @@
    },
    "dogfood": {
     "status": "OK",
-    "detail": "RouteVerdict verdict=TRUSTED score=90.0 alive=True x402_valid=True"
+    "detail": "RouteVerdict verdict=TRUSTED score=75.0 alive=True x402_valid=True"
    },
    "routes": [
     {
      "route": "/v1/approval-check",
      "url": "https://lock-smith-production.up.railway.app/v1/approval-check",
      "price": "$0.03",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-22T14:13:52.815741+00:00",
-     "detail": "402, Base accept OK (30000 units to payTo) (PAYMENT-REQUIRED header 9844 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.938998+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/audit",
      "url": "https://lock-smith-production.up.railway.app/v1/audit",
      "price": "$0.10",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-09T15:27:00.930457+00:00",
-     "detail": "402, Base accept OK (100000 units to payTo) (PAYMENT-REQUIRED header 8900 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939002+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     },
     {
      "route": "/v1/contract-check",
      "url": "https://lock-smith-production.up.railway.app/v1/contract-check",
      "price": "$0.10",
-     "status": "OK",
-     "checker_class": "OK",
-     "since": "2026-11-22T14:13:52.815755+00:00",
-     "detail": "402, Base accept OK (100000 units to payTo) (PAYMENT-REQUIRED header 8544 chars)"
+     "status": "DOWN",
+     "checker_class": "NEW-FAILURE",
+     "since": "2026-11-24T04:06:30.939006+00:00",
+     "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F"
     }
    ]
   }
  ],
  "incidents_30d": [
+  {
+   "entity": "route:token-verdict /v1/verdict",
+   "kind": "route",
+   "service": "token-verdict",
+   "route": "/v1/verdict",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939230+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:token-verdict /v1/second-opinion",
+   "kind": "route",
+   "service": "token-verdict",
+   "route": "/v1/second-opinion",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939227+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:token-verdict /v1/pre-trade",
+   "kind": "route",
+   "service": "token-verdict",
+   "route": "/v1/pre-trade",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939223+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:token-verdict /v1/batch-verdict",
+   "kind": "route",
+   "service": "token-verdict",
+   "route": "/v1/batch-verdict",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939220+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/wallet-verdict",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/wallet-verdict",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939216+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/wallet-snapshot",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/wallet-snapshot",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939213+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/wallet-ping",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/wallet-ping",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939210+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/video-transcript",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/video-transcript",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939207+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/video-details",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/video-details",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939204+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/url-unshorten",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/url-unshorten",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939201+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/tx-decoder",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/tx-decoder",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939198+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/tube-search/batch",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/tube-search/batch",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939194+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/tube-search",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/tube-search",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939191+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/toolkit/pack",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/toolkit/pack",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939188+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/sign-read",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/sign-read",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939184+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/score-book",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/score-book",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939181+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/sanctions-check",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/sanctions-check",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939178+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/repo-vitals",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/repo-vitals",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939174+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/repo-readme",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/repo-readme",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939171+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/recheck/pack",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/recheck/pack",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939166+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/recheck",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/recheck",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939163+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/receipt-verify",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/receipt-verify",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939160+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/price-check",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/price-check",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939157+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/pre-trade-pack",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/pre-trade-pack",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939152+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/pre-trade-guard",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/pre-trade-guard",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939149+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/physical",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/physical",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939146+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/payto-pin/verify",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/payto-pin/verify",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939142+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/page-to-markdown/batch",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/page-to-markdown/batch",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939139+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/page-to-markdown",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/page-to-markdown",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939135+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/page-metadata",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/page-metadata",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939131+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/orchestrate",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/orchestrate",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939128+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/liquidity-check",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/liquidity-check",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939124+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/ledger-dataset/full",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/ledger-dataset/full",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939121+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/ledger-dataset",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/ledger-dataset",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939118+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/job-scout",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/job-scout",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939114+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/index/history",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/index/history",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939111+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/index/changes",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/index/changes",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939108+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/guard",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/guard",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939104+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/grade-my-stall",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/grade-my-stall",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939101+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/gas-oracle",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/gas-oracle",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939097+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/fleet-pass-20",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/fleet-pass-20",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939093+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/fleet-pass",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/fleet-pass",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939090+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/fleet-check/pack",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/fleet-check/pack",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939071+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/fleet-check",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/fleet-check",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939067+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/flagged-paytos",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/flagged-paytos",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939063+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/feed-digest",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/feed-digest",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939048+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/entitlement-pass",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/entitlement-pass",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939044+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/entitlement-pack",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/entitlement-pack",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939040+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/due-diligence-pack",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/due-diligence-pack",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939037+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/counterparty-watch",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/counterparty-watch",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939033+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/counterparty-report/deep",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/counterparty-report/deep",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939029+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/counterparty-report",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/counterparty-report",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939026+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/card-smith",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/card-smith",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939022+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/allowance-audit",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/allowance-audit",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939019+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:stall-row /v1/agent-card-verify",
+   "kind": "route",
+   "service": "stall-row",
+   "route": "/v1/agent-card-verify",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939015+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:route-verdict /v1/check",
+   "kind": "route",
+   "service": "route-verdict",
+   "route": "/v1/check",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939010+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:lock-smith /v1/contract-check",
+   "kind": "route",
+   "service": "lock-smith",
+   "route": "/v1/contract-check",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939006+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:lock-smith /v1/audit",
+   "kind": "route",
+   "service": "lock-smith",
+   "route": "/v1/audit",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.939002+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:lock-smith /v1/approval-check",
+   "kind": "route",
+   "service": "lock-smith",
+   "route": "/v1/approval-check",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.938998+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:list-smith /v1/grade",
+   "kind": "route",
+   "service": "list-smith",
+   "route": "/v1/grade",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.938991+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
+  {
+   "entity": "route:list-smith /v1/fix",
+   "kind": "route",
+   "service": "list-smith",
+   "route": "/v1/fix",
+   "status": "open",
+   "first_seen": "2026-11-24T04:06:30.938982+00:00",
+   "last_seen": "2026-11-24T04:01:21.782571+00:00",
+   "recovered_at": null,
+   "detail": "Base payTo 0x4e31ec77ca099fd95cbc1c4042ca26a249a38181 != 0x097f9685D1e0752bF8B02d61E5Ce9be7eA0FBA7F",
+   "consecutive_failures": 1
+  },
   {
    "entity": "route:token-verdict /v1/pre-trade",
    "kind": "route",
@@ -781,7 +1513,7 @@
   "since": "2026-10-29T03:26:22.605425+00:00",
   "label": "Incidents recorded since 2026-10-29",
   "note": "The fleet checker retains only its latest run \u2014 it keeps no 30-day history \u2014 so this rollup covers only the incident log kept beside the checker since 2026-10-29 (the first status-snapshot publish). Nothing earlier is claimed: there is no earlier record to publish.",
-  "open": 0,
-  "total_recorded": 11
+  "open": 61,
+  "total_recorded": 72
  }
 }
