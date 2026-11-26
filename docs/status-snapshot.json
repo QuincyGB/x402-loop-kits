@@ -1,7 +1,7 @@
 {
  "schema": "fleet-status/v1",
- "generated_at": "2026-11-26T03:56:12.448723+00:00",
- "summary": "61/61 routes OK, 5/5 services OK, 1 failing",
+ "generated_at": "2026-11-26T04:12:05.893285+00:00",
+ "summary": "61/61 routes OK, 5/5 services OK, 1 recovered",
  "services": [
   {
    "name": "Token Verdict",
@@ -15,8 +15,8 @@
     "since": "2026-11-09T15:27:00.930297+00:00"
    },
    "dogfood": {
-    "status": "DOWN",
-    "detail": "RouteVerdict verdict=AVOID score=40.0 alive=True x402_valid=False"
+    "status": "OK",
+    "detail": "RouteVerdict verdict=TRUSTED score=100.0 alive=True x402_valid=True"
    },
    "routes": [
     {
@@ -649,10 +649,10 @@
    "kind": "dogfood",
    "service": "token-verdict",
    "route": null,
-   "status": "open",
+   "status": "recovered",
    "first_seen": "2026-11-26T03:58:27.840441+00:00",
-   "last_seen": "2026-11-26T03:56:12.448723+00:00",
-   "recovered_at": null,
+   "last_seen": "2026-11-26T04:12:05.893285+00:00",
+   "recovered_at": "2026-11-26T04:12:05.893285+00:00",
    "detail": "RouteVerdict verdict=AVOID score=40.0 alive=True x402_valid=False",
    "consecutive_failures": 1
   },
@@ -1525,7 +1525,7 @@
   "since": "2026-10-29T03:26:22.605425+00:00",
   "label": "Incidents recorded since 2026-10-29",
   "note": "The fleet checker retains only its latest run \u2014 it keeps no 30-day history \u2014 so this rollup covers only the incident log kept beside the checker since 2026-10-29 (the first status-snapshot publish). Nothing earlier is claimed: there is no earlier record to publish.",
-  "open": 1,
+  "open": 0,
   "total_recorded": 73
  }
 }
