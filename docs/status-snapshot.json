@@ -1,7 +1,7 @@
 {
  "schema": "fleet-status/v1",
- "generated_at": "2026-11-26T04:12:05.893285+00:00",
- "summary": "61/61 routes OK, 5/5 services OK, 1 recovered",
+ "generated_at": "2026-11-26T04:26:07.805318+00:00",
+ "summary": "61/61 routes OK, 5/5 services OK",
  "services": [
   {
    "name": "Token Verdict",
