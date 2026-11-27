@@ -1,6 +1,6 @@
 {
  "schema": "fleet-status/v1",
- "generated_at": "2026-11-27T15:56:11.896420+00:00",
+ "generated_at": "2026-11-27T17:56:14.256213+00:00",
  "summary": "61/61 routes OK, 5/5 services OK",
  "services": [
   {
@@ -53,7 +53,7 @@
      "status": "OK",
      "checker_class": "OK",
      "since": "2026-11-24T04:11:04.187277+00:00",
-     "detail": "402, Base accept OK (20000 units to payTo) + Solana accept OK (PAYMENT-REQUIRED header 10220 chars)"
+     "detail": "402, Base accept OK (20000 units to payTo) + Solana accept OK (PAYMENT-REQUIRED header 10224 chars)"
     }
    ]
   },
